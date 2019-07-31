@@ -56,7 +56,9 @@ KEY Key1,Key2;
   */
 int main(void)
 {
-  /*CRC和emWin没有关系，只是他们为了库的保护而做的，这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。 */
+  /* CRC和emWin没有关系，只是他们为了库的保护而做的
+   * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
+   */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
 	
   /*

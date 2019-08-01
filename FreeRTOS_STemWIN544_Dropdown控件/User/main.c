@@ -317,6 +317,7 @@ static void GUI_Task(void* parameter)
 	/* ¿ªÆôÈý»º³å */
 	WM_MULTIBUF_Enable(1);
 	
+  GUI_SetOrientation(GUI_SWAP_XY |GUI_MIRROR_X |GUI_MIRROR_Y);
 	while(1)
 	{
 		MainTask();

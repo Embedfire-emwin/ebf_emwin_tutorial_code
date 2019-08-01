@@ -138,7 +138,7 @@ static void _2D_Graph_Drawing(void)
 	
 	/* 绘制线条 */
 	GUI_SetPenSize(10);
-	GUI_SetColor(GUI_YELLOW);
+  GUI_SetColor(GUI_DARKMAGENTA);
 	GUI_DrawLine(10, 140, 100, 240);
 	
 	/* 绘制多边形 */
@@ -222,15 +222,14 @@ static void Alpha_Blending(void)
 	GUI_DispStringHCenterAt("Alpha blending", 223, 203);
 
 	/* 将Alpha数值添加到颜色中并显示 */
-	GUI_SetAlpha(0x80);
-	GUI_SetColor(GUI_RED | (0x80 << 24));
+  GUI_EnableAlpha(1);
+	GUI_SetColor((0xC0uL << 24) | 0xFF0000);
 	GUI_FillRect(20, 20, 235, 235);
-	GUI_SetAlpha(0x80);
-	GUI_SetColor(GUI_GREEN | (0x80 << 24));
+	GUI_SetColor((0x80uL << 24) | 0x00FF00);
 	GUI_FillRect(110, 110, 325, 325);
-	GUI_SetAlpha(0x80);
-	GUI_SetColor(GUI_BLUE | (0x80 << 24));
+	GUI_SetColor((0x40uL << 24) | 0x0000FF);
 	GUI_FillRect(210, 210, 425, 425);
+  GUI_EnableAlpha(0);
 }
 
 /**

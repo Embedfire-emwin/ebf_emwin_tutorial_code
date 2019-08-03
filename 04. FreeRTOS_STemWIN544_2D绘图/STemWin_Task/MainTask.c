@@ -25,10 +25,9 @@
  * 全局变量
  ******************************************************************************/
 GUI_RECT BasicRect = {10, 10, 100, 105};
-static const float pi = 3.1415926L;
 static const unsigned aValues[] = {100, 135, 190, 240, 340, 360};
 static const GUI_COLOR aColor[] = {GUI_BLUE, GUI_GREEN, GUI_RED,
-                            GUI_CYAN, GUI_MAGENTA, GUI_YELLOW};
+                                   GUI_CYAN, GUI_MAGENTA, GUI_YELLOW};
 static const char QR_TEXT[] = "http://www.firebbs.cn";
 static const GUI_POINT _aPointArrow[] = {
   {  0,   0 },
@@ -39,29 +38,42 @@ static const GUI_POINT _aPointArrow[] = {
   { 10, -20 },
   { 40, -30 },
 };
-GUI_POINT aArrowRotatedPoints[GUI_COUNTOF(_aPointArrow)];
-
-static const GUI_POINT _aPointStar[] = {
-  {  0, -36 },
-  {  8,  -8 },
-  { 36,   0 },
-  {  8,   8 },
-  {  0,  36 },
-  { -8,   8 },
-  {-36,   0 },
-  { -8,  -8 }
+static const GUI_POINT DashCube_BackPoint[] = {
+		{ 76 , 104 },
+		{ 176, 104 },
+		{ 176,   4 },
+		{  76,   4 }
 };
-GUI_POINT aStarRotatedPoints[GUI_COUNTOF(_aPointStar)];
-
-static const GUI_POINT _aPointHexagon[] = {
-  {  0, -30 },
-  { 26, -15 },
-  { 26,  15 },
-  {  0,  30 },
-  {-26,  15 },
-  {-26, -15 },
+static const GUI_POINT DashCube_LeftPoint[] = {
+		{ 40, 140 },
+		{ 76, 104 },
+		{ 76,   4 },
+		{ 40,  40 }
 };
-GUI_POINT aHexagonRotatedPoints[GUI_COUNTOF(_aPointHexagon)];
+static const GUI_POINT DashCube_BottonPoint[] = {
+		{  40, 140 },
+		{ 140, 140 },
+		{ 176, 104 },
+		{  76, 104 }
+};
+static const GUI_POINT DashCube_TopPoint[] = {
+		{  40, 40 },
+		{ 140, 40 },
+		{ 176,  4 },
+		{  76,  4 },
+};
+static const GUI_POINT DashCube_RightPoint[] = {
+		{ 140, 140 },
+		{ 176, 104 },
+		{ 176,   4 },
+		{ 140,  40 },
+};
+static const 	GUI_POINT DashCube_FrontPoint[] = {
+		{  40, 140},
+		{ 140, 140},
+		{ 140,  40},
+		{  40,  40},
+};
 
 /*******************************************************************************
  * 函数
@@ -92,7 +104,7 @@ static void Pie_Chart_Drawing(int x0, int y0, int r)
   * @brief 二维码生成
   * @note 无
   * @param pText：二维码内容
-  *        PixelSize：二维码单个像素的大小
+  *        PixelSize：二维码数据色块的大小，单位：像素
   *        EccLevel：纠错编码级别
   *        x0：二维码图像在LCD的坐标x
   *        y0：二维码图像在LCD的坐标y
@@ -116,20 +128,22 @@ static void QR_Code_Drawing(const char *pText, int PixelSize, int EccLevel, int 
   * @param 无
   * @retval 无
   */
+/* 用于存放多边形旋转后的点列表 */ 
+GUI_POINT aArrowRotatedPoints[GUI_COUNTOF(_aPointArrow)];
 static void _2D_Graph_Drawing(void)
 {
-	static int y = 120;
 	I16 aY[125] = {0};
 	int i;
-	int a0 = 0, a1 = 0;
-	float angle = 0.0;
+  float pi = 3.1415926L;
+  float angle = 0.0f;
 	
 	/* 绘制各种矩形 */
-	GUI_SetColor(GUI_RED);
+	GUI_SetColor(GUI_GREEN);
 	GUI_DrawRectEx(&BasicRect);
 	BasicRect.x0 += 116;
 	BasicRect.x1 += 116;
 	GUI_FillRectEx(&BasicRect);
+  GUI_SetColor(GUI_RED);
 	GUI_DrawRoundedRect(240, 10, 330, 105, 10);
 	GUI_DrawRoundedFrame(352, 10, 442, 105, 10, 10);
 	GUI_FillRoundedRect(468, 10, 558, 105, 10);
@@ -138,40 +152,33 @@ static void _2D_Graph_Drawing(void)
 	
 	/* 绘制线条 */
 	GUI_SetPenSize(10);
-  GUI_SetColor(GUI_DARKMAGENTA);
+  GUI_SetColor(GUI_YELLOW);
 	GUI_DrawLine(10, 140, 100, 240);
 	
 	/* 绘制多边形 */
 	GUI_SetColor(GUI_RED);
-	GUI_FillPolygon(&_aPointArrow[0], 7, 190, y + 85);
-	GUI_SetColor(GUI_GREEN);
-	GUI_FillPolygon(&_aPointStar[0], 8, 290, y + 45);
-	GUI_SetColor(GUI_BLUE);
-	GUI_FillPolygon(&_aPointHexagon[0], 6, 390, y + 45);
-	
-	/* 旋转多边形 */
+	GUI_FillPolygon(_aPointArrow, 7, 190, 205);
+  /* 旋转多边形 */
 	angle = pi / 2;
 	GUI_RotatePolygon(aArrowRotatedPoints,
 	                  _aPointArrow, 
                     (sizeof(_aPointArrow) / sizeof(_aPointArrow[0])),
 										angle);
-	GUI_SetColor(GUI_RED);
-	GUI_FillPolygon(&aArrowRotatedPoints[0], 7, 220, y + 130);
-	angle = pi / 4;
-	GUI_RotatePolygon(aStarRotatedPoints,
-	                  _aPointStar, 
-                    (sizeof(_aPointStar) / sizeof(_aPointStar[0])),
-										angle);
-	GUI_SetColor(GUI_GREEN);
-	GUI_FillPolygon(&aStarRotatedPoints[0], 8, 290, y + 120);
-	angle = pi / 6;
-	GUI_RotatePolygon(aHexagonRotatedPoints,
-	                  _aPointHexagon, 
-                    (sizeof(_aPointHexagon) / sizeof(_aPointHexagon[0])),
-										angle);
-	GUI_SetColor(GUI_BLUE);
-	GUI_FillPolygon(&aHexagonRotatedPoints[0], 6, 390, y + 120);
-	
+	GUI_FillPolygon(&aArrowRotatedPoints[0], 7, 220, 250);
+  
+  /* 绘制线框正方体 */
+  GUI_SetPenSize(1);
+	GUI_SetColor(0x4a51cc);
+	GUI_SetLineStyle(GUI_LS_DOT);
+	GUI_DrawPolygon(DashCube_BackPoint, 4, 210, 145);
+  GUI_DrawPolygon(DashCube_LeftPoint, 4, 210, 145);
+  GUI_DrawPolygon(DashCube_BottonPoint, 4, 210, 145);
+  GUI_SetPenSize(2);
+  GUI_SetLineStyle(GUI_LS_SOLID);
+  GUI_DrawPolygon(DashCube_TopPoint, 4, 210, 145);
+  GUI_DrawPolygon(DashCube_RightPoint, 4, 210, 145);
+  GUI_DrawPolygon(DashCube_FrontPoint, 4, 210, 145);
+                    
 	/* 绘制圆 */
 	GUI_SetColor(GUI_LIGHTMAGENTA);
 	for(i = 10; i <= 70; i += 10)
@@ -216,19 +223,22 @@ static void _2D_Graph_Drawing(void)
   */
 static void Alpha_Blending(void)
 {
+  /* 显示字符 */
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetTextMode(GUI_TM_TRANS);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
 	GUI_DispStringHCenterAt("Alpha blending", 223, 203);
 
-	/* 将Alpha数值添加到颜色中并显示 */
+  /* 开启自动Alpha混合 */
   GUI_EnableAlpha(1);
+	/* 将Alpha数值添加到颜色中并显示 */
 	GUI_SetColor((0xC0uL << 24) | 0xFF0000);
 	GUI_FillRect(20, 20, 235, 235);
 	GUI_SetColor((0x80uL << 24) | 0x00FF00);
 	GUI_FillRect(110, 110, 325, 325);
 	GUI_SetColor((0x40uL << 24) | 0x0000FF);
 	GUI_FillRect(210, 210, 425, 425);
+  /* 关闭自动Alpha混合 */
   GUI_EnableAlpha(0);
 }
 
@@ -249,7 +259,7 @@ void MainTask(void)
 	
 	GUI_Delay(5000);
 	GUI_Clear();
-  
+
 	/* Alpha混合 */
 	Alpha_Blending();
 	

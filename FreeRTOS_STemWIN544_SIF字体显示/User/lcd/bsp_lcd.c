@@ -234,14 +234,14 @@ void LCD_Init(void)
  /* Configure PLLSAI prescalers for LCD */
  /* Enable Pixel Clock */
  /* PLLSAI_VCO Input = HSE_VALUE/PLL_M = 1 Mhz */
- /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAI_N = 384 Mhz */
- /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAI_R = 384/4 = 96 Mhz */
- /* LTDC clock frequency = PLLLCDCLK / RCC_PLLSAIDivR = 96/4 = 24 Mhz */ 
+ /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAI_N = 144 Mhz */
+ /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAI_R = 144/2 = 72 Mhz */
+ /* LTDC clock frequency = PLLLCDCLK / RCC_PLLSAIDivR = 72/4 = 18 Mhz */ 
  //开启两层时：设置为24MHz时界面运行流畅，如果设置为36Mhz时界面程序闪烁情况
  //如果只使用单层，可以设置成较高频率
  //另外，时钟频率跟颜色模式有关系，使用ARGB8888模式时时钟减半
- RCC_PLLSAIConfig(144, 7, 3);
- RCC_LTDCCLKDivConfig(RCC_PLLSAIDivR_Div4);//12MHz
+ RCC_PLLSAIConfig(144, 7, 2);
+ RCC_LTDCCLKDivConfig(RCC_PLLSAIDivR_Div4);//18MHz
  
  /* Enable PLLSAI Clock */
  RCC_PLLSAICmd(ENABLE);

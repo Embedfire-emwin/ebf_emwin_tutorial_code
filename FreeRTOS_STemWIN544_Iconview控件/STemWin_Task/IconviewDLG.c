@@ -255,7 +255,7 @@ void MainTask(void)
   GUI_EnableAlpha(1);
   
 	/* 加载BMP图片数据到内存设备 */
-	LoadBMP_UsingMEMDEV("wallpaper.bmp");
+	LoadBMP_UsingMEMDEV("0:/image/wallpaper.bmp");
 	/* 重定向背景窗口回调函数 */
 	WM_SetCallback(WM_HBKWIN, _cbBkWindow);
 	/* 在指定位置创建ICONVIEW控件 */

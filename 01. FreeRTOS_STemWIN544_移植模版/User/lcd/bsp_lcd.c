@@ -241,7 +241,7 @@ void LCD_Init(void)
  //如果只使用单层，可以设置成较高频率
  //另外，时钟频率跟颜色模式有关系，使用ARGB8888模式时时钟减半
  RCC_PLLSAIConfig(144, 7, 3);
- RCC_LTDCCLKDivConfig(RCC_PLLSAIDivR_Div4);//12MHz
+ RCC_LTDCCLKDivConfig(RCC_PLLSAIDivR_Div2);//24MHz
  
  /* Enable PLLSAI Clock */
  RCC_PLLSAICmd(ENABLE);

@@ -709,9 +709,9 @@ static void _LTDC_SetLayerAlpha(int LayerIndex, int Alpha) {
 static void _LTDC_SetLUTEntry(int LayerIndex, U32 Color, int Pos) {
   U32 r, g, b, a;
 
-  r = ( Color        & 0xff) << 16;
-  g = ((Color >>  8) & 0xff) <<  8;
-  b = ((Color >> 16) & 0xff);
+  r = Color & (0xff << 16);
+  g = Color & (0xff <<  8);
+  b = Color &  0xff;
   a = Pos << 24;
   _apLayer[LayerIndex]->CLUTWR &= ~(LTDC_LxCLUTWR_BLUE | LTDC_LxCLUTWR_GREEN | LTDC_LxCLUTWR_RED | LTDC_LxCLUTWR_CLUTADD);
   _apLayer[LayerIndex]->CLUTWR  = r | g | b | a;

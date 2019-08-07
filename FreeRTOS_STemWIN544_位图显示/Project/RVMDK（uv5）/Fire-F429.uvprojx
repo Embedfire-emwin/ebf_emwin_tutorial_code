@@ -814,9 +814,9 @@
               <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
             </File>
             <File>
-              <FileName>wildfire.c</FileName>
+              <FileName>ngc7293.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\wildfire.c</FilePath>
+              <FilePath>..\..\STemWin_Task\ngc7293.c</FilePath>
             </File>
             <File>
               <FileName>ScreenShot.c</FileName>

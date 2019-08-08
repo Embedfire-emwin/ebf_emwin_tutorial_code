@@ -56,12 +56,6 @@ Purpose     : Configures emWins abilities, fonts etc.
 
 /*********************************************************************
 *
-*       External memory support
-*/
-#define USE_EXTMEMHEAP            (1)
-
-/*********************************************************************
-*
 *       Multi layer/display support
 */
 #define GUI_NUM_LAYERS            2    // Maximum number of available layers

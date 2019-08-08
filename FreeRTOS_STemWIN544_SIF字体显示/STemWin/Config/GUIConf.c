@@ -4,7 +4,7 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2012  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
@@ -69,7 +69,7 @@ Purpose     : Display controller initialization
 //
 #ifdef USE_EXTMEMHEAP
   #define GUI_NUMBYTES   (1024 * 1024 * 4)    // x KByte
-  #define GUI_EXTBUFADD  (0xD2000000-GUI_NUMBYTES)//32MB SDRAM的最后3MB作为STemWIN动态内存
+  #define GUI_EXTBUFADD  (0xD2000000-GUI_NUMBYTES)//32MB SDRAM的最后4MB作为STemWIN动态内存
 #else
   #define GUI_NUMBYTES  (1024 * 110)    // x KByte
 #endif

@@ -129,10 +129,9 @@ static GUI_HMEM LoadBMP_UsingMEMDEV(const char *sFilename)
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
 	/* 创建内存设备 */
-	hBMP = GUI_MEMDEV_CreateEx(0, 0,                       /* 起始坐标 */
-														 GUI_BMP_GetXSize(_acbuffer),/* x方向尺寸 */
-														 GUI_BMP_GetYSize(_acbuffer),/* y方向尺寸 */
-														 GUI_MEMDEV_HASTRANS);/* 带透明度的内存设备 */
+	hBMP = GUI_MEMDEV_Create(0, 0,                        /* 起始坐标 */
+													 GUI_BMP_GetXSize(_acbuffer), /* x方向尺寸 */
+													 GUI_BMP_GetYSize(_acbuffer));/* y方向尺寸 */
 	/* 选择内存设备 */
 	GUI_MEMDEV_Select(hBMP);
 	/* 绘制BMP到内存设备中 */
@@ -201,7 +200,7 @@ static void _cbBkWindow(WM_MESSAGE *pMsg)
 	{
 		case WM_PAINT:
 			/* 将背景图片从内存设备写入LCD */
-			GUI_MEMDEV_WriteAt(hBMP, 0, 0);
+			GUI_MEMDEV_WriteOpaqueAt(hBMP, 0, 0);
 //			/* 删除内存设备 */
 //			GUI_MEMDEV_Delete(hBMP);
 		  break;

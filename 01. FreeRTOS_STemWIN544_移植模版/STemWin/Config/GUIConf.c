@@ -63,24 +63,26 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-
 //
 // Define the available number of bytes available for the GUI
 //
-#ifdef USE_EXTMEMHEAP
-  #define GUI_NUMBYTES   (1024 * 1024 * 4)    // x KByte
-  #define GUI_EXTBUFADD  (0xD2000000-GUI_NUMBYTES)//32MB SDRAM的最后4MB作为STemWIN动态内存
+#if USE_EXTMEMHEAP
+  #define GUI_NUMBYTES   (1024 * 1024 * 8)    // x KByte
+  #define GUI_EXTBUFADD  (0xD2000000-GUI_NUMBYTES)//32MB SDRAM的最后8MB作为STemWIN动态内存
 #else
   #define GUI_NUMBYTES  (1024 * 110)    // x KByte
 #endif
+
+#define GUI_BLOCKSIZE 0x80
+
 /*********************************************************************
 *
 *       Static data
 *
 **********************************************************************
 */
-#ifdef USE_EXTMEMHEAP
-  U32 HeapMem[GUI_NUMBYTES / 4] __attribute__((at(GUI_EXTBUFADD)));
+#if USE_EXTMEMHEAP
+  static U32 HeapMem[GUI_NUMBYTES / 4] __attribute__((at(GUI_EXTBUFADD)));
 #else
   static U32 extMem[GUI_NUMBYTES / 4];
 #endif
@@ -91,7 +93,6 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-#define GUI_BLOCKSIZE 0x80
 
 /*********************************************************************
 *
@@ -100,7 +101,7 @@ Purpose     : Display controller initialization
 * Purpose:
 *   Allocate heap from external memory
 */
-#ifdef USE_EXTMEMHEAP
+#if USE_EXTMEMHEAP
 U32* Get_ExtMemHeap (void)
 {
   return HeapMem;

@@ -54,10 +54,12 @@ Purpose     : Configures emWins abilities, fonts etc.
 #ifndef GUICONF_H
 #define GUICONF_H
 
+/*********************************************************************
+*
+*       External memory support
+*/
+#define USE_EXTMEMHEAP            (1)
 
-#ifndef USE_EXTMEMHEAP
-#define USE_EXTMEMHEAP
-#endif
 /*********************************************************************
 *
 *       Multi layer/display support

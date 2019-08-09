@@ -58,12 +58,9 @@ Purpose     : This file provides emWin Interface with FreeRTOS
 *
 * Global data
 */
-static SemaphoreHandle_t DispSem = NULL;
-static SemaphoreHandle_t EventSem = NULL;
-static SemaphoreHandle_t KeySem = NULL;
-
-static int  KeyPressed;
-static char KeyIsInited;
+static xSemaphoreHandle xQueueMutex = NULL;
+static xSemaphoreHandle xSemaTxDone = NULL;
+ 
 /*********************************************************************
 *
 * Timing:
@@ -76,7 +73,7 @@ and delay function. Default time unit (tick), normally is
 */
 int GUI_X_GetTime(void)
 {
-	return xTaskGetTickCount();
+	return ((int) xTaskGetTickCount());
 }
 
 void GUI_X_Delay(int ms)
@@ -94,51 +91,9 @@ void GUI_X_Delay(int ms)
 * If not required, leave this routine blank.
 */
 
-static void CheckInit(void)
-{
-	if(KeyIsInited == pdFALSE) {
-		KeyIsInited = pdTRUE;
-		GUI_X_Init();
-	}
-}
 void GUI_X_Init(void) {
-	 /* 创建信号量 用于键盘 cnt = 0 */
-	KeySem = xSemaphoreCreateCounting(1, 0);
 }
 
-int GUI_X_GetKey(void)
-{
-	int r;
-	
-	r = KeyPressed;
-	CheckInit();
-	KeyPressed = 0;
-	
-	return (r);
-}
-
-int GUI_X_WaitKey(void)
-{
-	int r;
-	
-	CheckInit();
-	if(KeyPressed == 0) {
-		/* 获取信号量 */
-		xSemaphoreTake(KeySem, /* 信号量句柄 */
-								   portMAX_DELAY);/* 阻塞等待 */
-	}
-	r = KeyPressed;
-	KeyPressed = 0;
-	
-	return (r);
-}
-
-void GUI_X_StoreKey(int k)
-{
-	KeyPressed = k;
-	/* 给出信号量 */
-  xSemaphoreGive(KeySem);
-}
 
 /*********************************************************************
 *
@@ -173,22 +128,28 @@ void GUI_X_ExecIdle(void) {
 /* Init OS */
 void GUI_X_InitOS(void)
 { 
-  /* 创建信号量 用于资源共享 cnt = 1 */
-  DispSem = xSemaphoreCreateCounting(1, 1);
-	/* 创建信号量 用于事件触发 cnt = 0 */
-  EventSem = xSemaphoreCreateCounting(1, 0);
+  /* 创建信号量 用于资源共享 */
+  xQueueMutex = xSemaphoreCreateMutex();
+  configASSERT (xQueueMutex != NULL);
+	/* 创建信号量 用于事件触发 */
+  vSemaphoreCreateBinary( xSemaTxDone );
+  configASSERT ( xSemaTxDone != NULL );
 }
 
 void GUI_X_Unlock(void)
 {
 	/* 给出信号量 */
-  xSemaphoreGive(DispSem);
+  xSemaphoreGive(xQueueMutex);
 }
 
 void GUI_X_Lock(void)
 {
+  if(xQueueMutex == NULL)
+  {
+    GUI_X_InitOS();
+  }
 	/* 获取信号量 */
-  xSemaphoreTake(DispSem, /* 信号量句柄 */
+  xSemaphoreTake(xQueueMutex,   /* 信号量句柄 */
 								 portMAX_DELAY);/* 阻塞等待 */
 }
 
@@ -202,15 +163,15 @@ U32 GUI_X_GetTaskId(void)
 void GUI_X_WaitEvent (void) 
 {
   /* 获取信号量 */
-  xSemaphoreTake(EventSem, /* 信号量句柄 */
-								 portMAX_DELAY);/* 阻塞等待 */
+  while(xSemaphoreTake(xSemaTxDone,              /* 信号量句柄 */
+								       portMAX_DELAY) != pdTRUE);/* 阻塞等待 */
 }
 
 
 void GUI_X_SignalEvent (void) 
 {
   /* 给出信号量 */
-  xSemaphoreGive(EventSem);
+  xSemaphoreGive(xSemaTxDone);
 }
 
 /*********************************************************************

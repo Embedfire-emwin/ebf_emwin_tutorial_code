@@ -129,17 +129,17 @@ void GUI_X_ExecIdle(void) {
 /* Init OS */
 void GUI_X_InitOS(void)
 { 
-  /* 创建信号量 用于资源共享 */
+  /* 创建互斥信号量 用于资源共享 */
   xQueueMutex = xSemaphoreCreateMutex();
   configASSERT (xQueueMutex != NULL);
-	/* 创建信号量 用于事件触发 */
+	/* 创建二值信号量 用于事件触发 */
   vSemaphoreCreateBinary( xSemaTxDone );
   configASSERT ( xSemaTxDone != NULL );
 }
 
 void GUI_X_Unlock(void)
 {
-	/* 给出信号量 */
+	/* 给出互斥量 */
   xSemaphoreGive(xQueueMutex);
 }
 
@@ -149,8 +149,8 @@ void GUI_X_Lock(void)
   {
     GUI_X_InitOS();
   }
-	/* 获取信号量 */
-  xSemaphoreTake(xQueueMutex,   /* 信号量句柄 */
+	/* 获取互斥量 */
+  xSemaphoreTake(xQueueMutex,   /* 互斥量句柄 */
 								 portMAX_DELAY);/* 阻塞等待 */
 }
 

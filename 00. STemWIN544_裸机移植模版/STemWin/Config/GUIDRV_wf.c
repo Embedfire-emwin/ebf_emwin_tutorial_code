@@ -135,8 +135,8 @@ can be set here.
 //
 // Layer size
 //
-#define XSIZE_0 240
-#define YSIZE_0 320
+#define XSIZE_0 LCD_PIXEL_WIDTH
+#define YSIZE_0 LCD_PIXEL_HEIGHT
 
 /*********************************************************************
 *
@@ -146,8 +146,8 @@ can be set here.
 //
 // Layer size
 //
-#define XSIZE_1 240
-#define YSIZE_1 320
+#define XSIZE_1 LCD_PIXEL_WIDTH
+#define YSIZE_1 LCD_PIXEL_HEIGHT
 
 /*********************************************************************
 *

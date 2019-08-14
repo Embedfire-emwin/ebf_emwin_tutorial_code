@@ -1005,8 +1005,7 @@ static void _LCD_InitController(int LayerIndex) {
   }
   if (Done == 0) {
     Done = 1;
-
-//    LCD_Init();
+ 
     //
     // Enable line interrupt
     //

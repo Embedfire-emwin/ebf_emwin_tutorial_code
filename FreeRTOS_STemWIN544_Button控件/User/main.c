@@ -300,7 +300,7 @@ static void Touch_Task(void* parameter)
 	while(1)
 	{
 		GT9xx_GetOnePiont();
-		vTaskDelay(20);
+		vTaskDelay(10);
 	}
 }
 

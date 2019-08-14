@@ -681,7 +681,7 @@ void GT9xx_GetOnePiont(void)
 		State.Pressed = 0;
 		State.Layer = 0;
     //存储触摸坐标到emwin使用的fifo
-		GUI_PID_StoreState(&State);
+		GUI_TOUCH_StoreStateEx(&State);
 		return;
 	}
 	State.Pressed = 1;
@@ -689,7 +689,7 @@ void GT9xx_GetOnePiont(void)
 	State.y =pre_y;
 	State.Layer = 0;
   //存储触摸坐标到emwin使用的fifo
-	GUI_PID_StoreState(&State);
+	GUI_TOUCH_StoreStateEx(&State);
 }
 //MODULE_DESCRIPTION("GTP Series Driver");
 //MODULE_LICENSE("GPL");

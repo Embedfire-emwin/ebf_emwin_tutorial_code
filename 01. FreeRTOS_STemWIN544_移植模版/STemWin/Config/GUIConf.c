@@ -73,7 +73,6 @@ Purpose     : Display controller initialization
   #define GUI_NUMBYTES  (1024 * 110)    // x KByte
 #endif
 
-#define GUI_BLOCKSIZE 0x80
 
 /*********************************************************************
 *
@@ -120,11 +119,9 @@ void GUI_X_Config(void)
 {
 #ifdef USE_EXTMEMHEAP
   GUI_ALLOC_AssignMemory(HeapMem, GUI_NUMBYTES);
-	GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
-#else	
+	#else	
   GUI_ALLOC_AssignMemory(extMem, GUI_NUMBYTES);	
-	GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
-#endif
+	#endif
 }
 
 /*************************** End of file ****************************/

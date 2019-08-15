@@ -89,7 +89,7 @@ static void Touch_Task(void* parameter);
 static void GUI_Task(void* parameter);
 
 static void BSP_Init(void);
-static void BL8782_PDN_INIT(void);
+static void AP6181_PDN_INIT(void);
 /**
   * @brief  主函数
   * @param  无
@@ -314,16 +314,16 @@ static void BSP_Init(void)
   SDRAM_Init();
 	/* LCD初始化 */
 	LCD_Init();
-	BL8782_PDN_INIT();
+	AP6181_PDN_INIT();
 }
 
 /**
-  * @brief BL8782_PDN_INIT
+  * @brief AP6181_PDN_INIT
   * @note 禁止WIFI模块
   * @param 无
   * @retval 无
   */
-static void BL8782_PDN_INIT(void)
+static void AP6181_PDN_INIT(void)
 {
   /*定义一个GPIO_InitTypeDef类型的结构体*/
   GPIO_InitTypeDef GPIO_InitStructure;

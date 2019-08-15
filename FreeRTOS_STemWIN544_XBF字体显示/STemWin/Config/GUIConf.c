@@ -79,8 +79,8 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-#ifdef USE_EXTMEMHEAP
-  //U32 HeapMem[GUI_NUMBYTES] __attribute__((at(GUI_EXTBUFADD)));
+#if USE_EXTMEMHEAP
+  static U32 HeapMem[GUI_NUMBYTES / 4] __attribute__((at(GUI_EXTBUFADD)));
 #else
   static U32 extMem[GUI_NUMBYTES / 4];
 #endif
@@ -91,7 +91,6 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-#define GUI_BLOCKSIZE 0x80
 
 /*********************************************************************
 *
@@ -118,15 +117,10 @@ Purpose     : Display controller initialization
 void GUI_X_Config(void)
 {
 #ifdef USE_EXTMEMHEAP
-	static U32 *aMemory;
-	aMemory = (U32 *)GUI_EXTBUFADD;
-	
-  GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
-	GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
-#else	
+  GUI_ALLOC_AssignMemory(HeapMem, GUI_NUMBYTES);
+	#else	
   GUI_ALLOC_AssignMemory(extMem, GUI_NUMBYTES);	
-	GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
-#endif
+	#endif
 }
 
 /*************************** End of file ****************************/

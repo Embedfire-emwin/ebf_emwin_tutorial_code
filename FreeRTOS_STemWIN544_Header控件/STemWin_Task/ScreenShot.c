@@ -36,12 +36,12 @@ DIR dir;
 uint16_t  file_num = 0;
 
 /**
-  * @brief BL8782_PDN_INIT
+  * @brief AP6181_PDN_INIT
   * @note 禁止WIFI模块
   * @param 无
   * @retval 无
   */
-static void BL8782_PDN_INIT(void)
+static void AP6181_PDN_INIT(void)
 {
   /*定义一个GPIO_InitTypeDef类型的结构体*/
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -68,7 +68,7 @@ void FS_Init(void)
 	const TCHAR *ScreenShotPATH  = "0:/ScreenShot";
 	
 	/* 禁用WiFi模块 */
-	BL8782_PDN_INIT();
+	AP6181_PDN_INIT();
 	
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
   result = f_mount(&fs,"0:",1);

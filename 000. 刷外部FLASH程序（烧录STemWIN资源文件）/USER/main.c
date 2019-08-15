@@ -46,7 +46,7 @@ extern char src_dir[];
 * Return(s)   : none.
 *********************************************************************************************************
 */
-static void BL8782_PDN_INIT(void)
+static void AP6181_PDN_INIT(void)
 {
   /*定义一个GPIO_InitTypeDef类型的结构体*/
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -96,7 +96,7 @@ int main(void)
 {
   FRESULT res = FR_OK;
   
-	BL8782_PDN_INIT();
+	AP6181_PDN_INIT();
 	/* 初始化LED */
   LED_GPIO_Config();
   KEY1_INIT();

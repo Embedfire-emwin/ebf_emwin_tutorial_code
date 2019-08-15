@@ -1089,33 +1089,36 @@ static void _DemoMemDev(void)
 
 	GUI_Delay(1000);
 	GUI_ClearRect(0, 45, 799, 479);
-	GUI_SetFont(GUI_FONT_16B_1);
+	GUI_SetFont(GUI_FONT_24B_1);
 	
 	/* 使用兼容LCD颜色格式的内存设备显示位图 */
 	hMem = GUI_MEMDEV_Create(0, 0, 324, 87);
 	GUI_MEMDEV_Select(hMem);
 	GUI_DrawBitmap(&bmwildfire, 0, 0);
 	GUI_MEMDEV_Select(0);
-	GUI_MEMDEV_CopyToLCDAt(hMem, 20, 62);
+	GUI_MEMDEV_CopyToLCDAt(hMem, 20, 78);
 	GUI_DispStringAt("GUI_MEMDEV_Create()", 20, 40);
 	UseBytes = GUI_ALLOC_GetNumUsedBytes();
 	sprintf(buf, "UsedMemBytes: %d", UseBytes);
-	GUI_DispStringAt(buf, 20, 152);
+	GUI_DispStringAt(buf, 20, 168);
 	GUI_MEMDEV_Delete(hMem);
 	
+  GUI_SetColor(GUI_WHITE);
+  GUI_FillRect(456, 68, 780, 155);
 	/* 使用固定颜色格式的内存设备显示位图 */
 	hMem = GUI_MEMDEV_CreateFixed(0, 0, 324, 87,
-	                              GUI_MEMDEV_NOTRANS,/* */
+	                              GUI_MEMDEV_HASTRANS,/* */
 	                              GUI_MEMDEV_APILIST_16,
 	                              GUICC_565);
+  
 	GUI_MEMDEV_Select(hMem);
 	GUI_DrawBitmap(&bmwildfire, 0, 0);
 	GUI_MEMDEV_Select(0);
-	GUI_MEMDEV_CopyToLCDAt(hMem, 456, 62);
+	GUI_MEMDEV_CopyToLCDAt(hMem, 456, 78);
 	GUI_DispStringAt("GUI_MEMDEV_CreateFixed()", 456, 40);
 	UseBytes = GUI_ALLOC_GetNumUsedBytes();
 	sprintf(buf, "UsedMemBytes: %d", UseBytes);
-	GUI_DispStringAt(buf, 456, 152);
+	GUI_DispStringAt(buf, 456, 168);
 	GUI_MEMDEV_Delete(hMem);
 }
 

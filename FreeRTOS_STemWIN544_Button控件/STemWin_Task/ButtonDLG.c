@@ -34,8 +34,6 @@
 #define ID_BUTTON_2 (GUI_ID_USER + 0x03)
 #define ID_BUTTON_3 (GUI_ID_USER + 0x04)
 #define ID_BUTTON_4 (GUI_ID_USER + 0x05)
-//#define ID_TEXT_0 (GUI_ID_USER + 0x06)
-//#define ID_TEXT_1 (GUI_ID_USER + 0x07)
 
 /*********************************************************************
 *
@@ -57,8 +55,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "Button2", ID_BUTTON_2, 50, 246, 80, 80, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "", ID_BUTTON_3, 244, 30, 165, 48, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "", ID_BUTTON_4, 244, 138, 165, 48, 0, 0x0, 0 },
-//	{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 268, 30, 165, 48, 0, 0x64, 0 },
-//	{ TEXT_CreateIndirect, "Text", ID_TEXT_1, 268, 138, 165, 48, 0, 0x64, 0 },
 };
 
 /*********************************************************************
@@ -159,7 +155,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 	WM_HWIN hItem;
 	int     NCode;
 	int     Id;
-	static  U8  button_0_flag = 0, button_1_flag = 0;
+	static  U8  button_3_flag = 0, button_4_flag = 0;
 
 	switch (pMsg->MsgId) {
 	case WM_INIT_DIALOG:
@@ -170,22 +166,18 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 		FRAMEWIN_SetTitleHeight(hItem, 32);
 		/* 初始化Button1 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-		WM_SetHasTrans(hItem);
 		WM_SetCallback(hItem, _cbButton1);
 		/* 初始化Button2 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-		WM_SetHasTrans(hItem);
 		WM_SetCallback(hItem, _cbButton2);
 		/* 初始化Button2 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
 		GUI_SetFont(GUI_FONT_24B_ASCII);
-//		GUI_DispStringAt("BEEP", 292, 30);
 		BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
 		/* 初始化Button4 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
 		GUI_SetFont(GUI_FONT_24B_ASCII);
-//		GUI_DispStringAt("LED", 292, 138);
-		BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
+		BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
 		break;
 	case WM_NOTIFY_PARENT:
 		Id = WM_GetId(pMsg->hWinSrc);
@@ -196,14 +188,17 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 			case WM_NOTIFICATION_CLICKED:
 				break;
 			case WM_NOTIFICATION_RELEASED:
+        LED2_TOGGLE;
 				break;
 			}
 			break;
 		case ID_BUTTON_1: // Notifications sent by 'Button1'
 			switch (NCode) {
 			case WM_NOTIFICATION_CLICKED:
+        BEEP_ON;
 				break;
 			case WM_NOTIFICATION_RELEASED:
+        BEEP_OFF;
 				break;
 			}
 			break;
@@ -223,8 +218,8 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 				break;
 			case WM_NOTIFICATION_RELEASED:
 				/* Button3已被释放 */
-				button_0_flag = ~button_0_flag;
-				if (button_0_flag != 0)
+				button_3_flag = ~button_3_flag;
+				if (button_3_flag != 0)
 				{
 					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
 				}
@@ -241,13 +236,13 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 				break;
 			case WM_NOTIFICATION_RELEASED:
 				/* Button4已被释放 */
-				button_1_flag = ~button_1_flag;
-				if (button_1_flag != 0)
+				button_4_flag = ~button_4_flag;
+				if (button_4_flag != 0)
 				{
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
+					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
 				}
 				else
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
+					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
 				break;
 			}
 			break;

@@ -61,7 +61,7 @@ GUI_FONT     	FONT_XINSONGTI_24;
 
 	static const char FONT_STORAGE_ROOT_DIR[]  =   "0:";
 	static const char FONT_XINSONGTI_18_ADDR[] = 	 "0:/Font/新宋体18.xbf";
-	static const char FONT_XINSONGTI_24_ADDR[] = 	 "0:/Font/新宋体24.xbf";
+	static const char FONT_XINSONGTI_24_ADDR[] = 	 "0:/Font/思源黑体25.xbf";
 
 #endif
 

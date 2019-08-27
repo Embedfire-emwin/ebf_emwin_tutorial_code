@@ -90,6 +90,7 @@ static void GUI_Task(void* parameter);
 
 static void BSP_Init(void);
 static void AP6181_PDN_INIT(void);
+
 /**
   * @brief  主函数
   * @param  无
@@ -314,6 +315,7 @@ static void BSP_Init(void)
   SDRAM_Init();
 	/* LCD初始化 */
 	LCD_Init();
+	/* 禁用WiFi模块 */
 	AP6181_PDN_INIT();
 }
 

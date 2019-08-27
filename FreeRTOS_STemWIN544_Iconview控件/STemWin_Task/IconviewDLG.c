@@ -178,11 +178,6 @@ static void FUN_ICON0Clicked(void)
 	WM_HWIN hWin;
 	
 	hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-	
-	while(1)
-	{
-		GUI_Delay(1);
-	}
 }
 
 /**
@@ -250,7 +245,8 @@ void MainTask(void)
 {
 	U8 i;
 	WM_HWIN  hWin;
-	
+
+  WM_SetCreateFlags(WM_CF_MEMDEV);
   GUI_EnableAlpha(1);
   
 	/* 加载BMP图片数据到内存设备 */
@@ -287,7 +283,7 @@ void MainTask(void)
 	/* 设置图标在X和Y方向上的间距 */
 	ICONVIEW_SetSpace(hWin, GUI_COORD_X, 70);
 	ICONVIEW_SetSpace(hWin, GUI_COORD_Y, 50);
-	
+
 	while (1)
 	{
 		GUI_Delay(50);

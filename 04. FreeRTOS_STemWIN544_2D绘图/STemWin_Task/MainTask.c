@@ -225,15 +225,12 @@ static void _2D_Graph_Drawing(void)
   */
 static void Alpha_Blending(void)
 {
-  int t0 = 0, t1 = 0;
-  
   /* 显示字符 */
 	GUI_SetColor(GUI_BLACK);
 	GUI_SetTextMode(GUI_TM_TRANS);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
 	GUI_DispStringHCenterAt("Alpha blending", 223, 203);
 
-  t0 = GUI_GetTime();
   /* 开启自动Alpha混合 */
   GUI_EnableAlpha(1);
 	/* 将Alpha数值添加到颜色中并显示 */
@@ -245,9 +242,6 @@ static void Alpha_Blending(void)
 	GUI_FillRect(210, 210, 425, 425);
   /* 关闭自动Alpha混合 */
   GUI_EnableAlpha(0);
-  t1 = GUI_GetTime();
-  
-  printf("%d ms", t1 - t0);
 }
 
 /**

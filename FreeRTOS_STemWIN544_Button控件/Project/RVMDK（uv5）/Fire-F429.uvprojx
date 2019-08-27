@@ -819,14 +819,9 @@
               <FilePath>..\..\STemWin_Task\ScreenShot.c</FilePath>
             </File>
             <File>
-              <FileName>BUTTON_OFF.c</FileName>
+              <FileName>BUTTON_Bitmaps.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\BUTTON_OFF.c</FilePath>
-            </File>
-            <File>
-              <FileName>BUTTON_ON.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\BUTTON_ON.c</FilePath>
+              <FilePath>..\..\STemWin_Task\BUTTON_Bitmaps.c</FilePath>
             </File>
           </Files>
         </Group>

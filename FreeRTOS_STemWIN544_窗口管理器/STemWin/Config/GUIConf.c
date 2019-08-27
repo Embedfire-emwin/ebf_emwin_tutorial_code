@@ -82,7 +82,7 @@ Purpose     : Display controller initialization
 **********************************************************************
 */
 #if USE_EXTMEMHEAP
-  U32 HeapMem[GUI_NUMBYTES / 4] __attribute__((at(GUI_EXTBUFADD)));
+  static U32 HeapMem[GUI_NUMBYTES / 4] __attribute__((at(GUI_EXTBUFADD)));
 #else
   static U32 extMem[GUI_NUMBYTES / 4];
 #endif

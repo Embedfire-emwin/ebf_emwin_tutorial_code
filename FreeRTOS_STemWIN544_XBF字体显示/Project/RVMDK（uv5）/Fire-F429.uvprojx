@@ -828,6 +828,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\ScreenShot.c</FilePath>
             </File>
+            <File>
+              <FileName>text.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin_Task\text.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

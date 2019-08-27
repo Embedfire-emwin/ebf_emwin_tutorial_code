@@ -135,6 +135,8 @@ void MainTask(void)
 {
 	WM_HWIN hWin;
 	
+//  WM_SetCreateFlags(WM_CF_MEMDEV_ON_REDRAW);
+  
 	hWin = CreateFramewin();
 	
 	while(1)

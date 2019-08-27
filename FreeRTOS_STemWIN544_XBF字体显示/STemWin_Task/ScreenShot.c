@@ -45,9 +45,6 @@ void FS_Init(void)
 {
 	const TCHAR *ScreenShotPATH  = "0:/ScreenShot";
 	
-	/* 禁用WiFi模块 */
-	AP6181_PDN_INIT();
-	
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)

@@ -77,13 +77,20 @@ static void _cbWindow(WM_MESSAGE* pMsg)
   switch (pMsg->MsgId)
 	{
 		case WM_PAINT:
+      /* 返回窗口客户区坐标 */
 			WM_GetInsideRect(&Rect);
+      /* 设置窗口背景颜色 */
 			GUI_SetBkColor(GUI_RED);
+      /* 设置前景颜色 */
 			GUI_SetColor(GUI_YELLOW);
+      /* 绘制窗口 */    
 			GUI_ClearRectEx(&Rect);
 			GUI_DrawRectEx(&Rect);
+      /* 设置文本颜色 */
 			GUI_SetColor(GUI_BLACK);
+      /* 设置文本格式 */
 			GUI_SetFont(&GUI_Font8x16);
+      /* 显示提示信息 */
 			GUI_DispStringHCenterAt("Foreground window", 75, 40);
 			break;
 		default:

@@ -758,10 +758,11 @@ static void _DemoDeleteWindow(void)
 void MainTask(void)
 {
   GUI_SetBkColor(GUI_BLACK);
-  WM_SetCreateFlags(WM_CF_MEMDEV);
+//  WM_SetCreateFlags(WM_CF_MEMDEV);
   WM_EnableMemdev(WM_HBKWIN);
   while (1)
 	{
+    
     _DemoSetDesktopColor();
     _DemoCreateWindow();
     _DemoCreateWindowAsChild();

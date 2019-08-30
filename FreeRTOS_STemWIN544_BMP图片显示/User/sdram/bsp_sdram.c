@@ -295,7 +295,7 @@ static void SDRAM_InitSequence(void)
   
 /* Step 7 --------------------------------------------------------------------*/
   /* 设置sdram寄存器配置 */
-  tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_2          |
+  tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_8          |
                    SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |
                    SDRAM_MODEREG_CAS_LATENCY_3           |
                    SDRAM_MODEREG_OPERATING_MODE_STANDARD |
@@ -378,7 +378,7 @@ void SDRAM_Init(void)
   /* 突发读模式设置*/  
   FMC_SDRAMInitStructure.FMC_ReadBurst = SDRAM_READBURST;
   /* 读延迟配置 */
-  FMC_SDRAMInitStructure.FMC_ReadPipeDelay = FMC_ReadPipe_Delay_1;
+  FMC_SDRAMInitStructure.FMC_ReadPipeDelay = FMC_ReadPipe_Delay_0;
   /* SDRAM时序参数 */
   FMC_SDRAMInitStructure.FMC_SDRAMTimingStruct = &FMC_SDRAMTimingInitStructure;
   

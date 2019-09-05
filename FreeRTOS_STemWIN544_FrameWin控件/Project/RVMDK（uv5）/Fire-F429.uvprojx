@@ -336,7 +336,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F429_439xx,OS_SUPPORT</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F429_439xx,OS_SUPPORT,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM4F;..\..\STemWin\Config;..\..\STemWin\inc;..\..\STemWin\Application;..\..\STemWin_Task;..\..\FATFS</IncludePath>
             </VariousControls>

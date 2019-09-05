@@ -26,11 +26,14 @@
 *
 **********************************************************************
 */
+/* 控件ID */
 #define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
+#define ID_BUTTON_0   (GUI_ID_USER + 0x01)
 
 /* 资源表 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, FRAMEWIN_CF_MOVEABLE, 0, 0 },
+  { BUTTON_CreateIndirect, "Button0", ID_BUTTON_0, 10, 30, 160, 48, 0, 0x0, 0 },
 };
 
 /**
@@ -42,14 +45,38 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static void _cbDialog(WM_MESSAGE * pMsg)
 {
   WM_HWIN hItem;
+  int     NCode;
+  int     Id;
 
   switch (pMsg->MsgId)
   {
     case WM_INIT_DIALOG:
+      /* 初始化框架窗口控件 */
       hItem = pMsg->hWin;
-      FRAMEWIN_SetTitleHeight(hItem, 24);
-      FRAMEWIN_SetFont(hItem, GUI_FONT_24_1);
+      FRAMEWIN_SetTitleHeight(hItem, 32);
+      FRAMEWIN_SetFont(hItem, GUI_FONT_32_1);
       FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
+      /* 初始化Button0 */
+      hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+      BUTTON_SetFont(hItem, GUI_FONT_24B_ASCII);
+      break;
+    case WM_NOTIFY_PARENT:
+      /* 获取控件ID */
+      Id = WM_GetId(pMsg->hWinSrc);
+      /* 获取消息内容 */
+      NCode = pMsg->Data.v;
+      switch(Id)
+      {
+        case ID_BUTTON_0: // Notifications sent by 'Button'
+        switch(NCode)
+        {
+          case WM_NOTIFICATION_CLICKED:
+            break;
+          case WM_NOTIFICATION_RELEASED:
+            break;
+        }
+        break;
+      }
       break;
     default:
       WM_DefaultProc(pMsg);
@@ -58,7 +85,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 }
 
 /**
-  * @brief 资源表方式间接创建对话框
+  * @brief 以对话框方式间接创建控件
   * @note 无
   * @param 无
   * @retval hWin：资源表中第一个控件的句柄
@@ -79,8 +106,13 @@ WM_HWIN CreateFramewin(void)
   */
 void MainTask(void)
 {
+  /* 设置桌面窗口颜色 */
+  WM_SetDesktopColor(GUI_BLUE);
+  
 	/* 创建对话框 */
 	CreateFramewin();
+  /* 开启光标 */
+  GUI_CURSOR_Show();
   
 	while (1)
 	{

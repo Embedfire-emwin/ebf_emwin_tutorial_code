@@ -168,15 +168,6 @@ can be set here.
 #elif (COLOR_MODE_0 == _CM_ARGB4444)
   #define COLOR_CONVERSION_0 GUICC_M4444I
   #define DISPLAY_DRIVER_0   GUIDRV_LIN_16
-#elif (COLOR_MODE_0 == _CM_L8)
-  #define COLOR_CONVERSION_0 GUICC_8666
-  #define DISPLAY_DRIVER_0   GUIDRV_LIN_8
-#elif (COLOR_MODE_0 == _CM_AL44)
-  #define COLOR_CONVERSION_0 GUICC_1616I
-  #define DISPLAY_DRIVER_0   GUIDRV_LIN_8
-#elif (COLOR_MODE_0 == _CM_AL88)
-  #define COLOR_CONVERSION_0 GUICC_88666I
-  #define DISPLAY_DRIVER_0   GUIDRV_LIN_16
 #else
   #error Illegal color mode 0!
 #endif
@@ -197,15 +188,6 @@ can be set here.
   #define DISPLAY_DRIVER_1   GUIDRV_LIN_16
 #elif (COLOR_MODE_1 == _CM_ARGB4444)
   #define COLOR_CONVERSION_1 GUICC_M4444I
-  #define DISPLAY_DRIVER_1   GUIDRV_LIN_16
-#elif (COLOR_MODE_1 == _CM_L8)
-  #define COLOR_CONVERSION_1 GUICC_8666
-  #define DISPLAY_DRIVER_1   GUIDRV_LIN_8
-#elif (COLOR_MODE_1 == _CM_AL44)
-  #define COLOR_CONVERSION_1 GUICC_1616I
-  #define DISPLAY_DRIVER_1   GUIDRV_LIN_8
-#elif (COLOR_MODE_1 == _CM_AL88)
-  #define COLOR_CONVERSION_1 GUICC_88666I
   #define DISPLAY_DRIVER_1   GUIDRV_LIN_16
 #else
   #error Illegal color mode 1!
@@ -855,13 +837,11 @@ static void _LCD_CopyBuffer(int LayerIndex, int IndexSrc, int IndexDst) {
 */
 static void _LCD_CopyRect(int LayerIndex, int x0, int y0, int x1, int y1, int xSize, int ySize) {
   U32 BufferSize, AddrSrc, AddrDst;
-	int OffLine;
 
   BufferSize = _GetBufferSize(LayerIndex);
   AddrSrc = _aAddr[LayerIndex] + BufferSize * _aBufferIndex[LayerIndex] + (y0 * _axSize[LayerIndex] + x0) * _aBytesPerPixels[LayerIndex];
   AddrDst = _aAddr[LayerIndex] + BufferSize * _aBufferIndex[LayerIndex] + (y1 * _axSize[LayerIndex] + x1) * _aBytesPerPixels[LayerIndex];
-  OffLine = _axSize[LayerIndex] - xSize;
-	_DMA_Copy(LayerIndex, (void *)AddrSrc, (void *)AddrDst, xSize, ySize, OffLine, OffLine);
+	_DMA_Copy(LayerIndex, (void *)AddrSrc, (void *)AddrDst, xSize, ySize, _axSize[LayerIndex] - xSize, _axSize[LayerIndex] - xSize);
 }
 
 /*********************************************************************

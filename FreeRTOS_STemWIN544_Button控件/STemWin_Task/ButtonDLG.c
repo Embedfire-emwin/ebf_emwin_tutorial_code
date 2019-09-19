@@ -80,18 +80,18 @@ static void _cbButton1(WM_MESSAGE* pMsg)
 		if (BUTTON_IsPressed(pMsg->hWin))
 		{
 			GUI_SetColor(GUI_GRAY_C8);
-			GUI_FillRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1);
+			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
 			GUI_SetBkColor(GUI_GRAY_C8);
 			GUI_SetColor(0xA0ECECEC);
-			GUI_DrawRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1);
+			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
 		}
 		else
 		{
 			GUI_SetColor(GUI_WHITE);
-			GUI_FillRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1);
+			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
 			GUI_SetBkColor(GUI_WHITE);
 			GUI_SetColor(0xA0ECECEC);
-			GUI_DrawRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1);
+			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
 		}
 		GUI_SetColor(GUI_BLACK);
 		GUI_SetFont(&GUI_Font16B_ASCII);
@@ -262,7 +262,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 */
 
  /**
-  * @brief 资源表方式间接创建对话框
+  * @brief 以对话框方式间接创建控件
   * @note 无
   * @param 无
   * @retval hWin：资源表中第一个控件的句柄

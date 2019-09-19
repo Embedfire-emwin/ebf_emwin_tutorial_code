@@ -63,32 +63,14 @@ static void AP6181_PDN_INIT(void)
   */
 void FS_Init(void)
 {
-	const TCHAR *ScreenShotPATH  = "0:/ScreenShot";
-	
-	/* 禁用WiFi模块 */
-	AP6181_PDN_INIT();
-	
+  AP6181_PDN_INIT();
+  
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)
 	{
 		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
 		while(1);
-	}
-	/*  如果路径不存在，则创建路径  */
-	result = f_opendir(&dir, ScreenShotPATH);
-	while(result != FR_OK)
-	{
-		f_mkdir(ScreenShotPATH);
-		result = f_opendir(&dir, ScreenShotPATH);
-	}
-	/* 扫描已存在的截图文件个数 */
-	while(f_readdir(&dir, &fno) == FR_OK)
-	{
-		if(fno.fname[0] == 0)
-			break;
-		if(fno.fattrib == AM_ARC)
-			file_num++;
 	}
 }
 

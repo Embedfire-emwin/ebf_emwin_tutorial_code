@@ -106,7 +106,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 **********************************************************************
 */
  /**
-  * @brief 资源表方式间接创建对话框
+  * @brief 以对话框方式间接创建控件
   * @note 无
   * @param 无
   * @retval hWin：资源表中第一个控件的句柄
@@ -134,7 +134,7 @@ void MainTask(void)
 	{
 		/* 向GRAPH数据对象添加数据 */
 		GRAPH_DATA_YT_AddValue(Graphdata, ADC_ConvertedValue/10);
-		GUI_Delay(1);
+		GUI_Delay(40);
 	}
 }
 

@@ -48,7 +48,7 @@ void MainTask(void)
 	
 	/* 设置字体大小 */
 	GUI_SetFont(GUI_FONT_32_1);
-	GUI_DispStringAt("STemWIN@EmbeddedFire STM32F429", 10, 10);
+	GUI_DispStringAt("STemWIN@EmbedFire STM32F429", 10, 10);
 	
 	/* 画线 */
 	GUI_SetPenSize(10);

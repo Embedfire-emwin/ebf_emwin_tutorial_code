@@ -67,7 +67,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     WINDOW_SetBkColor(hItem, GUI_BLUE);
     /* ³õÊ¼»¯Text */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-    TEXT_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+    TEXT_SetText(hItem, "STemWIN@EmbedFire STM32F429");
     TEXT_SetFont(hItem, GUI_FONT_32_1);
     TEXT_SetTextColor(hItem, GUI_WHITE);
     break;

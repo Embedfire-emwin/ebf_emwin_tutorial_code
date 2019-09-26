@@ -33,7 +33,6 @@
 #define ID_BUTTON_1 (GUI_ID_USER + 0x02)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x03)
 #define ID_BUTTON_3 (GUI_ID_USER + 0x04)
-#define ID_BUTTON_4 (GUI_ID_USER + 0x05)
 
 /*********************************************************************
 *
@@ -54,7 +53,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "Button1", ID_BUTTON_1, 10, 138, 160, 48, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button2", ID_BUTTON_2, 50, 246, 80, 80, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "", ID_BUTTON_3, 244, 30, 165, 48, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "", ID_BUTTON_4, 244, 138, 165, 48, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -80,21 +78,21 @@ static void _cbButton1(WM_MESSAGE* pMsg)
 		if (BUTTON_IsPressed(pMsg->hWin))
 		{
 			GUI_SetColor(GUI_GRAY_C8);
-			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
+			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 10);
 			GUI_SetBkColor(GUI_GRAY_C8);
 			GUI_SetColor(0xA0ECECEC);
-			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
+			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 10);
 		}
 		else
 		{
 			GUI_SetColor(GUI_WHITE);
-			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
+			GUI_FillRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 10);
 			GUI_SetBkColor(GUI_WHITE);
 			GUI_SetColor(0xA0ECECEC);
-			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 5);
+			GUI_DrawRoundedRect(Rect.x0, Rect.y0, Rect.x1, Rect.y1, 10);
 		}
 		GUI_SetColor(GUI_BLACK);
-		GUI_SetFont(&GUI_Font16B_ASCII);
+		GUI_SetFont(&GUI_Font20B_ASCII);
 		GUI_DispStringInRect("Button1", &Rect, GUI_TA_HCENTER | GUI_TA_VCENTER);
 		break;
 
@@ -135,11 +133,10 @@ static void _cbButton2(WM_MESSAGE* pMsg)
 			GUI_SetColor(GUI_BLACK);
 			GUI_DrawEllipse(Rect.x1 / 2, Rect.y1 / 2, Rect.x1 / 2, Rect.y1 / 2);
 		}
-		GUI_SetFont(&GUI_Font16B_ASCII);
+		GUI_SetFont(&GUI_Font20B_ASCII);
 		GUI_SetColor(GUI_WHITE);
 		GUI_DispStringInRect("Button2", &Rect, GUI_TA_HCENTER | GUI_TA_VCENTER);
 		break;
-
 	default:
 		BUTTON_Callback(pMsg);
 	}
@@ -161,23 +158,21 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 	case WM_INIT_DIALOG:
 		/* 初始化Framewin控件 */
 		hItem = pMsg->hWin;
-		FRAMEWIN_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
 		FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
 		FRAMEWIN_SetTitleHeight(hItem, 32);
+  	/* 初始化Button0 */
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+    BUTTON_SetFont(hItem, GUI_FONT_20B_1);
 		/* 初始化Button1 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
 		WM_SetCallback(hItem, _cbButton1);
 		/* 初始化Button2 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
 		WM_SetCallback(hItem, _cbButton2);
-		/* 初始化Button2 */
+		/* 初始化Button3 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
-		GUI_SetFont(GUI_FONT_24B_ASCII);
-		BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
-		/* 初始化Button4 */
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
-		GUI_SetFont(GUI_FONT_24B_ASCII);
-		BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
+		BUTTON_SetBitmap(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF);
 		break;
 	case WM_NOTIFY_PARENT:
 		Id = WM_GetId(pMsg->hWinSrc);
@@ -188,25 +183,26 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 			case WM_NOTIFICATION_CLICKED:
 				break;
 			case WM_NOTIFICATION_RELEASED:
-        LED2_TOGGLE;
+        LED1_TOGGLE;
 				break;
 			}
 			break;
 		case ID_BUTTON_1: // Notifications sent by 'Button1'
 			switch (NCode) {
 			case WM_NOTIFICATION_CLICKED:
-        BEEP_ON;
 				break;
 			case WM_NOTIFICATION_RELEASED:
-        BEEP_OFF;
+        LED2_TOGGLE;
 				break;
 			}
 			break;
 		case ID_BUTTON_2: // Notifications sent by 'Button2'
 			switch (NCode) {
 			case WM_NOTIFICATION_CLICKED:
+        BEEP_ON;
 				break;
 			case WM_NOTIFICATION_RELEASED:
+        BEEP_OFF;
 				break;
 			}
 			break;
@@ -221,28 +217,10 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 				button_3_flag = ~button_3_flag;
 				if (button_3_flag != 0)
 				{
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
+					BUTTON_SetBitmap(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON);
 				}
 				else
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
-				break;
-			}
-			break;
-		case ID_BUTTON_4: // Notifications sent by 'Button4'
-			/* 获取控件句柄 */
-			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
-			switch (NCode) {
-			case WM_NOTIFICATION_CLICKED:
-				break;
-			case WM_NOTIFICATION_RELEASED:
-				/* Button4已被释放 */
-				button_4_flag = ~button_4_flag;
-				if (button_4_flag != 0)
-				{
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF, 0, 0);
-				}
-				else
-					BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_ON, 0, 0);
+					BUTTON_SetBitmap(hItem, BUTTON_BI_UNPRESSED, &bmBUTTON_OFF);
 				break;
 			}
 			break;

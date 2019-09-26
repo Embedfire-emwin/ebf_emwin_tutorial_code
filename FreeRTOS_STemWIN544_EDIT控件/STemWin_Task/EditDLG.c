@@ -130,7 +130,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = pMsg->hWin;
     FRAMEWIN_SetFont(hItem, GUI_FONT_20_ASCII);
     FRAMEWIN_SetTitleHeight(hItem, 20);
-    FRAMEWIN_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
     /* Edit0³õÊ¼»¯ */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
     EDIT_SetText(hItem, "TEXT");

@@ -71,7 +71,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   case WM_INIT_DIALOG:
     /* ³õÊ¼»¯Framewin¿Ø¼þ */
     hItem = pMsg->hWin;
-    FRAMEWIN_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
     FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
     FRAMEWIN_SetTitleHeight(hItem, 32);
 	

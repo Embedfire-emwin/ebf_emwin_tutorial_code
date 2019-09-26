@@ -114,7 +114,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 		/* 初始化Framewin控件 */
 		hItem = pMsg->hWin;
 		FRAMEWIN_SetTitleHeight(hItem, 32);
-		FRAMEWIN_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
 		FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
 	
 		/* 初始化Listview控件 */

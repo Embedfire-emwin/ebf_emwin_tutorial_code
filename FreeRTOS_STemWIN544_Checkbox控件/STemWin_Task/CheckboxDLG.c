@@ -41,6 +41,7 @@
 **********************************************************************
 */
 extern GUI_CONST_STORAGE GUI_BITMAP bmcheckbox_true;
+extern GUI_CONST_STORAGE GUI_BITMAP bmcheckbox_false;
 
 /*********************************************************************
 *
@@ -51,7 +52,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { CHECKBOX_CreateIndirect, "Checkbox0", ID_CHECKBOX_0, 30, 30, 130, 35, 0, 0x0, 0 },
   { CHECKBOX_CreateIndirect, "Checkbox1", ID_CHECKBOX_1, 30, 100, 130, 35, 0, 0x0, 0 },
   { CHECKBOX_CreateIndirect, "Checkbox2", ID_CHECKBOX_2, 30, 170, 130, 35, 0, 0x0, 0 },
-  { CHECKBOX_CreateIndirect, "Checkbox3", ID_CHECKBOX_3, 30, 240, 130, 35, 0, 0x0, 0 },
+  { CHECKBOX_CreateIndirect, "Checkbox3", ID_CHECKBOX_3, 240, 30, 130, 35, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -77,7 +78,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = pMsg->hWin;
     FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
     FRAMEWIN_SetTitleHeight(hItem, 32);
-    FRAMEWIN_SetText(hItem, "STemWIN@EmbeddedFire STM32F429");
+    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
     /* 初始化Checkbox0 */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
     CHECKBOX_SetText(hItem, "Checkbox0");
@@ -91,7 +92,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     CHECKBOX_SetText(hItem, "Checkbox2");
     CHECKBOX_SetFont(hItem, GUI_FONT_20_ASCII);
 		CHECKBOX_SetTextColor(hItem, GUI_LIGHTGRAY);
-		CHECKBOX_SetBoxBkColor(hItem, GUI_LIGHTGRAY, CHECKBOX_CI_DISABLED);
 		CHECKBOX_SetState(hItem, 1);
 		WM_DisableWindow(hItem);
     /* 初始化Checkbox3 */
@@ -109,7 +109,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
 		  switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        if(CHECKBOX_IsChecked(hItem))
+        if(CHECKBOX_GetState(hItem))
 				{LED2_ON;}
 				else
 				{LED2_OFF;}
@@ -124,21 +124,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        if(CHECKBOX_IsChecked(hItem))
+        if(CHECKBOX_GetState(hItem))
 					CHECKBOX_SetTextColor(hItem, GUI_RED);
 				else
 					CHECKBOX_SetTextColor(hItem, GUI_BLACK);
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        break;
-      case WM_NOTIFICATION_VALUE_CHANGED:
-        break;
-      }
-      break;
-    case ID_CHECKBOX_2: // Notifications sent by 'Checkbox2'
-			hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
         break;
       case WM_NOTIFICATION_RELEASED:
         break;
@@ -150,8 +139,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        if(CHECKBOX_IsChecked(hItem))
+        if(CHECKBOX_GetState(hItem))
 					CHECKBOX_SetImage(hItem, &bmcheckbox_true, CHECKBOX_BI_ACTIV_CHECKED);
+        else
+          CHECKBOX_SetImage(hItem, &bmcheckbox_false, CHECKBOX_BI_ACTIV_UNCHECKED);
         break;
       case WM_NOTIFICATION_RELEASED:
         break;

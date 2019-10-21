@@ -156,7 +156,7 @@
 #define configIDLE_SHOULD_YIELD					1           
 
 //启用队列
-#define configUSE_QUEUE_SETS					  0    
+#define configUSE_QUEUE_SETS					  1    
 
 //开启任务通知功能，默认开启
 #define configUSE_TASK_NOTIFICATIONS    1   

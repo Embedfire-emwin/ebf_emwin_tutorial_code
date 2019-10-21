@@ -20,7 +20,10 @@
 
 /* STemWIN头文件 */
 #include "MainTask.h"
-
+/* FreeRTOS头文件 */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
 
 /*********************************************************************
 *
@@ -38,30 +41,64 @@
 
 /*********************************************************************
 *
-*       _aDialogCreate
-*/
-
-/*********************************************************************
-*
-*       Static code
-*
-**********************************************************************
-*/
-
-/*********************************************************************
-*
 *       Public code
 *
 **********************************************************************
 */
+/**
+  * @brief 设置LCD显示方向
+  * @note 此函数会额外消耗 xSize*ySize*BytesPerPixel 大小的RAM空间
+  * @param orientation：0：正常
+  *                     1：右侧竖屏
+  *                     2：翻转180°
+  *                     3：左侧竖屏
+  * @retval 无
+  */
+static uint8_t LCD_Orientation(U8 orientation)
+{
+  switch(orientation)
+  {
+    case 0:/* 正常 */
+      GUI_SetOrientation(0);
+      break;
+    case 1:/* 右侧竖屏 */
+			GUI_SetOrientation(GUI_SWAP_XY | GUI_MIRROR_X);
+      break;
+    case 2:/* 翻转180° */
+      GUI_SetOrientation(GUI_MIRROR_X | GUI_MIRROR_Y);
+      break;
+    case 3:/* 左侧竖屏 */
+      GUI_SetOrientation(GUI_SWAP_XY | GUI_MIRROR_Y);
+      break;
+    default:
+      GUI_SetOrientation(0);
+      break;
+  }
+  return orientation;
+}
+
 /**
   * @brief GUI主任务
   * @note 无
   * @param 无
   * @retval 无
   */
+extern QueueHandle_t Test_Queue;
 void MainTask(void)
 {
+  uint8_t Orientation = 0;
+  BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为 pdPASS */
+  GUI_PID_STATE State;
+  
+  /* 设置LCD显示方向 */
+  Orientation = LCD_Orientation(2);
+  /* 发送LCD显示方向到触摸任务，修改触摸方向 */
+  xReturn = xQueueSend(Test_Queue,/* 消息队列的句柄 */
+                       &Orientation,/* 发送的消息内容 */
+                       0);/* 等待时间 0 */
+  if (pdPASS == xReturn)
+    printf(" Orientation消息发送成功!\n\n");
+  
 	/* 设置背景颜色 */
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_Clear();
@@ -75,7 +112,7 @@ void MainTask(void)
   
 	while(1)
 	{
-		GUI_Delay(1000);
+		GUI_Delay(100);
 	}
 }
 

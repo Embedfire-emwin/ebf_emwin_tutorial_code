@@ -71,6 +71,7 @@ static TaskHandle_t GUI_Task_Handle = NULL;
  * 
  */
 SemaphoreHandle_t ScreenShotSem_Handle = NULL;
+QueueHandle_t Test_Queue =NULL;
  
 /******************************* 全局变量声明 ************************************/
 /*
@@ -138,6 +139,12 @@ static void AppTaskCreate(void)
 	ScreenShotSem_Handle = xSemaphoreCreateBinary();
 	if(NULL != ScreenShotSem_Handle)
 		printf("ScreenShotSem二值信号量创建成功！\r\n");
+  
+  /* 创建消息队列 */
+  Test_Queue = xQueueCreate(1,/* 消息队列长度 */
+                            1);/* 消息大小 */
+	if(NULL != Test_Queue)
+		printf("Test_Queue消息队列创建成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)ScreenShot_Task,/* 任务入口函数 */
 											 (const char*    )"ScreenShot_Task",/* 任务名称 */
@@ -297,9 +304,15 @@ static void Key_Task(void* parameter)
   */
 static void Touch_Task(void* parameter)
 {
+  uint8_t Touch_Orientation = 0;
+  BaseType_t xReturn = pdTRUE;/*  定义一个创建信息返回值，默认为 pdTRUE */
+  
+  xReturn = xQueueReceive(Test_Queue,/* 消息队列的句柄 */
+                          &Touch_Orientation,/* 收到的消息内容 */
+                          portMAX_DELAY);/* 阻塞等待 */
 	while(1)
 	{
-		GT9xx_GetOnePiont();
+		GT9xx_GetOnePiont(Touch_Orientation);
 		vTaskDelay(20);
 	}
 }
@@ -311,7 +324,7 @@ static void Touch_Task(void* parameter)
   * @retval 无
   */
 static void GUI_Task(void* parameter)
-{
+{ 
 	/* 初始化GUI */
 	GUI_Init();
 	/* 开启三缓冲 */

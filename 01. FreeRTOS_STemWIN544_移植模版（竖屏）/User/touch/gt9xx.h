@@ -249,5 +249,5 @@ int32_t GTP_Read_Version(void);
 int32_t GTP_Init_Panel(void);
 int8_t GTP_Send_Command(uint8_t command);
 
-void GT9xx_GetOnePiont(void);
+void GT9xx_GetOnePiont(uint8_t Orientation);
 #endif /* _GOODIX_GT9XX_H_ */

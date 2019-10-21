@@ -81,13 +81,6 @@ can be set here.
 *
 *       Common
 */
-
-#undef  LCD_SWAP_XY
-#undef  LCD_MIRROR_Y
-
-#define LCD_SWAP_XY  0 
-#define LCD_MIRROR_Y 1
-
 //
 // Physical display size
 //
@@ -131,7 +124,7 @@ can be set here.
 //
 // Color mode layer 0
 //
-#define COLOR_MODE_0 _CM_RGB888
+#define COLOR_MODE_0 _CM_RGB565
 //
 // Layer size
 //

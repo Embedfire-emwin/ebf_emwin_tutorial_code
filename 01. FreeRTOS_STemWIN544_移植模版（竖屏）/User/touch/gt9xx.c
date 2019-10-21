@@ -623,8 +623,9 @@ static int8_t GTP_I2C_Test( void)
 
 
 #include "GUI.h"
-
-void GT9xx_GetOnePiont(void)
+#include "./lcd/bsp_lcd.h"
+extern U8 Orientation;
+void GT9xx_GetOnePiont(uint8_t Orientation)
 {
 	GUI_PID_STATE State;
 	GTP_DEBUG_FUNC();
@@ -644,11 +645,35 @@ void GT9xx_GetOnePiont(void)
 		GUI_TOUCH_StoreStateEx(&State);
 		return;
 	}
-	State.Pressed = 1;
-	State.x = pre_x;
-	State.y =pre_y;
-	State.Layer = 0;
-	GUI_TOUCH_StoreStateEx(&State);
+  else
+  {
+    switch(Orientation)
+    {
+      case 0:/* Õý³£ */
+        State.x = pre_x;
+        State.y = pre_y;
+        break;
+      case 1:/* ÓÒ²àÊúÆÁ */
+        State.x = pre_y;
+        State.y = LCD_PIXEL_WIDTH - pre_x - 1;  
+        break;
+      case 2:/* ·­×ª180¡ã */
+        State.x = LCD_PIXEL_WIDTH - pre_x - 1;
+        State.y = LCD_PIXEL_HEIGHT - pre_y - 1;
+        break;
+      case 3:/* ×ó²àÊúÆÁ */
+        State.x = LCD_PIXEL_HEIGHT - pre_y - 1;
+        State.y = pre_x;
+        break;
+      default:
+        State.x = pre_x;
+        State.y = pre_y;
+        break;
+    }
+    State.Pressed = 1;
+    State.Layer = 0;
+    GUI_TOUCH_StoreStateEx(&State);
+  }
 }
 //MODULE_DESCRIPTION("GTP Series Driver");
 //MODULE_LICENSE("GPL");

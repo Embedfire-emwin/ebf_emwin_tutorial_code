@@ -50,8 +50,8 @@
 **********************************************************************
 */
 int t0, t1;
-static char *_acbuffer = NULL;
 static char _acBuffer[1024 * 4];
+static char *_acbuffer = NULL;
 
 UINT    f_num;
 extern FATFS   fs;								/* FatFs文件系统对象 */
@@ -79,34 +79,37 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytesReq, U32 Off)
 	
 	Picfile = (FIL *)p;
 	
+  /* 检查缓冲区大小 */
 	if(NumBytesReq > sizeof(_acBuffer))
 	{NumBytesReq = sizeof(_acBuffer);}
-	
+  
+	/* 读取偏移量 */
 	if(Off == 1) FileAddress = 0;
 	else FileAddress = Off;
 	result = f_lseek(Picfile, FileAddress);
 	
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
+  /* 读取图片数据 */
 	result = f_read(Picfile, _acBuffer, NumBytesReq, &NumBytesRead);
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
 	
 	*ppData = (const U8 *)_acBuffer;
 	
+  /* 返回以读到的字节数 */
 	return NumBytesRead;
 }
 
 /**
-  * @brief 直接从存储器中绘制BMP图片数据
+  * @brief 直接从外部存储器中绘制BMP图片
   * @note 无
   * @param sFilename：需要加载的图片名
-  *        ScaledMode：是否启用缩放，0不启用，1启用
-  *        Num：缩放系数的分子
-  *        Denom：缩放系数的分母
+  *        x0：图片左上角在屏幕上的横坐标
+  *        y0：图片左上角在屏幕上的纵坐标
   * @retval 无
   */
-static void ShowBMPEx(const char *sFilename, char ScaledMode, int Num, int Denom)
+static void ShowBMPEx(const char *sFilename, int x0, int y0)
 {
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
@@ -115,36 +118,23 @@ static void ShowBMPEx(const char *sFilename, char ScaledMode, int Num, int Denom
 	if ((result != FR_OK))
 	{
 		printf("文件打开失败！\r\n");
-		_acBuffer[0]='\0';
 	}
-	/* 退出临界段 */
+  /* 退出临界段 */
 	taskEXIT_CRITICAL();
-	
-	switch(ScaledMode)
-	{
-		case 0:
-			/* 绘制BMP */
-			GUI_BMP_DrawEx(_GetData, &file, 0, 0);
-			break;
-		case 1:
-			/* 缩放BMP */
-			GUI_BMP_DrawScaledEx(_GetData, &file, 0, 0, Num, Denom);
-			break;
-	}
-	/* 读取完毕关闭文件 */
-	f_close(&file);
+  
+  /* 绘制图片 */
+  GUI_BMP_DrawEx(_GetData, &file, x0, y0);
 }
 
 /**
   * @brief 加载BMP图片到内存中并绘制
   * @note 无
   * @param sFilename：需要加载的图片名
-  *        ScaledMode：是否启用缩放，0不启用，1启用
-  *        Num：缩放系数的分子
-  *        Denom：缩放系数的分母
+  *        x0：图片左上角在屏幕上的横坐标
+  *        y0：图片左上角在屏幕上的纵坐标
   * @retval 无
   */
-static void ShowBMP(const char *sFilename, char ScaledMode, int Num, int Denom)
+static void ShowBMP(const char *sFilename, int x0, int y0)
 {
 	WM_HMEM hMem;
 	
@@ -174,17 +164,8 @@ static void ShowBMP(const char *sFilename, char ScaledMode, int Num, int Denom)
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
 	
-	switch(ScaledMode)
-	{
-		case 0:
-			/* 绘制BMP */
-			GUI_BMP_Draw(_acbuffer, 0, 0);
-			break;
-		case 1:
-			/* 缩放BMP */
-			GUI_BMP_DrawScaled(_acbuffer, 0, 0, Num, Denom);
-			break;
-	}
+	GUI_BMP_Draw(_acbuffer, x0, y0);
+  
 	/* 释放内存 */
 	GUI_ALLOC_Free(hMem);
 }
@@ -198,11 +179,10 @@ static void ShowBMP(const char *sFilename, char ScaledMode, int Num, int Denom)
   *        Denom：缩放系数的分母
   * @retval 无
   */
-static void LoadBMP_UsingMEMDEV(const char *sFilename, char ScaledMode, int Num, int Denom)
+WM_HMEM hMem;
+GUI_MEMDEV_Handle hBMP;
+static void LoadBMP_UsingMEMDEV(const char *sFilename, int x0, int y0)
 {
-	WM_HMEM hMem;
-	GUI_MEMDEV_Handle hBMP;
-	
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
 	/* 打开图片 */
@@ -229,36 +209,18 @@ static void LoadBMP_UsingMEMDEV(const char *sFilename, char ScaledMode, int Num,
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
 	/* 创建内存设备 */
-	hBMP = GUI_MEMDEV_CreateEx(0, 0,                       /* 起始坐标 */
+	hBMP = GUI_MEMDEV_CreateEx(x0, y0,                     /* 起始坐标 */
 														 GUI_BMP_GetXSize(_acbuffer),/* x方向尺寸 */
 														 GUI_BMP_GetYSize(_acbuffer),/* y方向尺寸 */
 														 GUI_MEMDEV_HASTRANS);/* 带透明度的内存设备 */
-	switch(ScaledMode)
-	{
-		case 0:
-			/* 选择内存设备 */
-			GUI_MEMDEV_Select(hBMP);
-			/* 绘制BMP到内存设备中 */
-			GUI_BMP_Draw(_acbuffer, 0, 0);
-			break;
-		case 1:
-			/* 选择内存设备 */
-			GUI_MEMDEV_Select(hBMP);
-			/* 绘制BMP到内存设备中 */
-			GUI_BMP_DrawScaled(_acbuffer, 0, 0, Num, Denom);
-			break;
-	}
-	t0 = GUI_GetTime();
-	/* 选择内存设备，0表示选中LCD */
-	GUI_MEMDEV_Select(0);
-	/* 从内存设备写入LCD */
-	GUI_MEMDEV_CopyToLCDAt(hBMP, 0, 0);
-	/* 删除内存设备 */
-	GUI_MEMDEV_Delete(hBMP);
-	t1 = GUI_GetTime();
-	/* 释放内存 */
-	GUI_ALLOC_Free(hMem);
-
+  /* 选择内存设备 */
+  GUI_MEMDEV_Select(hBMP);
+  /* 绘制BMP到内存设备中 */
+  GUI_BMP_Draw(_acbuffer, x0, y0);
+  /* 选择内存设备，0表示选中LCD */
+  GUI_MEMDEV_Select(0);
+  /* 释放内存 */
+  GUI_ALLOC_Free(hMem);
 }
 
 /*********************************************************************
@@ -276,10 +238,15 @@ static void LoadBMP_UsingMEMDEV(const char *sFilename, char ScaledMode, int Num,
 void MainTask(void)
 {
 	int i = 0;
-	char Tbuf[10] = {0};
 	
-	GUI_SetFont(GUI_FONT_16B_ASCII);
-	
+	GUI_SetFont(GUI_FONT_20B_ASCII);
+  GUI_SetTextMode(GUI_TM_XOR);
+  
+  /* 加载BMP图片数据到内存设备 */
+  LoadBMP_UsingMEMDEV("0:/image/ngc7635.bmp",
+                      (LCD_GetXSize()-768)/2,
+                      (LCD_GetYSize()-432)/2);
+  
 	while (1)
 	{
 		i++;
@@ -287,30 +254,39 @@ void MainTask(void)
 		{
 			case 1:
 				t0 = GUI_GetTime();
-				/* 直接从存储器中绘制BMP图片 */
-				ShowBMPEx("0:/image/ngc7293.bmp", 0, 0, 0);
+				/* 直接从外部存储器绘制BMP图片 */
+				ShowBMPEx("0:/image/ngc7635.bmp",
+                  (LCD_GetXSize()-768)/2,
+                  (LCD_GetYSize()-432)/2);
 				t1 = GUI_GetTime();
+        GUI_DispStringAt("GUI_BMP_DrawEx()", 0, 0);
+        printf("\r\n直接从外部存储器绘制BMP：%dms\r\n",t1 - t0);
 				break;
 			case 2:
 				t0 = GUI_GetTime();
 				/* 加载BMP图片到内存中并绘制 */
-				ShowBMP("0:/image/illustration.bmp", 0, 0, 0);
+				ShowBMP("0:/image/ngc7635.bmp",
+                (LCD_GetXSize()-768)/2,
+                (LCD_GetYSize()-432)/2);
 				t1 = GUI_GetTime();
+        GUI_DispStringAt("GUI_BMP_Draw()", 0, 0);
+        printf("加载BMP到内存中并绘制：%dms\r\n",t1 - t0);
 				break;
 			case 3:
-				/* 加载BMP图片数据到内存设备并绘制 */
-				LoadBMP_UsingMEMDEV("0:/image/wallpaper.bmp", 0, 0, 0);
-				break;
-			case 4:
-				/* 加载BMP图片数据到内存设备并绘制缩放 */
-				LoadBMP_UsingMEMDEV("0:/image/wallpaper.bmp", 1, 3, 5);
+        /* 显示内存设备中的BMP图片 */
+        t0 = GUI_GetTime();
+        /* 从内存设备写入LCD */
+        GUI_MEMDEV_CopyToLCDAt(hBMP,
+                               (LCD_GetXSize()-768)/2,
+                               (LCD_GetYSize()-432)/2);
+        t1 = GUI_GetTime();
+        GUI_DispStringAt("USE MEMDEV", 0, 0);
+        printf("使用内存设备显示BMP：%dms\r\n",t1 - t0);
 				break;
 			default:
 				i = 0;
 				break;
 		}
-		sprintf(Tbuf, "%d ms", t1 - t0);
-		GUI_DispStringAt(Tbuf, 0, 0);
 		GUI_Delay(2000);
 		GUI_Clear();
 	}

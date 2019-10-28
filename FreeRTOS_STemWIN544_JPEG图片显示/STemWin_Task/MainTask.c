@@ -57,8 +57,6 @@ extern FIL     file;							/* file objects */
 extern FRESULT result; 
 extern DIR     dir;
 
-int t0, t1;
-char Tbuf[8] = {0};
 /*********************************************************************
 *
 *       Static code
@@ -105,11 +103,6 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytesReq, U32 Off)
   */
 static void ShowJPEGEx(const char *sFilename)
 {
-	GUI_GIF_INFO Gifinfo = {0};
-	GUI_GIF_IMAGE_INFO Imageinfo = {0};
-	int i = 0;
-	int j = 0;
-	
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
 	/* 打开图片 */
@@ -164,9 +157,7 @@ static void ShowJPEG(const char *sFilename)
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
 	
-	t0 = GUI_GetTime();
 	GUI_JPEG_Draw(_acbuffer, file.fsize, 0, 0);
-	t1 = GUI_GetTime();
 	
 	/* 释放内存 */
 	GUI_ALLOC_Free(hMem);
@@ -219,7 +210,7 @@ static WM_HMEM LoadJPEG_UsingMEMDEV(const char *sFilename)
 														 GUI_MEMDEV_HASTRANS);/* 带透明度的内存设备 */
 	/* 选择内存设备 */
 	GUI_MEMDEV_Select(hJPEG);
-	/* 绘制BMP到内存设备中 */
+	/* 绘制JPEG到内存设备中 */
 	GUI_JPEG_Draw(_acbuffer, file.fsize, 0, 0);
 	/* 选择内存设备，0表示选中LCD */
 	GUI_MEMDEV_Select(0);
@@ -242,36 +233,53 @@ static WM_HMEM LoadJPEG_UsingMEMDEV(const char *sFilename)
   */
 void MainTask(void)
 {
+  int i = 0;
+  uint16_t t0 = 0;
+  uint16_t t1 = 0;
+  
 	GUI_MEMDEV_Handle hJPEG;
 	
 	GUI_SetFont(GUI_FONT_24B_ASCII);
-	GUI_SetColor(GUI_WHITE);
+	GUI_SetTextMode(GUI_TM_TRANS);
+  GUI_SetColor(GUI_WHITE);
 	
-	hJPEG = LoadJPEG_UsingMEMDEV("0:/image/gundam.jpg");
+  /* 加载JPEG图片数据到内存设备 */
+	hJPEG = LoadJPEG_UsingMEMDEV("0:/image/FORD_GT.jpg");
 	
 	while (1)
 	{
-		t0 = GUI_GetTime();
-		ShowJPEGEx("0:/image/despicable_me_2.jpg");
-		t1 = GUI_GetTime();
-		sprintf(Tbuf, "%d ms", t1 - t0);
-		GUI_DispStringAt(Tbuf, 0, 0);
-		GUI_Delay(1000);
-		GUI_Clear();
-		
-		ShowJPEG("0:/image/despicable_me_2.jpg");
-		sprintf(Tbuf, "%d ms", t1 - t0);
-		GUI_DispStringAt(Tbuf, 0, 0);
-		GUI_Delay(1000);
-		GUI_Clear();
-		
-		t0 = GUI_GetTime();
-		/* 从内存设备写入LCD */
-		GUI_MEMDEV_CopyToLCDAt(hJPEG, 0, 0);
-		t1 = GUI_GetTime();
-		sprintf(Tbuf, "%d ms", t1 - t0);
-		GUI_DispStringAt(Tbuf, 0, 0);
-		GUI_Delay(1000);
+    i++;
+    switch(i)
+    {
+			case 1:
+				t0 = GUI_GetTime();
+				/* 直接从外部存储器绘制JPEG图片 */
+				ShowJPEGEx("0:/image/FORD_GT.jpg");
+				t1 = GUI_GetTime();
+        GUI_DispStringHCenterAt("GUI_JPEG_DrawEx()", 400, 0);
+        printf("\r\n直接从外部存储器绘制JPEG：%dms\r\n",t1 - t0);
+				break;
+			case 2:
+				t0 = GUI_GetTime();
+				/* 加载JPEG图片到内存中并绘制 */
+				ShowJPEG("0:/image/FORD_GT.jpg");
+				t1 = GUI_GetTime();
+        GUI_DispStringHCenterAt("GUI_JPEG_Draw()", 400, 0);
+        printf("加载JPEG到内存中并绘制：%dms\r\n",t1 - t0);
+				break;
+      case 3:
+        t0 = GUI_GetTime();
+        /* 从内存设备写入LCD */
+        GUI_MEMDEV_CopyToLCDAt(hJPEG, 0, 0);
+        t1 = GUI_GetTime();
+        GUI_DispStringHCenterAt("USE MEMDEV", 400, 0);
+        printf("使用内存设备显示JPEG：%dms\r\n",t1 - t0);
+        break;
+      default:
+        i = 0;
+        break;
+    }
+		GUI_Delay(2000);
 		GUI_Clear();
 	}
 }

@@ -82,11 +82,7 @@ can be set here.
 *       Common
 */
 
-#undef  LCD_SWAP_XY
-#undef  LCD_MIRROR_Y
 
-#define LCD_SWAP_XY  0 
-#define LCD_MIRROR_Y 1
 
 //
 // Physical display size
@@ -1089,7 +1085,6 @@ void LTDC_ISR_Handler(void) {
       //
       // Clear pending buffer flag of layer
       //
-      //_aBufferIndex[i] = _aPendingBuffer[i];
       _aPendingBuffer[i] = -1;
     }
   }
@@ -1438,7 +1433,7 @@ void LCD_X_Config(void) {
     GUICC_M565_SetCustColorConv  (_Color2IndexBulk_M565_DMA2D,   _Index2ColorBulk_M565_DMA2D);   // Set up custom bulk color conversion using DMA2D for RGB565
     GUICC_M4444I_SetCustColorConv(_Color2IndexBulk_M4444I_DMA2D, _Index2ColorBulk_M4444I_DMA2D); // Set up custom bulk color conversion using DMA2D for ARGB4444
     GUICC_M888_SetCustColorConv  (_Color2IndexBulk_M888_DMA2D,   _Index2ColorBulk_M888_DMA2D);   // Set up custom bulk color conversion using DMA2D for RGB888
-    GUICC_M8888I_SetCustColorConv(_Color2IndexBulk_M8888I_DMA2D, _Index2ColorBulk_M8888I_DMA2D);
+    GUICC_M8888I_SetCustColorConv(_Color2IndexBulk_M8888I_DMA2D, _Index2ColorBulk_M8888I_DMA2D);   // Set up custom bulk color conversion using DMA2D for RGB888
     //
     // Set up custom alpha blending function using DMA2D
     //

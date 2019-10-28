@@ -34,7 +34,7 @@
 #define  LCD_PIXEL_HEIGHT       ((uint16_t)480)
 
 #define  LCD_FRAME_BUFFER       ((uint32_t)0xD0000000)
-#define  BUFFER_OFFSET          ((uint32_t)800*480*2)    //sdram为16位的
+
 
 
 /*部分液晶信号线的引脚复用编号是AF9*/

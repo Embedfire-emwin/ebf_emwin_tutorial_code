@@ -106,7 +106,6 @@ static void ShowGIFEx(const char *sFilename)
 	GUI_GIF_INFO Gifinfo = {0};
 	GUI_GIF_IMAGE_INFO Imageinfo = {0};
 	int i = 0;
-	int j = 0;
 	
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
@@ -119,20 +118,20 @@ static void ShowGIFEx(const char *sFilename)
 	}
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
-	
-	GUI_GIF_GetInfoEx(_GetData, &file, &Gifinfo);
-	
+  
+	/* 获取GIF文件信息 */
+	GUI_GIF_GetInfoEx(_GetData, &file, &Gifinfo);	
 	/* 循环显示所有的GIF帧 */
 	for(i = 0; i < Gifinfo.NumImages; i++)
 	{
+    /* 获取GIF子图象信息 */
+    GUI_GIF_GetImageInfoEx(_GetData, &file, &Imageinfo, i);
+    /* 绘制GIF子图象 */
 		GUI_GIF_DrawSubEx(_GetData, &file,
 										(LCD_GetXSize() - Gifinfo.xSize) / 2,
 										(LCD_GetYSize() - Gifinfo.ySize) / 2, i);
-		GUI_GIF_GetImageInfoEx(_GetData, &file, &Imageinfo, i);
-		if(Imageinfo.Delay == 0)
-			GUI_Delay(100);
-		else
-			GUI_Delay(Imageinfo.Delay);
+    /* 帧延时 */
+		GUI_Delay(Imageinfo.Delay);
 	}
 	/* 读取完毕关闭文件 */
 	f_close(&file);
@@ -177,23 +176,23 @@ static void ShowGIF(const char *sFilename)
 	f_close(&file);
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
-	
+  
+	/* 获取GIF文件信息 */
 	GUI_GIF_GetInfo(_acbuffer, file.fsize, &Gifinfo);
-	
 	/* 显示2遍GIF */
 	for(j = 0; j < 2; j++)
 	{
 		/* 循环显示所有的GIF帧 */
 		for(i = 0; i<Gifinfo.NumImages; i++)
 		{
+      /* 获取GIF子图象信息 */
+      GUI_GIF_GetImageInfo(_acbuffer, file.fsize, &Imageinfo, i);
+      /* 绘制GIF子图象 */
 			GUI_GIF_DrawSub(_acbuffer, file.fsize,
 											(LCD_GetXSize() - Gifinfo.xSize) / 2,
 											(LCD_GetYSize() - Gifinfo.ySize) / 2, i);
-			GUI_GIF_GetImageInfo(_acbuffer, file.fsize, &Imageinfo, i);
-			if(Imageinfo.Delay == 0)
-				GUI_Delay(100);
-			else
-				GUI_Delay(Imageinfo.Delay);
+       /* 帧延时 */
+			GUI_Delay(Imageinfo.Delay);
 		}
 	}
 	/* 释放内存 */
@@ -214,8 +213,6 @@ static void ShowGIF(const char *sFilename)
   */
 void MainTask(void)
 {
-	/* 启用自动内存设备 */
-	WM_SetCreateFlags(WM_CF_MEMDEV);
 	/* 设置背景色 */
 	GUI_SetBkColor(GUI_WHITE);
 	GUI_Clear();
@@ -225,23 +222,23 @@ void MainTask(void)
 	while (1)
 	{
 		/* 直接从存储器中绘制BMP图片数据 */
-		GUI_DispStringAt("ShowGIFEx", 328, 10);
+		GUI_DispStringHCenterAt("ShowGIFEx", LCD_GetXSize()/2, 10);
 		ShowGIFEx("0:/image/dolphin.gif");
 		GUI_Delay(100);
 		GUI_Clear();
 		
 		/* 加载GIT图片到内存中并绘制 */
-		GUI_DispStringAt("ShowGIF", 344, 10);
+		GUI_DispStringHCenterAt("ShowGIF", LCD_GetXSize()/2, 10);
 		ShowGIF("0:/image/dolphin.gif");
 		GUI_Delay(100);
 		GUI_Clear();
 		
-		GUI_DispStringAt("ShowGIF", 344, 10);
+		GUI_DispStringHCenterAt("ShowGIF", LCD_GetXSize()/2, 10);
 		ShowGIF("0:/image/rabbit.gif");
 		GUI_Delay(100);
 		GUI_Clear();
 		
-		GUI_DispStringAt("ShowGIF", 344, 10);
+		GUI_DispStringHCenterAt("ShowGIF", LCD_GetXSize()/2, 10);
 		ShowGIF("0:/image/Groundhog.gif");
 		GUI_Delay(100);
 		GUI_Clear();

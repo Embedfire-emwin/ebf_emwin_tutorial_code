@@ -813,11 +813,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
             </File>
-            <File>
-              <FileName>ScreenShot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\ScreenShot.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

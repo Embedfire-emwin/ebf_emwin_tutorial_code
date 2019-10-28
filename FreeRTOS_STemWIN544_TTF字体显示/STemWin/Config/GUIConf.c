@@ -119,9 +119,9 @@ void GUI_X_Config(void)
 {
 #ifdef USE_EXTMEMHEAP
   GUI_ALLOC_AssignMemory(HeapMem, GUI_NUMBYTES);
-//	#else	
+	#else	
   GUI_ALLOC_AssignMemory(extMem, GUI_NUMBYTES);	
-	#endif
+#endif
 }
 
 /*************************** End of file ****************************/

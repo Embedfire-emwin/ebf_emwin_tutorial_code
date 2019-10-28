@@ -31,7 +31,7 @@
  * 这个句柄可以为NULL。
  */
 /* 创建任务句柄 */
-static TaskHandle_t AppTaskCraete_Handle = NULL;
+static TaskHandle_t AppTaskCreate_Handle = NULL;
 /* LED1任务句柄 */
 static TaskHandle_t LED1_Task_Handle = NULL;
 /* LED2任务句柄 */
@@ -82,7 +82,7 @@ int main(void)
 											 (uint16_t       )512,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
-											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
+											 (TaskHandle_t   )&AppTaskCreate_Handle);/* 任务控制块指针 */
 	/* 启动任务调度 */
 	if(pdPASS == xReturn)
 		vTaskStartScheduler();/* 启动任务，开启调度 */
@@ -122,7 +122,7 @@ static void AppTaskCreate(void)
 	if(pdPASS == xReturn)
 		printf("创建LED1_Task任务成功！\r\n");
 	
-	vTaskDelete(AppTaskCraete_Handle);//删除AppTaskCreate任务
+	vTaskDelete(AppTaskCreate_Handle);//删除AppTaskCreate任务
 	
 	taskEXIT_CRITICAL();//退出临界区
 }

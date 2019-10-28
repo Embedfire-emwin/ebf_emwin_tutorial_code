@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -65,8 +65,6 @@ static const char text[] = {"这是一个使用矢量字体显示的例子。"};
   */
 void MainTask(void)
 {
-  uint32_t uxHighWaterMark;
-  
   /* 启用UTF-8编码 */
   GUI_UC_SetEncodeUTF8();
   /* 创建字体 */
@@ -79,7 +77,8 @@ void MainTask(void)
   /* 设置字体模式和颜色 */
   GUI_SetTextMode(GUI_TM_TRANS);
   GUI_SetColor(GUI_BLACK);
-  
+
+  /* 显示中文 */
   GUI_SetFont(&FONT_TTF_24);
   GUI_DispString(text);
   GUI_DispNextLine();
@@ -90,6 +89,9 @@ void MainTask(void)
   GUI_DispString(text);
   GUI_DispNextLine();
   GUI_SetFont(&FONT_TTF_96);
+  GUI_DispString(text);
+  GUI_DispNextLine();
+  GUI_SetFont(&FONT_TTF_120);
   GUI_DispString(text);
   
 	while(1)

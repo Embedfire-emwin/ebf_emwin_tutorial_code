@@ -27,11 +27,11 @@
 
 
 /* 字库结构体 */
-GUI_FONT     	FONT_XINSONGTI_24_4BPP;
+GUI_FONT     	FONT_SIYUANHEITI_36_4BPP;
 GUI_FONT     	FONT_XINSONGTI_18_4BPP;
 
 /* 字库缓冲区 */
-uint8_t *SIFbuffer24;
+uint8_t *SIFbuffer36;
 uint8_t *SIFbuffer18;
 
 /* 字库存储路径 */
@@ -53,19 +53,13 @@ uint8_t *SIFbuffer18;
 	CatalogTypeDef Catalog;
 	
 	static const char  FONT_XINSONGTI_18_ADDR[]	 = "xinsongti18_4bpp.sif";
-	static const char  FONT_XINSONGTI_24_ADDR[]	 = "xinsongti24_4bpp.sif";
+	static const char  FONT_SIYUANHEITI_36_ADDR[]	 = "siyuanheit36_4bpp.sif";
 
 #elif (SIF_FONT_SOURCE == USE_SDCARD_FONT)
 
 	static const char FONT_STORAGE_ROOT_DIR[]  =   "0:";
 	static const char FONT_XINSONGTI_18_ADDR[] = 	 "0:/Font/新宋体18_4bpp.sif";
-	static const char FONT_XINSONGTI_24_ADDR[] = 	 "0:/Font/新宋体24_4bpp.sif";
-
-#elif (SIF_FONT_SOURCE == USE_FLASH_FILESYSTEM_FONT)
-	
-	static const char FONT_STORAGE_ROOT_DIR[]  =   "1:";
-	static const char FONT_XINSONGTI_25_ADDR[] = 	 "1:新宋体24.sif";
-	static const char FONT_XINSONGTI_19_ADDR[] = 	 "1:新宋体18.sif";
+	static const char FONT_SIYUANHEITI_36_ADDR[] = 	 "0:/Font/思源黑体36_4bpp.sif";
 
 #endif
 
@@ -73,7 +67,7 @@ uint8_t *SIFbuffer18;
 static uint8_t storage_init_flag = 0;
 
 /* 字库存储在文件系统时需要使用的变量 */
-#if (SIF_FONT_SOURCE == USE_SDCARD_FONT || SIF_FONT_SOURCE == USE_FLASH_FILESYSTEM_FONT)
+#if (SIF_FONT_SOURCE == USE_SDCARD_FONT)
 	static FIL fnew;									  /* file objects */
 	static FATFS fs;									  /* Work area (file system object) for logical drives */
 	static FRESULT res;
@@ -108,9 +102,9 @@ int GetResOffset(const char *res_name)
 #endif
 
 /**
-  * @brief  获取字体数据的回调函数
+  * @brief  加载字体数据到SDRAM
   * @note 无
-  * @param  res_name：要读取的字库文件名
+  * @param  res_name：要加载的字库文件名
   * @retval Fontbuffer：已加载好的字库数据
   */
 void *FONT_SIF_GetData(const char *res_name)
@@ -147,7 +141,7 @@ void *FONT_SIF_GetData(const char *res_name)
 	
 	return Fontbuffer; 
 	
-#elif (SIF_FONT_SOURCE == USE_SDCARD_FONT || SIF_FONT_SOURCE == USE_FLASH_FILESYSTEM_FONT)
+#elif (SIF_FONT_SOURCE == USE_SDCARD_FONT)
 	
 	if (storage_init_flag == 0)
 	{
@@ -187,50 +181,20 @@ void *FONT_SIF_GetData(const char *res_name)
   * @param  无
   * @retval 无
   */
-void Creat_SIF_Font(void) 
+void Create_SIF_Font(void) 
 {
 	/* 获取字体数据 */
 	SIFbuffer18 = FONT_SIF_GetData(FONT_XINSONGTI_18_ADDR);
-	SIFbuffer24 = FONT_SIF_GetData(FONT_XINSONGTI_24_ADDR);
+	SIFbuffer36 = FONT_SIF_GetData(FONT_SIYUANHEITI_36_ADDR);
 	
 	/* 新宋体18 */
 	GUI_SIF_CreateFont(SIFbuffer18,               /* 已加载到内存中的字体数据 */
 	                   &FONT_XINSONGTI_18_4BPP,   /* GUI_FONT 字体结构体指针 */
 										 GUI_SIF_TYPE_PROP_AA4_EXT);/* 字体类型 */
-	/* 新宋体24 */
-	GUI_SIF_CreateFont(SIFbuffer24,               /* 已加载到内存中的字体数据 */
-	                   &FONT_XINSONGTI_24_4BPP,   /* GUI_FONT 字体结构体指针 */
+	/* 思源黑体36 */
+	GUI_SIF_CreateFont(SIFbuffer36,               /* 已加载到内存中的字体数据 */
+	                   &FONT_SIYUANHEITI_36_4BPP, /* GUI_FONT 字体结构体指针 */
 										 GUI_SIF_TYPE_PROP_AA4_EXT);/* 字体类型 */
-}
-
-/**
-  * @brief  GBK转UTF8
-  * @param  src：输入的字符串（GBK格式）
-  * @param  str：输出的字符串（UTF8格式）
-  * @retval 无
-  */
-void COM_gbk2utf8(const char *src, char *str)
-{
-	uint32_t j=0,k=0;
-	uint16_t gbkdata=0;
-	uint16_t UCbuffer[512]={0};
-	for(j=0,k=0;src[j]!='\0';k++)
-	{
-		if((uint8_t)src[j]>0x80)
-		{
-			gbkdata=src[j+1]+src[j]*256;
-			UCbuffer[k]=ff_convert(gbkdata,1);
-			j+=2;
-		}
-		else
-		{
-			UCbuffer[k]=0x00ff&src[j];
-			j+=1;
-		}
-	}
-	UCbuffer[k]='\0';
-	GUI_UC_ConvertUC2UTF8(UCbuffer,2*k+2,str,k*3);
-	str[k*3]=0;
 }
 
 /*********************************************END OF FILE**********************/

@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -46,22 +46,21 @@
 *
 **********************************************************************
 */
-char buf[15] = {0};
-char utf8_buffer[4096] = {0};
-static const char Framewin_text[] = {"STemWIN@野火电子 STM32F429"};
-static const char text[] = {"欢迎使用野火F429开发板\r\n这是一个使用SIF格式字库显示的例子，本例子支持中文显示"};
-static const char MULTIEDIT_text[] = {"实验平台:野火 STM32F429 开发板\r\n论坛:http://www.firebbs.cn\r\n淘宝:https://fire-stm32.taobao.com"};
-static const char *BUTTON_text[] = {"确定","取消"};
+extern const char Framewin_text[];
+extern const char text[];
+extern const char MULTIEDIT_text[];
+extern const char *BUTTON_text[];
+
 
 /*********************************************************************
 *
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 	{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 20, 35, 580, 50, 0, 0x64, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_1, 20, 100, 650, 50, 0, 0x64, 0 },
-  { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 40, 200, 420, 130, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_1, 20, 80, 740, 80, 0, 0x64, 0 },
+  { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 20, 200, 480, 130, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 560, 200, 140, 36, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 560, 292, 140, 36, 0, 0x0, 0 },
 };
@@ -89,9 +88,9 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 		case WM_INIT_DIALOG:
 			/* 初始化Framewin控件 */
 			hItem = pMsg->hWin;
-			FRAMEWIN_SetTitleHeight(hItem, 24);
+			FRAMEWIN_SetTitleHeight(hItem, 32);
 			FRAMEWIN_SetText(hItem, Framewin_text);
-			FRAMEWIN_SetFont(hItem, &FONT_XINSONGTI_24_4BPP);
+			FRAMEWIN_SetFont(hItem, &FONT_SIYUANHEITI_36_4BPP);
 			/* 初始化TEXT0 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
 			TEXT_SetText(hItem, text);
@@ -99,24 +98,24 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 			/* 初始化TEXT1 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
 			TEXT_SetText(hItem, text);
-			TEXT_SetFont(hItem, &FONT_XINSONGTI_24_4BPP);
+			TEXT_SetFont(hItem, &FONT_SIYUANHEITI_36_4BPP);
 			/* 初始化MULTIEDIT0 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
 			MULTIEDIT_SetReadOnly(hItem, 1);
 			MULTIEDIT_SetBufferSize(hItem, 200);
 			MULTIEDIT_SetWrapWord(hItem);
 			MULTIEDIT_SetText(hItem, MULTIEDIT_text);
-			MULTIEDIT_SetFont(hItem, &FONT_XINSONGTI_24_4BPP);
+			MULTIEDIT_SetFont(hItem, &FONT_SIYUANHEITI_36_4BPP);
 			MULTIEDIT_SetTextColor(hItem, MULTIEDIT_CI_READONLY, GUI_GREEN);
 			MULTIEDIT_SetBkColor(hItem, MULTIEDIT_CI_READONLY, GUI_BLACK);
 			MULTIEDIT_ShowCursor(hItem, 0);
 			/* 初始化Button0 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-			BUTTON_SetFont(hItem, &FONT_XINSONGTI_24_4BPP);
+			BUTTON_SetFont(hItem, &FONT_SIYUANHEITI_36_4BPP);
 			BUTTON_SetText(hItem, BUTTON_text[0]);
 			/* 初始化Button1 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-			BUTTON_SetFont(hItem, &FONT_XINSONGTI_24_4BPP);
+			BUTTON_SetFont(hItem, &FONT_SIYUANHEITI_36_4BPP);
 			BUTTON_SetText(hItem, BUTTON_text[1]);
 			break;
 		case WM_NOTIFY_PARENT:
@@ -193,7 +192,7 @@ void MainTask(void)
 	/* 启用UTF-8编码 */
 	GUI_UC_SetEncodeUTF8();
 	/* 创建字体 */
-	Creat_SIF_Font();
+	Create_SIF_Font();
 	/* 创建窗口 */
 	CreateFramewin();
 	while(1)

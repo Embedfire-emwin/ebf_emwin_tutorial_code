@@ -29,18 +29,21 @@
 static uint8_t Storage_Init_Flag = 0;
 
 /* 字库属性结构体 */
-GUI_TTF_CS cs0, cs1, cs2, cs3;
+GUI_TTF_CS cs0, cs1, cs2, cs3, cs4;
 
 /* 字库数据结构体 */
 GUI_TTF_DATA ttf_data;
 
+/* 定义emwin字体 */
 GUI_FONT FONT_TTF_24;
 GUI_FONT FONT_TTF_48;
 GUI_FONT FONT_TTF_72;
 GUI_FONT FONT_TTF_96;
+GUI_FONT FONT_TTF_120;
 
 /* 字库数据缓冲区 */
 char *TTFfont_buffer;
+GUI_HMEM hFontMem;
 
 /* 字库存储路径 */
 static const char FONT_STORAGE_ROOT_DIR[] = "0:";
@@ -78,8 +81,10 @@ static void FONT_TTF_GetData(const char *res_name)
 		while(1);
 	}
   
-  /* 为字库缓冲区申请一片内存 */
-  TTFfont_buffer = (char *)malloc(fnew.fsize);
+  /* 申请一块动态内存空间 */
+	hFontMem = GUI_ALLOC_AllocZero(fnew.fsize);
+	/* 转换动态内存的句柄为指针 */
+	TTFfont_buffer = GUI_ALLOC_h2p(hFontMem);
   
   /* 读取内容 */
   taskENTER_CRITICAL();
@@ -112,6 +117,10 @@ static void FONT_TTF_GetData(const char *res_name)
   cs3.pTTF = &ttf_data;
   cs3.PixelHeight = 96;
   cs3.FaceIndex = 0;
+  
+  cs4.pTTF = &ttf_data;
+  cs4.PixelHeight = 120;
+  cs4.FaceIndex = 0;
 }
 
 /**
@@ -134,4 +143,6 @@ void Create_TTF_Font(void)
                        &cs2);
   GUI_TTF_CreateFontAA(&FONT_TTF_96,
                        &cs3);
+  GUI_TTF_CreateFontAA(&FONT_TTF_120,
+                       &cs4);
 }

@@ -35,13 +35,13 @@ static uint8_t storage_init_flag = 0;
 GUI_XBF_DATA 	XBF_XINSONGTI_18_Data;
 GUI_FONT     	FONT_XINSONGTI_18;
 
-GUI_XBF_DATA 	XBF_XINSONGTI_24_Data;
-GUI_FONT     	FONT_XINSONGTI_24;
+GUI_XBF_DATA 	XBF_SIYUANHEITI_36_Data;
+GUI_FONT     	FONT_SIYUANHEITI_36;
 
 /* 字库存储路径 */
 #if (XBF_FONT_SOURCE == USE_FLASH_FONT)
 
-	/* 资源烧录到的FLASH基地址（目录地址） */
+	/* 资源烧录到的FLASH基地址（目录地址，需与烧录程序一致） */
 	#define RESOURCE_BASE_ADDR	(16*1024*1024)
 	/* 存储在FLASH中的资源目录大小 */
 	#define CATALOG_SIZE				(8*1024)
@@ -53,20 +53,20 @@ GUI_FONT     	FONT_XINSONGTI_24;
 		uint32_t  	size;      /* 资源的大小 */ 
 		uint32_t 	  offset;    /* 资源相对于基地址的偏移 */
 	}CatalogTypeDef;
-	
+	/* 资源文件名称 */
 	static const char FONT_XINSONGTI_18_ADDR[] = "xinsongti18.xbf";
-	static const char FONT_XINSONGTI_24_ADDR[] = "xinsongti24.xbf";
+	static const char FONT_SIYUANHEITI_36_ADDR[] = "siyuanheiti36_2bpp.xbf";
 
 #elif (XBF_FONT_SOURCE == USE_SDCARD_FONT)
 
 	static const char FONT_STORAGE_ROOT_DIR[]  =   "0:";
 	static const char FONT_XINSONGTI_18_ADDR[] = 	 "0:/Font/新宋体18.xbf";
-	static const char FONT_XINSONGTI_24_ADDR[] = 	 "0:/Font/思源黑体25.xbf";
+	static const char FONT_SIYUANHEITI_36_ADDR[] = "0:/Font/思源黑体36_2bpp.xbf";
 
 #endif
 
 /* 字库存储在文件系统时需要使用的变量 */
-#if (XBF_FONT_SOURCE == USE_SDCARD_FONT || XBF_FONT_SOURCE == USE_FLASH_FILESYSTEM_FONT)
+#if (XBF_FONT_SOURCE == USE_SDCARD_FONT)
 	static FIL fnew;									/* file objects */
 	static FATFS fs;									/* Work area (file system object) for logical drives */
 	static FRESULT res; 
@@ -168,7 +168,7 @@ static int _cb_FONT_XBF_GetData(U32 Offset, U16 NumBytes, void * pVoid, void * p
   * @param  无
   * @retval 无
   */
-void Creat_XBF_Font(void) 
+void Create_XBF_Font(void) 
 {
 	/* 新宋体18 */
 	GUI_XBF_CreateFont(&FONT_XINSONGTI_18,              /* GUI_FONT 字体结构体指针 */
@@ -176,42 +176,12 @@ void Creat_XBF_Font(void)
 					           GUI_XBF_TYPE_PROP_EXT,           /* 字体类型 */
 					           _cb_FONT_XBF_GetData,            /* 获取字体数据的回调函数 */
 					           (void *)&FONT_XINSONGTI_18_ADDR);/* 要传输给回调函数的自定义数据指针，此处传输字库的地址 */
-	/* 新宋体24 */
-	GUI_XBF_CreateFont(&FONT_XINSONGTI_24,              /* GUI_FONT 字体结构体指针 */
-					           &XBF_XINSONGTI_24_Data,          /* GUI_XBF_DATA 结构体指针 */
-					           GUI_XBF_TYPE_PROP_EXT,           /* 字体类型 */
+	/* 思源黑体36 */
+	GUI_XBF_CreateFont(&FONT_SIYUANHEITI_36,              /* GUI_FONT 字体结构体指针 */
+					           &XBF_SIYUANHEITI_36_Data,          /* GUI_XBF_DATA 结构体指针 */
+					           GUI_XBF_TYPE_PROP_AA2_EXT,           /* 字体类型 */
 					           _cb_FONT_XBF_GetData,            /* 获取字体数据的回调函数 */
-					           (void *)&FONT_XINSONGTI_24_ADDR);/* 要传输给回调函数的自定义数据指针，此处传输字库的地址 */
-}
-
-/**
-  * @brief  GBK转UTF8
-  * @param  src：输入的字符串（GBK格式）
-  * @param  str：输出的字符串（UTF8格式）
-  * @retval 无
-  */
-void COM_gbk2utf8(const char *src, char *str)
-{
-	uint32_t j=0,k=0;
-	uint16_t gbkdata=0;
-	uint16_t UCbuffer[512]={0};
-	for(j=0,k=0;src[j]!='\0';k++)
-	{
-		if((uint8_t)src[j]>0x80)
-		{
-			gbkdata=src[j+1]+src[j]*256;
-			UCbuffer[k]=ff_convert(gbkdata,1);
-			j+=2;
-		}
-		else
-		{
-			UCbuffer[k]=0x00ff&src[j];
-			j+=1;
-		}
-	}
-	UCbuffer[k]='\0';
-	GUI_UC_ConvertUC2UTF8(UCbuffer,2*k+2,str,k*3);
-	str[k*3]=0;
+					           (void *)&FONT_SIYUANHEITI_36_ADDR);/* 要传输给回调函数的自定义数据指针，此处传输字库的地址 */
 }
 
 /*********************************************END OF FILE**********************/

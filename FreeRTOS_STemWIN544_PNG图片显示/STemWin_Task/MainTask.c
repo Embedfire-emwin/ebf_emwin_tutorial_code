@@ -47,7 +47,6 @@
 **********************************************************************
 */
 char *_acbuffer = NULL;
-//char _acBuffer[1024 * 4];
 
 UINT    f_num;
 extern FATFS   fs;								/* FatFs文件系统对象 */
@@ -55,7 +54,6 @@ extern FIL     file;							/* file objects */
 extern FRESULT result; 
 extern DIR     dir;
 
-GUI_MEMDEV_Handle hPNG;
 /*********************************************************************
 *
 *       Static code
@@ -106,7 +104,6 @@ static void ShowPNGEx(const char *sFilename, int x0, int y0)
 	if ((result != FR_OK))
 	{
 		printf("文件打开失败！\r\n");
-//		_acBuffer[0]='\0';
 	}
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
@@ -173,35 +170,39 @@ static void ShowPNG(const char *sFilename, int x0, int y0)
   */
 void MainTask(void)
 {
-	GUI_SetBkColor(GUI_WHITE);
-	GUI_Clear();
+  int i = 0;
 	
-	GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  GUI_SetBkColor(GUI_LIGHTCYAN);
+  GUI_Clear();
+  
+	GUI_SetTextMode(GUI_TM_TRANS | GUI_TM_XOR);
 	GUI_SetFont(GUI_FONT_24B_ASCII);
-	GUI_SetColor(GUI_BLACK);
 	
 	while (1)
 	{
-		GUI_DispStringAt("ShowPNGEx", 292, 10);
-		ShowPNGEx("0:/image/野火.png", 80, 153);
-		GUI_Delay(1000);
-		GUI_Clear();
-		
-		GUI_DispStringAt("ShowPNG", 292, 10);
-		ShowPNG("0:/image/one_punch_man.png", 200, 80);
-		GUI_Delay(1000);
-		GUI_Clear();
+    i++;
     
-    GUI_DispStringAt("ShowPNG", 292, 10);
-		ShowPNG("0:/image/pokemon.png", 200, 60);
+    switch(i)
+    {
+      case 1:
+        GUI_DispStringHCenterAt("ShowPNGEx", LCD_GetXSize()/2, 10);
+		    ShowPNGEx("0:/image/野火.png", 80, 153);
+        break;
+      case 2:
+        GUI_DispStringHCenterAt("ShowPNG", LCD_GetXSize()/2, 10);
+		    ShowPNG("0:/image/one_punch_man.png", 45, 80);
+		    ShowPNG("0:/image/pokemon.png", 405, 60);
+        break;
+      case 3:
+        GUI_DispStringHCenterAt("ShowPNG", LCD_GetXSize()/2, 10);
+        ShowPNG("0:/image/滑稽.png", 280, 100);
+        break;
+      default:
+        i = 0;
+        break;
+    }
 		GUI_Delay(1000);
-		GUI_Clear();
-		
-		GUI_DispStringAt("ShowPNG", 292, 10);
-		/* 从内存设备写入LCD */
-    ShowPNG("0:/image/Android.png", 100, 153);
-		GUI_Delay(1000);
-		GUI_Clear();
+		GUI_Clear(); 
 	}
 }
 

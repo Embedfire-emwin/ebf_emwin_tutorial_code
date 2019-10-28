@@ -35,7 +35,10 @@
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "ScreenShot.h"
+/* FATFS */
+#include "ff.h"
+#include "diskio.h"
+#include "integer.h"
 
 /**************************** 任务句柄 ********************************/
 /* 
@@ -44,11 +47,7 @@
  * 这个句柄可以为NULL。
  */
 /* 创建任务句柄 */
-static TaskHandle_t AppTaskCraete_Handle = NULL;
-/* 截屏任务句柄 */
-static TaskHandle_t ScreenShot_Task_Handle = NULL;
-/* TPAD任务句柄 */
-static TaskHandle_t TPAD_Task_Handle = NULL;
+static TaskHandle_t AppTaskCreate_Handle = NULL;
 /* LED任务句柄 */
 static TaskHandle_t LED_Task_Handle = NULL;
 /* Touch任务句柄 */
@@ -67,12 +66,17 @@ static TaskHandle_t GUI_Task_Handle = NULL;
  * 来完成的
  * 
  */
- SemaphoreHandle_t ScreenShotSem_Handle = NULL;
  
 /******************************* 全局变量声明 ************************************/
 /*
  * 当我们在写应用程序的时候，可能需要用到一些全局变量。
  */
+FATFS   fs;								/* FatFs文件系统对象 */
+FIL     file;							/* file objects */
+UINT    bw;            		/* File R/W count */
+FRESULT result; 
+FILINFO fno;
+DIR dir;
 
 /*
 *************************************************************************
@@ -81,8 +85,6 @@ static TaskHandle_t GUI_Task_Handle = NULL;
 */
 static void AppTaskCreate(void);
 
-static void ScreenShot_Task(void* parameter);
-static void TPAD_Task(void* parameter);
 static void LED_Task(void* parameter);
 static void Touch_Task(void* parameter);
 static void GUI_Task(void* parameter);
@@ -107,7 +109,7 @@ int main(void)
 											 (uint16_t       )512,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
-											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
+											 (TaskHandle_t   )&AppTaskCreate_Handle);/* 任务控制块指针 */
 	/* 启动任务调度 */
 	if(pdPASS == xReturn)
 		vTaskStartScheduler();/* 启动任务，开启调度 */
@@ -128,29 +130,6 @@ static void AppTaskCreate(void)
 	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
 	
 	taskENTER_CRITICAL();//进入临界区
-	
-	/* 创建ScreenShotSem信号量 */
-	ScreenShotSem_Handle = xSemaphoreCreateBinary();
-	if(NULL != ScreenShotSem_Handle)
-		printf("ScreenShotSem二值信号量创建成功！\r\n");
-	
-	xReturn = xTaskCreate((TaskFunction_t)ScreenShot_Task,/* 任务入口函数 */
-											 (const char*    )"ScreenShot_Task",/* 任务名称 */
-											 (uint16_t       )1024,       /* 任务栈大小 */
-											 (void*          )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t    )6,         /* 任务的优先级 */
-											 (TaskHandle_t   )&ScreenShot_Task_Handle);/* 任务控制块指针 */
-	if(pdPASS == xReturn)
-		printf("创建ScreenShot_Task任务成功！\r\n");
-	
-	xReturn = xTaskCreate((TaskFunction_t)TPAD_Task,/* 任务入口函数 */
-											 (const char*    )"TPAD_Task",/* 任务名称 */
-											 (uint16_t       )128,       /* 任务栈大小 */
-											 (void*          )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t    )5,         /* 任务的优先级 */
-											 (TaskHandle_t   )&TPAD_Task_Handle);/* 任务控制块指针 */
-	if(pdPASS == xReturn)
-		printf("创建TPAD_Task任务成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)LED_Task,/* 任务入口函数 */
 											 (const char*    )"LED_Task",/* 任务名称 */
@@ -179,59 +158,9 @@ static void AppTaskCreate(void)
 	if(pdPASS == xReturn)
 		printf("创建GUI_Task任务成功！\r\n");
 	
-	vTaskDelete(AppTaskCraete_Handle);//删除AppTaskCreate任务
+	vTaskDelete(AppTaskCreate_Handle);//删除AppTaskCreate任务
 	
 	taskEXIT_CRITICAL();//退出临界区
-}
-
-/**
-  * @brief 截屏任务主体
-  * @note 无
-  * @param 无
-  * @retval 无
-  */
-static void ScreenShot_Task(void* parameter)
-{
-	BaseType_t xReturn = pdPASS;
-	
-	/* 文件系统初始化 */
-	FS_Init();
-	
-	while(1)
-	{
-		/* 等待信号量 */
-		xReturn = xSemaphoreTake(ScreenShotSem_Handle,/* 二值信号量句柄 */
-														 portMAX_DELAY);/* 阻塞等待 */
-		if(pdTRUE == xReturn)
-		{
-			ScreenShot();
-		}
-	}
-}
-
-/**
-  * @brief 电容按键任务主体
-  * @note 无
-  * @param 无
-  * @retval 无
-  */
-static void TPAD_Task(void* parameter)
-{
-	/* 电容按键初始化 */
-	TPAD_Init();
-	
-	while(1)
-	{
-		if(TPAD_Scan(0))
-		{
-			BEEP_ON;
-			vTaskDelay(50);
-			BEEP_OFF;
-			/* 给出信号量 */
-			xSemaphoreGive(ScreenShotSem_Handle);
-		}
-		vTaskDelay(50);
-	}
 }
 
 /**
@@ -317,6 +246,13 @@ static void BSP_Init(void)
 	LCD_Init();
   /* 禁用WiFi模块 */
 	AP6181_PDN_INIT();
+  /* 挂载文件系统，挂载时会对SD卡初始化 */
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 }
 
 /**

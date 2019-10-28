@@ -10,6 +10,7 @@
       <TargetName>Fire-F429</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pArmCC>5060750::V5.06 update 6 (build 750)::ARMCC</pArmCC>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
@@ -134,7 +135,7 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4104</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
@@ -321,14 +322,14 @@
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>0</wLevel>
+            <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
-            <v6Lang>0</v6Lang>
-            <v6LangP>0</v6LangP>
+            <v6Lang>3</v6Lang>
+            <v6LangP>3</v6LangP>
             <vShortEn>0</vShortEn>
             <vShortWch>0</vShortWch>
             <v6Lto>0</v6Lto>
@@ -336,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F429_439xx,OS_SUPPORT,__TARGET_FPU_VFP</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F429_439xx,OS_SUPPORT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM4F;..\..\STemWin\Config;..\..\STemWin\inc;..\..\STemWin\Application;..\..\STemWin_Task;..\..\FATFS</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\Libraries\CMSIS\Include;..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM4F;..\..\STemWin\Config;..\..\STemWin\inc;..\..\STemWin\Application;..\..\STemWin_Task;..\..\FATFS;..\..\STemWin\truetype</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -369,7 +370,7 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>..\..\Output\TTF_SDRAM.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -709,11 +710,6 @@
               <FilePath>..\..\User\sdram\bsp_sdram.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_spi_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\flash\bsp_spi_flash.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_i2c_touch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\touch\bsp_i2c_touch.c</FilePath>
@@ -823,20 +819,240 @@
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\GUIFont_Create.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emWIN/truetpye</GroupName>
+          <Files>
             <File>
-              <FileName>ScreenShot.c</FileName>
+              <FileName>autofit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\ScreenShot.c</FilePath>
+              <FilePath>..\..\STemWin\truetype\autofit.c</FilePath>
             </File>
             <File>
-              <FileName>text.c</FileName>
+              <FileName>bdf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\text.c</FilePath>
+              <FilePath>..\..\STemWin\truetype\bdf.c</FilePath>
+            </File>
+            <File>
+              <FileName>cff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\cff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftbase.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftbase.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftbbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftbbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftbdf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftbdf.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftbitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftbitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftbzip2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftbzip2.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftcache.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftcache.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftcid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftcid.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftdebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftdebug.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftfstype.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftfstype.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftgasp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftgasp.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftglyph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftglyph.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftgxval.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftgxval.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftgzip.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftgzip.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftinit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftinit.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftlcdfil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftlcdfil.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftlzw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftlzw.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftmm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftmm.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftotval.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftotval.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftpatent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftpatent.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftpfr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftpfr.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftstroke.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftstroke.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftsynth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftsynth.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>fttype1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\fttype1.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftwinfnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftwinfnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftxf86.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\ftxf86.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_TTF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\GUI_TTF.c</FilePath>
+            </File>
+            <File>
+              <FileName>gxvalid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\gxvalid.c</FilePath>
+            </File>
+            <File>
+              <FileName>otvalid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\otvalid.c</FilePath>
+            </File>
+            <File>
+              <FileName>pcf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\pcf.c</FilePath>
+            </File>
+            <File>
+              <FileName>pfr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\pfr.c</FilePath>
+            </File>
+            <File>
+              <FileName>psaux.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\psaux.c</FilePath>
+            </File>
+            <File>
+              <FileName>pshinter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\pshinter.c</FilePath>
+            </File>
+            <File>
+              <FileName>psnames.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\psnames.c</FilePath>
+            </File>
+            <File>
+              <FileName>raster.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\raster.c</FilePath>
+            </File>
+            <File>
+              <FileName>sfnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\sfnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>smooth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\smooth.c</FilePath>
+            </File>
+            <File>
+              <FileName>truetype.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\truetype.c</FilePath>
+            </File>
+            <File>
+              <FileName>type1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\type1.c</FilePath>
+            </File>
+            <File>
+              <FileName>type1cid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\type1cid.c</FilePath>
+            </File>
+            <File>
+              <FileName>type42.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\type42.c</FilePath>
+            </File>
+            <File>
+              <FileName>winfnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin\truetype\winfnt.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>FatFs</GroupName>
+          <GroupName>FatFS</GroupName>
           <Files>
             <File>
               <FileName>diskio.c</FileName>

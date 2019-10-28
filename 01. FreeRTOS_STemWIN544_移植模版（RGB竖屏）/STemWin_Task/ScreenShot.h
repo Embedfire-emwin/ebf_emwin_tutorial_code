@@ -10,6 +10,9 @@
 extern FATFS   fs;								/* FatFs文件系统对象 */
 extern FIL     file;							/* file objects */
 extern UINT    bw;            		/* File R/W count */
+extern FRESULT result; 
+extern FILINFO fno;
+extern DIR dir;
 
 void FS_Init(void);
 void ScreenShot(void);

@@ -20,7 +20,7 @@
 
 /* STemWINÍ·ÎÄ¼þ */
 #include "MainTask.h"
-
+#include "./led/bsp_led.h" 
 
 /*********************************************************************
 *
@@ -75,6 +75,7 @@ void MainTask(void)
   
 	while(1)
 	{
+    LED3_TOGGLE;
 		GUI_Delay(1000);
 	}
 }

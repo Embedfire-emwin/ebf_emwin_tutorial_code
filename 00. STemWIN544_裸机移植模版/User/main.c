@@ -31,15 +31,23 @@
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "ScreenShot.h"
 #include "MainTask.h"
+/* FATFS */
+#include "ff.h"
+#include "diskio.h"
+#include "integer.h"
 
  /*
  *************************************************************************
  *                             全局变量声明
  *************************************************************************
  */
-KEY Key1,Key2;
+FATFS   fs;								/* FatFs文件系统对象 */
+FIL     file;							/* file objects */
+UINT    bw;            		/* File R/W count */
+FRESULT result; 
+FILINFO fno;
+DIR dir;
 
 /*
 *************************************************************************
@@ -74,13 +82,15 @@ int main(void)
 	Debug_USART_Config();
 	/* 蜂鸣器初始化 */
 	Beep_GPIO_Config();
-	/* 按键初始化 */
-	Key1_GPIO_Config();
-	Key2_GPIO_Config();
-	KeyCreate(&Key1,GetPinStateOfKey1);
-	KeyCreate(&Key2,GetPinStateOfKey2);
 	/* 触摸屏初始化 */
-	GTP_Init_Panel();	
+	GTP_Init_Panel();
+//	/* 挂载文件系统，挂载时会对SD卡初始化 */
+//  result = f_mount(&fs,"0:",1);
+//	if(result != FR_OK)
+//	{
+//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+//		while(1);
+//	}
 	/* SDRAM初始化 */
 	SDRAM_Init();
 	/* LCD初始化 */
@@ -96,33 +106,6 @@ int main(void)
     MainTask();
   }
 }
-
-///**
-//  * @brief 按键任务主体
-//  * @note 无
-//  * @param 无
-//  * @retval 无
-//  */
-//static void Key_Task(void* parameter)
-//{
-//	while(1)
-//	{
-//		Key_RefreshState(&Key1);//刷新按键状态
-//		Key_RefreshState(&Key2);//刷新按键状态
-//		if(Key_AccessTimes(&Key1,KEY_ACCESS_READ)!=0)//按键被按下过
-//		{
-//			LED2_TOGGLE;
-//			Key_AccessTimes(&Key1,KEY_ACCESS_WRITE_CLEAR);
-//		}
-//		if(Key_AccessTimes(&Key2,KEY_ACCESS_READ)!=0)//按键被按下过
-//		{
-//			LED1_TOGGLE;
-//			Key_AccessTimes(&Key2,KEY_ACCESS_WRITE_CLEAR);
-//		}
-//		vTaskDelay(50);
-//	}
-//}
-
 
 /*********************************************END OF FILE**********************/
 

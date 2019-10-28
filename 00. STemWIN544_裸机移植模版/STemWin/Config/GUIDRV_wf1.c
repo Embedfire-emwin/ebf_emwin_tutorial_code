@@ -87,11 +87,7 @@ can be set here.
 *       Common
 */
 
-#undef  LCD_SWAP_XY
-#undef  LCD_MIRROR_Y
 
-#define LCD_SWAP_XY  0 
-#define LCD_MIRROR_Y 1
 
 //
 // Physical display size
@@ -268,6 +264,7 @@ static void _DMA_Color2IndexBulk(LCD_COLOR * pColor, void * pIndex, U32 NumItems
 // Color conversion routines using DMA2D
 //
 DEFINE_DMA2D_COLORCONVERSION(M8888I, LTDC_Pixelformat_ARGB8888)
+DEFINE_DMA2D_COLORCONVERSION(M8888I,   LTDC_Pixelformat_ARGB8888)
 DEFINE_DMA2D_COLORCONVERSION(M888,   LTDC_Pixelformat_ARGB8888) // Internal pixel format of emWin is 32 bit, because of that ARGB8888
 DEFINE_DMA2D_COLORCONVERSION(M565,   LTDC_Pixelformat_RGB565)
 DEFINE_DMA2D_COLORCONVERSION(M1555I, LTDC_Pixelformat_ARGB1555)

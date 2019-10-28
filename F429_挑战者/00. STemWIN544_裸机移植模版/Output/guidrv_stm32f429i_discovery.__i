@@ -1,0 +1,6 @@
+--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\Libraries\CMSIS\Include -I ..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I ..\..\User -I ..\..\FreeRTOS\include -I ..\..\FreeRTOS\port\RVDS\ARM_CM4F -I ..\..\STemWin\Config -I ..\..\STemWin\inc -I ..\..\STemWin\Application -I ..\..\STemWin_Task -I ..\..\FATFS
+-I.\RTE\_Fire-F429
+-ID:\Keil_v5\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+-ID:\Keil_v5\ARM\CMSIS\Include
+-D__UVISION_VERSION="528" -DSTM32F429xx -DUSE_STDPERIPH_DRIVER -DSTM32F429_439xx
+-o ..\..\output\guidrv_stm32f429i_discovery.o --omf_browse ..\..\output\guidrv_stm32f429i_discovery.crf --depend ..\..\output\guidrv_stm32f429i_discovery.d "..\..\STemWin\Config\GUIDRV_stm32f429i_discovery.c"

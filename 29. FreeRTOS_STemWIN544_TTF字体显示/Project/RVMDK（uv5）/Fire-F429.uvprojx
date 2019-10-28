@@ -819,6 +819,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\GUIFont_Create.c</FilePath>
             </File>
+            <File>
+              <FileName>text.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin_Task\text.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

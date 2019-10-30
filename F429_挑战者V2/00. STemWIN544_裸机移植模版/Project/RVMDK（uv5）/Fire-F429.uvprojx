@@ -668,11 +668,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\stm32f4xx_it.c</FilePath>
             </File>
-            <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

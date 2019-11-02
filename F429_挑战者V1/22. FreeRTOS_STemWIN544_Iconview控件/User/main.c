@@ -331,7 +331,6 @@ static void BSP_Init(void)
   /* 禁用WIFI模块 */
   BL8782_PDN_INIT();
   /* 挂载文件系统，挂载时会对SD卡初始化 */
-	/*默认不使用SD卡，屏蔽SD卡挂载及初始化，否在在不插入SD卡是程序会卡死在while(1)循环*/
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)
 	{

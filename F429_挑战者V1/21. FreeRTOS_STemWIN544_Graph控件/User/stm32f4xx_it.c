@@ -30,6 +30,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 #include "./usart/bsp_debug_usart.h"
+#include "./adc/bsp_adc.h"
 
 //FreeRTOS 使用
 #include "FreeRTOS.h"
@@ -193,4 +194,27 @@ void DMA2D_IRQHandler(void)
 	/* 退出临界段 */
 	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
+
+extern __IO uint16_t ADC_ConvertedValue;
+/**
+  * @brief  ADC 转换完成中断服务程序
+  * @param  None
+  * @retval None
+  */
+void ADC_IRQHandler(void)
+{
+	uint32_t ulReturn;
+	/* 进入临界段 */
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+	
+	if(ADC_GetITStatus(RHEOSTAT_ADC,ADC_IT_EOC)==SET)
+	{
+		/* 读取ADC的转换值 */
+		ADC_ConvertedValue = ADC_GetConversionValue(RHEOSTAT_ADC);
+	}
+	ADC_ClearITPendingBit(RHEOSTAT_ADC,ADC_IT_EOC);
+	
+	/* 退出临界段 */
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+}	
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

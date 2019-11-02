@@ -723,6 +723,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\TouchPad\bsp_touchpad.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\adc\bsp_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -809,9 +814,9 @@
           <GroupName>STemWIN/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>GraphDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
+              <FilePath>..\..\STemWin_Task\GraphDLG.c</FilePath>
             </File>
           </Files>
         </Group>

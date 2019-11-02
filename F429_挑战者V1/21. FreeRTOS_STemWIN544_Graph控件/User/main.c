@@ -33,10 +33,11 @@
 #include "./touch/gt9xx.h"
 #include "./key/bsp_key.h"
 #include "./sdram/bsp_sdram.h"
+#include "./adc/bsp_adc.h"
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "MainTask.h"
+#include "GraphDLG.h"
 /* 文件系统 */
 #include "ff.h"
 #include "diskio.h"
@@ -329,6 +330,7 @@ static void BSP_Init(void)
 	/* LCD初始化 */
 	LCD_Init();
   /* 禁用WIFI模块 */
+	Rheostat_Init();
   BL8782_PDN_INIT();
   /* 挂载文件系统，挂载时会对SD卡初始化 */
 	/*默认不使用SD卡，屏蔽SD卡挂载及初始化，否在在不插入SD卡是程序会卡死在while(1)循环*/

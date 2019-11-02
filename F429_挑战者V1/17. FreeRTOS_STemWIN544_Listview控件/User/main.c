@@ -36,7 +36,7 @@
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "MainTask.h"
+#include "ListviewDLG.h"
 /* 文件系统 */
 #include "ff.h"
 #include "diskio.h"

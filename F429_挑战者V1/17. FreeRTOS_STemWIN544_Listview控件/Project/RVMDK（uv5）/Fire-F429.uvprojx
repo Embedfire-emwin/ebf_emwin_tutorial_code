@@ -809,9 +809,9 @@
           <GroupName>STemWIN/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>ListviewDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
+              <FilePath>..\..\STemWin_Task\ListviewDLG.c</FilePath>
             </File>
           </Files>
         </Group>

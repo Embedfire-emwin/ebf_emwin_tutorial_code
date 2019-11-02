@@ -29,6 +29,7 @@
 #include "./usart/bsp_debug_usart.h"
 #include "./TouchPad/bsp_touchpad.h"
 #include "./lcd/bsp_lcd.h"
+#include "./touch/bsp_i2c_touch.h"
 #include "./touch/gt9xx.h"
 #include "./key/bsp_key.h"
 #include "./sdram/bsp_sdram.h"
@@ -36,7 +37,10 @@
 #include "GUI.h"
 #include "DIALOG.h"
 #include "MainTask.h"
-#include "ScreenShot.h"
+/* 文件系统 */
+#include "ff.h"
+#include "diskio.h"
+#include "integer.h"
 
 /**************************** 任务句柄 ********************************/
 /* 
@@ -45,13 +49,13 @@
  * 这个句柄可以为NULL。
  */
 /* 创建任务句柄 */
-static TaskHandle_t AppTaskCreate_Handle = NULL;
-/* 截屏任务句柄 */
-static TaskHandle_t ScreenShot_Task_Handle = NULL;
+static TaskHandle_t AppTaskCraete_Handle = NULL;
 /* TPAD任务句柄 */
 static TaskHandle_t TPAD_Task_Handle = NULL;
 /* LED任务句柄 */
 static TaskHandle_t LED_Task_Handle = NULL;
+/* Key任务句柄 */
+static TaskHandle_t Key_Task_Handle = NULL;
 /* Touch任务句柄 */
 static TaskHandle_t Touch_Task_Handle = NULL;
 /* GUI任务句柄 */
@@ -68,12 +72,19 @@ static TaskHandle_t GUI_Task_Handle = NULL;
  * 来完成的
  * 
  */
- SemaphoreHandle_t ScreenShotSem_Handle = NULL;
  
 /******************************* 全局变量声明 ************************************/
 /*
  * 当我们在写应用程序的时候，可能需要用到一些全局变量。
  */
+KEY Key1,Key2;
+
+FATFS   fs;								/* FatFs文件系统对象 */
+FIL     file;							/* file objects */
+UINT    bw;            		/* File R/W count */
+FRESULT result; 
+FILINFO fno;
+DIR dir;
 
 /*
 *************************************************************************
@@ -82,14 +93,15 @@ static TaskHandle_t GUI_Task_Handle = NULL;
 */
 static void AppTaskCreate(void);
 
-static void ScreenShot_Task(void* parameter);
 static void TPAD_Task(void* parameter);
 static void LED_Task(void* parameter);
+static void Key_Task(void* parameter);
 static void Touch_Task(void* parameter);
 static void GUI_Task(void* parameter);
 
 static void BSP_Init(void);
-static void AP6181_PDN_INIT(void);
+static void BL8782_PDN_INIT(void);
+
 /**
   * @brief  主函数
   * @param  无
@@ -107,7 +119,7 @@ int main(void)
 											 (uint16_t       )512,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
-											 (TaskHandle_t   )&AppTaskCreate_Handle);/* 任务控制块指针 */
+											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
 	/* 启动任务调度 */
 	if(pdPASS == xReturn)
 		vTaskStartScheduler();/* 启动任务，开启调度 */
@@ -129,25 +141,11 @@ static void AppTaskCreate(void)
 	
 	taskENTER_CRITICAL();//进入临界区
 	
-	/* 创建ScreenShotSem信号量 */
-	ScreenShotSem_Handle = xSemaphoreCreateBinary();
-	if(NULL != ScreenShotSem_Handle)
-		printf("ScreenShotSem二值信号量创建成功！\r\n");
-	
-	xReturn = xTaskCreate((TaskFunction_t)ScreenShot_Task,/* 任务入口函数 */
-											 (const char*    )"ScreenShot_Task",/* 任务名称 */
-											 (uint16_t       )1024,       /* 任务栈大小 */
-											 (void*          )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t    )6,         /* 任务的优先级 */
-											 (TaskHandle_t   )&ScreenShot_Task_Handle);/* 任务控制块指针 */
-	if(pdPASS == xReturn)
-		printf("创建ScreenShot_Task任务成功！\r\n");
-	
 	xReturn = xTaskCreate((TaskFunction_t)TPAD_Task,/* 任务入口函数 */
 											 (const char*    )"TPAD_Task",/* 任务名称 */
 											 (uint16_t       )128,       /* 任务栈大小 */
 											 (void*          )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t    )5,         /* 任务的优先级 */
+											 (UBaseType_t    )7,         /* 任务的优先级 */
 											 (TaskHandle_t   )&TPAD_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建TPAD_Task任务成功！\r\n");
@@ -156,57 +154,41 @@ static void AppTaskCreate(void)
 											 (const char*    )"LED_Task",/* 任务名称 */
 											 (uint16_t       )128,       /* 任务栈大小 */
 											 (void*          )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t    )4,         /* 任务的优先级 */
+											 (UBaseType_t    )6,         /* 任务的优先级 */
 											 (TaskHandle_t   )&LED_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建LED1_Task任务成功！\r\n");
+	
+	xReturn = xTaskCreate((TaskFunction_t)Key_Task,/* 任务入口函数 */
+											 (const char*      )"Key_Task",/* 任务名称 */
+											 (uint16_t         )256,     /* 任务栈大小 */
+											 (void*            )NULL,    /* 任务入口函数参数 */
+											 (UBaseType_t      )5,       /* 任务的优先级 */
+											 (TaskHandle_t     )&Key_Task_Handle);/* 任务控制块指针 */
+	if(pdPASS == xReturn)
+		printf("创建Key_Task任务成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)Touch_Task,/* 任务入口函数 */
 											 (const char*      )"Touch_Task",/* 任务名称 */
 											 (uint16_t         )256,     /* 任务栈大小 */
 											 (void*            )NULL,    /* 任务入口函数参数 */
-											 (UBaseType_t      )3,       /* 任务的优先级 */
+											 (UBaseType_t      )4,       /* 任务的优先级 */
 											 (TaskHandle_t     )&Touch_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建Touch_Task任务成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )2048,      /* 任务栈大小 */
+											 (uint16_t         )1024,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
-											 (UBaseType_t      )2,         /* 任务的优先级 */
+											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建GUI_Task任务成功！\r\n");
 	
-	vTaskDelete(AppTaskCreate_Handle);//删除AppTaskCreate任务
+	vTaskDelete(AppTaskCraete_Handle);//删除AppTaskCreate任务
 	
 	taskEXIT_CRITICAL();//退出临界区
-}
-
-/**
-  * @brief 截屏任务主体
-  * @note 无
-  * @param 无
-  * @retval 无
-  */
-static void ScreenShot_Task(void* parameter)
-{
-	BaseType_t xReturn = pdPASS;
-	
-	/* 文件系统初始化 */
-	FS_Init();
-	
-	while(1)
-	{
-		/* 等待信号量 */
-		xReturn = xSemaphoreTake(ScreenShotSem_Handle,/* 二值信号量句柄 */
-														 portMAX_DELAY);/* 阻塞等待 */
-		if(pdTRUE == xReturn)
-		{
-			ScreenShot();
-		}
-	}
 }
 
 /**
@@ -227,8 +209,6 @@ static void TPAD_Task(void* parameter)
 			BEEP_ON;
 			vTaskDelay(50);
 			BEEP_OFF;
-			/* 给出信号量 */
-			xSemaphoreGive(ScreenShotSem_Handle);
 		}
 		vTaskDelay(50);
 	}
@@ -244,8 +224,36 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-		LED3_TOGGLE;
+		LED3_ON;
 		vTaskDelay(1000);
+    LED3_OFF;
+		vTaskDelay(1000);
+	}
+}
+
+/**
+  * @brief 按键任务主体
+  * @note 无
+  * @param 无
+  * @retval 无
+  */
+static void Key_Task(void* parameter)
+{
+	while(1)
+	{
+		Key_RefreshState(&Key1);//刷新按键状态
+		Key_RefreshState(&Key2);//刷新按键状态
+		if(Key_AccessTimes(&Key1,KEY_ACCESS_READ)!=0)//按键被按下过
+		{
+			LED2_TOGGLE;
+			Key_AccessTimes(&Key1,KEY_ACCESS_WRITE_CLEAR);
+		}
+		if(Key_AccessTimes(&Key2,KEY_ACCESS_READ)!=0)//按键被按下过
+		{
+			LED1_TOGGLE;
+			Key_AccessTimes(&Key2,KEY_ACCESS_WRITE_CLEAR);
+		}
+		vTaskDelay(50);
 	}
 }
 
@@ -259,7 +267,7 @@ static void Touch_Task(void* parameter)
 {
 	while(1)
 	{
-		GT9xx_GetOnePiont();//触摸屏定时扫描
+		GT9xx_GetOnePiont();
 		vTaskDelay(20);
 	}
 }
@@ -272,10 +280,11 @@ static void Touch_Task(void* parameter)
   */
 static void GUI_Task(void* parameter)
 {
-	/* 初始化STemWin */
-  GUI_Init();
+	/* 初始化GUI */
+	GUI_Init();
 	/* 开启多缓冲 */
 	WM_MULTIBUF_Enable(1);
+	
 	while(1)
 	{
 		MainTask();
@@ -308,35 +317,50 @@ static void BSP_Init(void)
 	Debug_USART_Config();
 	/* 蜂鸣器初始化 */
 	Beep_GPIO_Config();
-	/* 初始化触摸屏 */
-	GTP_Init_Panel();
+	/* 按键初始化 */
+	Key1_GPIO_Config();
+	Key2_GPIO_Config();
+	KeyCreate(&Key1,GetPinStateOfKey1);
+	KeyCreate(&Key2,GetPinStateOfKey2);
+	/* 触摸屏初始化 */
+	GTP_Init_Panel();	
 	/* SDRAM初始化 */
   SDRAM_Init();
 	/* LCD初始化 */
 	LCD_Init();
-	AP6181_PDN_INIT();
+  /* 禁用WIFI模块 */
+  BL8782_PDN_INIT();
+  /* 挂载文件系统，挂载时会对SD卡初始化 */
+	/*默认不使用SD卡，屏蔽SD卡挂载及初始化，否在在不插入SD卡是程序会卡死在while(1)循环*/
+//  result = f_mount(&fs,"0:",1);
+//	if(result != FR_OK)
+//	{
+//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+//		while(1);
+//	}
 }
 
 /**
-  * @brief AP6181_PDN_INIT
+  * @brief BL8782_PDN_INIT
   * @note 禁止WIFI模块
   * @param 无
   * @retval 无
   */
-static void AP6181_PDN_INIT(void)
+static void BL8782_PDN_INIT(void)
 {
   /*定义一个GPIO_InitTypeDef类型的结构体*/
   GPIO_InitTypeDef GPIO_InitStructure;
 
   RCC_AHB1PeriphClockCmd ( RCC_AHB1Periph_GPIOG, ENABLE); 							   
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;	
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure);	
+  GPIO_Init(GPIOG, &GPIO_InitStructure);	
   
-  GPIO_ResetBits(GPIOB,GPIO_Pin_13);  //禁用WiFi模块
+  GPIO_ResetBits(GPIOG,GPIO_Pin_9);  //禁用WiFi模块
 }
+
 /*********************************************END OF FILE**********************/
 

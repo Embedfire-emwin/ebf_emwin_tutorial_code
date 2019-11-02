@@ -36,28 +36,6 @@ DIR dir;
 uint16_t  file_num = 0;
 
 /**
-  * @brief AP6181_PDN_INIT
-  * @note 禁止WIFI模块
-  * @param 无
-  * @retval 无
-  */
-static void AP6181_PDN_INIT(void)
-{
-  /*定义一个GPIO_InitTypeDef类型的结构体*/
-  GPIO_InitTypeDef GPIO_InitStructure;
-
-  RCC_AHB1PeriphClockCmd ( RCC_AHB1Periph_GPIOG, ENABLE); 							   
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;	
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure);	
-  
-  GPIO_ResetBits(GPIOB,GPIO_Pin_13);  //禁用WiFi模块
-}
-
-/**
   * @brief FS_Init
   * @note 文件系统初始化
   * @param 无
@@ -67,16 +45,13 @@ void FS_Init(void)
 {
 	const TCHAR *ScreenShotPATH  = "0:/ScreenShot";
 	
-	/* 禁用WiFi模块 */
-	AP6181_PDN_INIT();
-	
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
-//  result = f_mount(&fs,"0:",1);
-//	if(result != FR_OK)
-//	{
-//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-//		while(1);
-//	}
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 	/*  如果路径不存在，则创建路径  */
 	result = f_opendir(&dir, ScreenShotPATH);
 	while(result != FR_OK)

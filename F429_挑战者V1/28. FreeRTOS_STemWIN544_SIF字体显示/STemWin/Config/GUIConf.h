@@ -70,7 +70,7 @@ Purpose     : Configures emWins abilities, fonts etc.
  #define GUI_OS                    (0)
 #endif
 
- /*********************************************************************
+/*********************************************************************
 *
 *       Configuration of touch support
 */
@@ -103,6 +103,6 @@ Purpose     : Configures emWins abilities, fonts etc.
 *
 *       ARGB support
 */
-#define GUI_USE_ARGB              (1)
+#define GUI_USE_ARGB                 (1)
 
 #endif  /* Avoid multiple inclusion */

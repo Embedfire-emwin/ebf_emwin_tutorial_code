@@ -127,12 +127,12 @@ can be set here.
 //
 // Color mode layer 0
 //
-#define COLOR_MODE_0 _CM_RGB888
+#define COLOR_MODE_0 _CM_RGB565
 //
 // Layer size
 //
-#define XSIZE_0 XSIZE_PHYS
-#define YSIZE_0 YSIZE_PHYS
+#define XSIZE_0 LCD_PIXEL_WIDTH
+#define YSIZE_0 LCD_PIXEL_HEIGHT
 
 /*********************************************************************
 *
@@ -142,8 +142,8 @@ can be set here.
 //
 // Layer size
 //
-#define XSIZE_1 XSIZE_PHYS
-#define YSIZE_1 YSIZE_PHYS
+#define XSIZE_1 LCD_PIXEL_WIDTH
+#define YSIZE_1 LCD_PIXEL_HEIGHT
 
 /*********************************************************************
 *
@@ -244,7 +244,7 @@ static void _DMA_Color2IndexBulk(LCD_COLOR * pColor, void * pIndex, U32 NumItems
 //
 // Color conversion routines using DMA2D
 //
-DEFINE_DMA2D_COLORCONVERSION(M8888I,   LTDC_Pixelformat_ARGB8888)
+DEFINE_DMA2D_COLORCONVERSION(M8888I, LTDC_Pixelformat_ARGB8888)
 DEFINE_DMA2D_COLORCONVERSION(M888,   LTDC_Pixelformat_ARGB8888) // Internal pixel format of emWin is 32 bit, because of that ARGB8888
 DEFINE_DMA2D_COLORCONVERSION(M565,   LTDC_Pixelformat_RGB565)
 DEFINE_DMA2D_COLORCONVERSION(M1555I, LTDC_Pixelformat_ARGB1555)
@@ -555,6 +555,67 @@ static void _LCD_MixColorsBulk(U32 * pFG, U32 * pBG, U32 * pDst, unsigned OffFG,
     pBG  += xSize + OffBG;
     pDst += xSize + OffDest;
   }
+}
+
+/**
+  * @brief  DMA2D Copy RGB 565 buffer
+  * @param  pSrc      : Source buffer pointer
+  * @param  pDst      : Destination buffer pointer
+  * @param  xSize     : Horizontal size
+  * @param  ySize     : Vertical size
+  * @param  OffLineSrc: Source Line offset
+  * @param  OffLineDst: Destination Line offset
+  * @retval None
+  */
+static void _DMA_CopyRGB565(const void * pSrc, void * pDst, int xSize, int ySize, int OffLineSrc, int OffLineDst)
+{
+  /* Setup DMA2D Configuration */  
+  DMA2D->CR      = 0x00000000UL | (1 << 9);
+  DMA2D->FGMAR   = (U32)pSrc;
+  DMA2D->OMAR    = (U32)pDst;
+  DMA2D->FGOR    = OffLineSrc;
+  DMA2D->OOR     = OffLineDst;
+  DMA2D->FGPFCCR = LTDC_Pixelformat_RGB565;
+  DMA2D->NLR     = (U32)(xSize << 16) | (U16)ySize;
+  
+  /* Start the transfer, and enable the transfer complete IT */
+  DMA2D->CR     |= (1|DMA2D_IT_TC);
+  
+  /* Wait for the end of the transfer */
+  while (DMA2D->CR & DMA2D_CR_START) {} 
+}
+
+/**
+  * @brief  Draw alpha bitmap
+  * @param  pDst       : Destination buffer
+  * @param  pSrc       : Source buffer
+  * @param  xSize      : Picture horizontal size
+  * @param  ySize      : Picture vertical size
+  * @param  OffLineSrc : Source line offset
+  * @param  OffLineDst : Destination line offset
+  * @param  PixelFormat: Pixel format
+  * @retval None
+  */
+static void _DMA_DrawAlphaBitmap(void * pDst, const void * pSrc, int xSize, int ySize, int OffLineSrc, int OffLineDst, int PixelFormat) 
+{
+  /* Setup DMA2D Configuration */ 
+  DMA2D->CR      = 0x00020000UL | (1 << 9);
+  DMA2D->FGMAR   = (U32)pSrc;
+  DMA2D->BGMAR   = (U32)pDst;
+  DMA2D->OMAR    = (U32)pDst;
+  DMA2D->FGOR    = OffLineSrc;
+  DMA2D->BGOR    = OffLineDst;
+  DMA2D->OOR     = OffLineDst;
+  DMA2D->FGPFCCR = LTDC_Pixelformat_ARGB8888;
+  DMA2D->BGPFCCR = PixelFormat;
+  DMA2D->OPFCCR  = PixelFormat;
+  DMA2D->NLR     = (U32)(xSize << 16) | (U16)ySize;
+
+  /* Start the transfer, and enable the transfer complete IT */
+  DMA2D->CR     |= (1|DMA2D_IT_TC);
+  
+  /* Wait for the end of the transfer */
+  while (DMA2D->CR & DMA2D_CR_START) {}
 }
 
 /*********************************************************************
@@ -910,6 +971,69 @@ static void _LCD_DrawBitmap32bpp(int LayerIndex, int x, int y, U8 const * p, int
   _DMA_Copy(LayerIndex, (void *)p, (void *)AddrDst, xSize, ySize, OffLineSrc, OffLineDst);
 }
 
+/**
+  * @brief  Draw 16 bits per pixel memory device
+  * @param  pDst           : Destination buffer
+  * @param  pSrc           : Source buffer
+  * @param  xSize          : Horizontal memory device size
+  * @param  ySize          : Vertical memory device size
+  * @param  BytesPerLineDst: Destination number of bytes per Line
+  * @param  BytesPerLineSrc: Source number of bytes per Line
+  * @retval None 
+  */
+static void _LCD_DrawMemdev16bpp(void * pDst, const void * pSrc, int xSize, int ySize, int BytesPerLineDst, int BytesPerLineSrc) 
+{
+  int OffLineSrc, OffLineDst;
+ 
+  OffLineSrc = (BytesPerLineSrc / 2) - xSize;
+  OffLineDst = (BytesPerLineDst / 2) - xSize;
+  _DMA_CopyRGB565(pSrc, pDst, xSize, ySize, OffLineSrc, OffLineDst);
+}
+
+/**
+  * @brief  Draw alpha memory device
+  * @param  pDst           : Destination buffer
+  * @param  pSrc           : Source buffer
+  * @param  xSize          : Horizontal memory device size
+  * @param  ySize          : Vertical memory device size
+  * @param  BytesPerLineDst: Destination number of bytes per Line
+  * @param  BytesPerLineSrc: Source number of bytes per Line
+  * @retval None 
+  */
+static void _LCD_DrawMemdevAlpha(void * pDst, const void * pSrc, int xSize, int ySize, int BytesPerLineDst, int BytesPerLineSrc) 
+{
+  int OffLineSrc, OffLineDst;
+ 
+  OffLineSrc = (BytesPerLineSrc / 4) - xSize;
+  OffLineDst = (BytesPerLineDst / 4) - xSize;
+  _DMA_DrawAlphaBitmap(pDst, pSrc, xSize, ySize, OffLineSrc, OffLineDst, LTDC_Pixelformat_ARGB8888);
+}
+
+/**
+  * @brief  Draw alpha Bitmap
+  * @param  LayerIndex  : Layer index
+  * @param  x           : Horizontal position on the screen
+  * @param  y           : vertical position on the screen
+  * @param  xSize       : Horizontal bitmap size
+  * @param  ySize       : Vertical bitmap size
+  * @param  BytesPerLine: Bytes per Line
+  * @retval None 
+  */
+static void _LCD_DrawBitmapAlpha(int LayerIndex, int x, int y, const void * p, int xSize, int ySize, int BytesPerLine) 
+{
+  U32 BufferSize, AddrDst;
+  int OffLineSrc, OffLineDst;
+  U32 PixelFormat;
+
+  PixelFormat = _GetPixelformat(LayerIndex);
+  BufferSize = _GetBufferSize(LayerIndex);
+  AddrDst = _aAddr[LayerIndex] + BufferSize * _aBufferIndex[LayerIndex] + (y * _axSize[LayerIndex] + x) * _aBytesPerPixels[LayerIndex];
+  OffLineSrc = (BytesPerLine / 4) - xSize;
+  OffLineDst = _axSize[LayerIndex] - xSize;
+  _DMA_DrawAlphaBitmap((void *)AddrDst, p, xSize, ySize, OffLineSrc, OffLineDst, PixelFormat);
+}
+
+
 /*********************************************************************
 *
 *       Public code
@@ -981,7 +1105,8 @@ static void _LCD_InitController(int LayerIndex) {
   }
   if (Done == 0) {
     Done = 1;
- 
+
+//    LCD_Init();
     //
     // Enable line interrupt
     //
@@ -1010,11 +1135,11 @@ static void _LCD_InitController(int LayerIndex) {
 	//一行的第一个起始像素，该成员值应用为 (LTDC_InitStruct.LTDC_AccumulatedHBP+1)的值
 	LTDC_Layer_InitStruct.LTDC_HorizontalStart = HBP + HSW;
 	//一行的最后一个像素，该成员值应用为 (LTDC_InitStruct.LTDC_AccumulatedActiveW)的值
-	LTDC_Layer_InitStruct.LTDC_HorizontalStop = HSW+HBP+xSize-1;
+	LTDC_Layer_InitStruct.LTDC_HorizontalStop = HSW+HBP+LCD_PIXEL_WIDTH-1;
 	//一列的第一个起始像素，该成员值应用为 (LTDC_InitStruct.LTDC_AccumulatedVBP+1)的值
 	LTDC_Layer_InitStruct.LTDC_VerticalStart =  VBP + VSW;
 	//一列的最后一个像素，该成员值应用为 (LTDC_InitStruct.LTDC_AccumulatedActiveH)的值
-	LTDC_Layer_InitStruct.LTDC_VerticalStop = VSW+VBP+ySize-1;
+	LTDC_Layer_InitStruct.LTDC_VerticalStop = VSW+VBP+LCD_PIXEL_HEIGHT-1;
   //
   // Pixel Format configuration
   //
@@ -1326,6 +1451,12 @@ void LCD_X_Config(void) {
     // Set up a custom function for mixing up arrays of colors using DMA2D
     //
     GUI_SetFuncMixColorsBulk(_LCD_MixColorsBulk);
+    
+    /* Set up custom function for drawing 16bpp memory devices */
+    GUI_MEMDEV_SetDrawMemdev16bppFunc(_LCD_DrawMemdev16bpp);
+    
+    /* Set up custom function for Alpha drawing operations */
+    GUI_SetFuncDrawAlpha(_LCD_DrawMemdevAlpha, _LCD_DrawBitmapAlpha);
   }
 }
 

@@ -36,7 +36,7 @@
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "MainTask.h"
+#include "ButtonDLG.h"
 /* 文件系统 */
 #include "ff.h"
 #include "diskio.h"
@@ -331,12 +331,13 @@ static void BSP_Init(void)
   /* 禁用WIFI模块 */
   BL8782_PDN_INIT();
   /* 挂载文件系统，挂载时会对SD卡初始化 */
-  result = f_mount(&fs,"0:",1);
-	if(result != FR_OK)
-	{
-		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-		while(1);
-	}
+	/*本例程未使用sd卡*/
+//  result = f_mount(&fs,"0:",1);
+//	if(result != FR_OK)
+//	{
+//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+//		while(1);
+//	}
 }
 
 /**

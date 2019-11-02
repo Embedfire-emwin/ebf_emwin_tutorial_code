@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F429IGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.13.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.12.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x10000000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -809,9 +809,14 @@
           <GroupName>STemWIN/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>ButtonDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
+              <FilePath>..\..\STemWin_Task\ButtonDLG.c</FilePath>
+            </File>
+            <File>
+              <FileName>BUTTON_Bitmaps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin_Task\BUTTON_Bitmaps.c</FilePath>
             </File>
           </Files>
         </Group>

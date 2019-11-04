@@ -641,14 +641,14 @@ void GT9xx_GetOnePiont(void)
 		State.y = -1;
 		State.Pressed = 0;
 		State.Layer = 0;
-		GUI_TOUCH_StoreStateEx(&State);
+		GUI_PID_StoreState(&State);
 		return;
 	}
 	State.Pressed = 1;
 	State.x = pre_x;
 	State.y =pre_y;
 	State.Layer = 0;
-	GUI_TOUCH_StoreStateEx(&State);
+	GUI_PID_StoreState(&State);
 }
 //MODULE_DESCRIPTION("GTP Series Driver");
 //MODULE_LICENSE("GPL");

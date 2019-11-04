@@ -144,11 +144,6 @@ static int _cb_FONT_XBF_GetData(U32 Offset, U16 NumBytes, void * pVoid, void * p
 	{
 		/* 挂载sd卡文件系统 */
 		res = f_mount(&fs,FONT_STORAGE_ROOT_DIR,1);
-	if(res != FR_OK)
-	{
-		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-		while(1);
-	}
 		storage_init_flag = 1;
 	}
 	

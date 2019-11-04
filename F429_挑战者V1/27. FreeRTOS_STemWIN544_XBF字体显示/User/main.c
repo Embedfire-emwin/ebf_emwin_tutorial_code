@@ -167,15 +167,15 @@ static void AppTaskCreate(void)
 											 (TaskHandle_t     )&Key_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建Key_Task任务成功！\r\n");
-//	
-//	xReturn = xTaskCreate((TaskFunction_t)Touch_Task,/* 任务入口函数 */
-//											 (const char*      )"Touch_Task",/* 任务名称 */
-//											 (uint16_t         )256,     /* 任务栈大小 */
-//											 (void*            )NULL,    /* 任务入口函数参数 */
-//											 (UBaseType_t      )4,       /* 任务的优先级 */
-//											 (TaskHandle_t     )&Touch_Task_Handle);/* 任务控制块指针 */
-//	if(pdPASS == xReturn)
-//		printf("创建Touch_Task任务成功！\r\n");
+	
+	xReturn = xTaskCreate((TaskFunction_t)Touch_Task,/* 任务入口函数 */
+											 (const char*      )"Touch_Task",/* 任务名称 */
+											 (uint16_t         )256,     /* 任务栈大小 */
+											 (void*            )NULL,    /* 任务入口函数参数 */
+											 (UBaseType_t      )4,       /* 任务的优先级 */
+											 (TaskHandle_t     )&Touch_Task_Handle);/* 任务控制块指针 */
+	if(pdPASS == xReturn)
+		printf("创建Touch_Task任务成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
@@ -331,7 +331,7 @@ static void BSP_Init(void)
   /* 禁用WIFI模块 */
   BL8782_PDN_INIT();
   /* 挂载文件系统，挂载时会对SD卡初始化 */
-	/*默认不使用SD卡，屏蔽SD卡挂载及初始化，否在在不插入SD卡是程序会卡死在while(1)循环*/
+	/*本例程未使用sd卡*/
 //  result = f_mount(&fs,"0:",1);
 //	if(result != FR_OK)
 //	{

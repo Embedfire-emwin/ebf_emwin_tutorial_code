@@ -138,7 +138,7 @@ can be set here.
 *
 *       Layer 1
 */
-#define COLOR_MODE_1 _CM_RGB565
+#define COLOR_MODE_1 _CM_ARGB8888
 //
 // Layer size
 //

@@ -167,15 +167,15 @@ static void AppTaskCreate(void)
 											 (TaskHandle_t     )&Key_Task_Handle);/* 任务控制块指针 */
 	if(pdPASS == xReturn)
 		printf("创建Key_Task任务成功！\r\n");
-	
-	xReturn = xTaskCreate((TaskFunction_t)Touch_Task,/* 任务入口函数 */
-											 (const char*      )"Touch_Task",/* 任务名称 */
-											 (uint16_t         )256,     /* 任务栈大小 */
-											 (void*            )NULL,    /* 任务入口函数参数 */
-											 (UBaseType_t      )4,       /* 任务的优先级 */
-											 (TaskHandle_t     )&Touch_Task_Handle);/* 任务控制块指针 */
-	if(pdPASS == xReturn)
-		printf("创建Touch_Task任务成功！\r\n");
+//	
+//	xReturn = xTaskCreate((TaskFunction_t)Touch_Task,/* 任务入口函数 */
+//											 (const char*      )"Touch_Task",/* 任务名称 */
+//											 (uint16_t         )256,     /* 任务栈大小 */
+//											 (void*            )NULL,    /* 任务入口函数参数 */
+//											 (UBaseType_t      )4,       /* 任务的优先级 */
+//											 (TaskHandle_t     )&Touch_Task_Handle);/* 任务控制块指针 */
+//	if(pdPASS == xReturn)
+//		printf("创建Touch_Task任务成功！\r\n");
 	
 	xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */

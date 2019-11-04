@@ -152,9 +152,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>197</LineNumber>
+          <LineNumber>156</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134322416</Address>
+          <Address>134328566</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\27. FreeRTOS_STemWIN544_XBF瀛椾綋鏄剧ず\Project\STemWin_Task\GUIFont_Create.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Fire_F429\../../STemWin_Task/GUIFont_Create.c\156</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>110</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134328298</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,7 +179,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\27. FreeRTOS_STemWIN544_XBF瀛椾綋鏄剧ず\Project\STemWin_Task\MainTask.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../STemWin_Task/MainTask.c\197</Expression>
+          <Expression>\\Fire_F429\../../STemWin_Task/MainTask.c\110</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -887,8 +903,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\touch\gt9xx.c</PathWithFileName>
-      <FilenameWithoutPath>gt9xx.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\User\TouchPad\bsp_touchpad.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_touchpad.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -899,8 +915,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\TouchPad\bsp_touchpad.c</PathWithFileName>
-      <FilenameWithoutPath>bsp_touchpad.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\User\flash\bsp_spi_flash.c</PathWithFileName>
+      <FilenameWithoutPath>bsp_spi_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -911,8 +927,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\User\flash\bsp_spi_flash.c</PathWithFileName>
-      <FilenameWithoutPath>bsp_spi_flash.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\User\touch\gt9xx.c</PathWithFileName>
+      <FilenameWithoutPath>gt9xx.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

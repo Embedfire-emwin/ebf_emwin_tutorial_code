@@ -714,11 +714,6 @@
               <FilePath>..\..\User\touch\bsp_i2c_touch.c</FilePath>
             </File>
             <File>
-              <FileName>gt9xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\touch\gt9xx.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_touchpad.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\TouchPad\bsp_touchpad.c</FilePath>
@@ -727,6 +722,11 @@
               <FileName>bsp_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\flash\bsp_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>gt9xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\touch\gt9xx.c</FilePath>
             </File>
           </Files>
         </Group>

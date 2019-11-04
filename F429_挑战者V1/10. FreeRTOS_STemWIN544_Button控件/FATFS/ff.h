@@ -1,23 +1,21 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module include R0.11a    (C)ChaN, 2015
+/  FatFs - FAT file system module include file  R0.10c    (C)ChaN, 2014
 /----------------------------------------------------------------------------/
-/ FatFs module is a free software that opened under license policy of
-/ following conditions.
+/ FatFs module is a generic FAT file system module for small embedded systems.
+/ This is a free software that opened for education, research and commercial
+/ developments under license policy of following terms.
 /
-/ Copyright (C) 2015, ChaN, all right reserved.
+/  Copyright (C) 2014, ChaN, all right reserved.
 /
-/ 1. Redistributions of source code must retain the above copyright notice,
-/    this condition and the following disclaimer.
+/ * The FatFs module is a free software and there is NO WARRANTY.
+/ * No restriction on use. You can use, modify and redistribute it for
+/   personal, non-profit or commercial product UNDER YOUR RESPONSIBILITY.
+/ * Redistributions of source code must retain the above copyright notice.
 /
-/ This software is provided by the copyright holder and contributors "AS IS"
-/ and any warranties related to this software are DISCLAIMED.
-/ The copyright owner or contributors be NOT LIABLE for any damages caused
-/ by use of this software.
-/---------------------------------------------------------------------------*/
-
+/----------------------------------------------------------------------------*/
 
 #ifndef _FATFS
-#define _FATFS	64180	/* Revision ID */
+#define _FATFS	80376	/* Revision ID */
 
 #ifdef __cplusplus
 extern "C" {
@@ -156,14 +154,11 @@ typedef struct {
 	WCHAR*	lfn;			/* Pointer to the LFN working buffer */
 	WORD	lfn_idx;		/* Last matched LFN index number (0xFFFF:No LFN) */
 #endif
-#if _USE_FIND
-	const TCHAR*	pat;	/* Pointer to the name matching pattern */
-#endif
 } DIR;
 
 
 
-/* File information structure (FILINFO) */
+/* File status structure (FILINFO) */
 
 typedef struct {
 	DWORD	fsize;			/* File size */
@@ -200,7 +195,7 @@ typedef enum {
 	FR_TIMEOUT,				/* (15) Could not get a grant to access the volume within defined period */
 	FR_LOCKED,				/* (16) The operation is rejected according to the file sharing policy */
 	FR_NOT_ENOUGH_CORE,		/* (17) LFN working buffer could not be allocated */
-	FR_TOO_MANY_OPEN_FILES,	/* (18) Number of open files > _FS_LOCK */
+	FR_TOO_MANY_OPEN_FILES,	/* (18) Number of open files > _FS_SHARE */
 	FR_INVALID_PARAMETER	/* (19) Given parameter is invalid */
 } FRESULT;
 
@@ -220,13 +215,11 @@ FRESULT f_sync (FIL* fp);											/* Flush cached data of a writing file */
 FRESULT f_opendir (DIR* dp, const TCHAR* path);						/* Open a directory */
 FRESULT f_closedir (DIR* dp);										/* Close an open directory */
 FRESULT f_readdir (DIR* dp, FILINFO* fno);							/* Read a directory item */
-FRESULT f_findfirst (DIR* dp, FILINFO* fno, const TCHAR* path, const TCHAR* pattern);	/* Find first file */
-FRESULT f_findnext (DIR* dp, FILINFO* fno);							/* Find next file */
 FRESULT f_mkdir (const TCHAR* path);								/* Create a sub directory */
 FRESULT f_unlink (const TCHAR* path);								/* Delete an existing file or directory */
 FRESULT f_rename (const TCHAR* path_old, const TCHAR* path_new);	/* Rename/Move a file or directory */
 FRESULT f_stat (const TCHAR* path, FILINFO* fno);					/* Get file status */
-FRESULT f_chmod (const TCHAR* path, BYTE attr, BYTE mask);			/* Change attribute of the file/dir */
+FRESULT f_chmod (const TCHAR* path, BYTE value, BYTE mask);			/* Change attribute of the file/dir */
 FRESULT f_utime (const TCHAR* path, const FILINFO* fno);			/* Change times-tamp of the file/dir */
 FRESULT f_chdir (const TCHAR* path);								/* Change current directory */
 FRESULT f_chdrive (const TCHAR* path);								/* Change current drive */
@@ -246,8 +239,6 @@ TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the fil
 #define f_error(fp) ((fp)->err)
 #define f_tell(fp) ((fp)->fptr)
 #define f_size(fp) ((fp)->fsize)
-#define f_rewind(fp) f_lseek((fp), 0)
-#define f_rewinddir(dp) f_readdir((dp), 0)
 
 #ifndef EOF
 #define EOF (-1)

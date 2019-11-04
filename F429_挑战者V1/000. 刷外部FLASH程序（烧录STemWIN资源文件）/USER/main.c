@@ -25,7 +25,7 @@
 #include "ff.h"
 #include "./fatfs/drivers/fatfs_flash_spi.h"
 #include "./res_mgr/res_mgr.h"
-
+#include "./flash/bsp_spi_flash.h"
 
 
 /**
@@ -51,15 +51,15 @@ static void AP6181_PDN_INIT(void)
   /*定义一个GPIO_InitTypeDef类型的结构体*/
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd ( RCC_AHB1Periph_GPIOB, ENABLE); 							   
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;	
+  RCC_AHB1PeriphClockCmd ( RCC_AHB1Periph_GPIOG, ENABLE); 							   
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure);	
+  GPIO_Init(GPIOG, &GPIO_InitStructure);	
   
-  GPIO_ResetBits(GPIOB,GPIO_Pin_13);  //禁用WiFi模块
+  GPIO_ResetBits(GPIOG,GPIO_Pin_9);  //禁用WiFi模块
 }
 /*
 *********************************************************************************************************
@@ -103,7 +103,7 @@ int main(void)
 
   /* 初始化调试串口，一般为串口1 */
   Debug_USART_Config();
-  TM_FATFS_FLASH_SPI_disk_initialize();
+  SPI_FLASH_Init();
   
   res = FR_DISK_ERR;
        
@@ -137,9 +137,9 @@ int main(void)
   /* 校验烧录的内容 */
   Check_Resource();
   
-//  printf("读取资源位置测试\r\n");
-//  printf("GB2312_H2424.FON offset = %d\r\n", 
-//                  GetResOffset("GB2312_H2424.FON"));
+  printf("读取资源位置测试\r\n");
+  printf("siyuanheiti36_2bpp.xbf offset = %d\r\n", 
+                  GetResOffset("siyuanheiti36_2bpp.xbf"));
   
 #if 0
   printf("\r\n 正在进行整片擦除，时间很长，请耐心等候...\r\n");

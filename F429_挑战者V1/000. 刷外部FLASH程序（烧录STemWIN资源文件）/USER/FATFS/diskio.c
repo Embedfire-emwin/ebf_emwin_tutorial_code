@@ -11,7 +11,7 @@
 #include "ff.h"
 
 #ifndef FATFS_FLASH_SPI
-	#define FATFS_FLASH_SPI				1
+	#define FATFS_FLASH_SPI				0
 #endif
 
 #ifndef FATFS_USE_SDIO
@@ -48,7 +48,7 @@ DSTATUS disk_initialize (
 {
 
 	DSTATUS status = STA_NOINIT;
-	FLASH_DEBUG_FUNC() ;
+//	FLASH_DEBUG_FUNC() ;
 	switch (pdrv) {
 		case ATA:	/* SD CARD */
 			#if FATFS_USE_SDIO == 1

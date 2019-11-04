@@ -38,7 +38,7 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Stack_Size      EQU     0x00002000
+Stack_Size      EQU     0x00000800
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
@@ -49,12 +49,13 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size       EQU     0x00000800
+Heap_Size       EQU     0x00000400
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
-__heap_base
+__heap_base     EQU     0xD0800000  ;设置堆空间起始地址(SDRAM)，位于8MB处，避开显存区
 Heap_Mem        SPACE   Heap_Size
-__heap_limit
+__heap_limit    EQU     0xD0A00000  ;设置堆空间极限地址(SDRAM)，
+                                    ;0xD0800000+0x00800000，分配2MB给TTF引擎
 
                 PRESERVE8
                 THUMB
@@ -187,9 +188,16 @@ Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
         IMPORT  SystemInit
         IMPORT  __main
+			
+        ;从外部文件引入声明
+        IMPORT SDRAM_Init    
 
                  LDR     R0, =SystemInit
                  BLX     R0
+                 
+                 LDR     R0, =SDRAM_Init ;初始化SDRAM
+                 BLX     R0
+
                  LDR     R0, =__main
                  BX      R0
                  ENDP

@@ -71,12 +71,12 @@ void FS_Init(void)
 	AP6181_PDN_INIT();
 	
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
-//  result = f_mount(&fs,"0:",1);
-//	if(result != FR_OK)
-//	{
-//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-//		while(1);
-//	}
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 	/*  如果路径不存在，则创建路径  */
 	result = f_opendir(&dir, ScreenShotPATH);
 	while(result != FR_OK)

@@ -7,7 +7,7 @@
 //设置SIF字体存储的位置：
 //FLASH非文件系统区域（推荐） 	USE_FLASH_FONT             	0 
 //SD卡文件系统区域							USE_SDCARD_FONT							1
-#define SIF_FONT_SOURCE				0
+#define SIF_FONT_SOURCE				1
 
 //（速度最快）字库在FLASH的非文件系统区域，使用前需要往FLASH特定地址拷贝字体文件
 #define USE_FLASH_FONT				0	

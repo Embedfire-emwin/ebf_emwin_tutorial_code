@@ -190,9 +190,9 @@ WM_HWIN CreateFramewin(void)
 void MainTask(void)
 {
 	/* 启用UTF-8编码 */
-//	GUI_UC_SetEncodeUTF8();
+	GUI_UC_SetEncodeUTF8();
 	/* 创建字体 */
-//	Create_SIF_Font();
+	Create_SIF_Font();
 	/* 创建窗口 */
 	CreateFramewin();
 	while(1)

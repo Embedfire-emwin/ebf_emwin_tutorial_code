@@ -814,14 +814,14 @@
           <GroupName>STemWIN/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
-            </File>
-            <File>
               <FileName>GUIFont_Create.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\GUIFont_Create.c</FilePath>
+            </File>
+            <File>
+              <FileName>MainTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
             </File>
             <File>
               <FileName>ScreenShot.c</FileName>
@@ -847,6 +847,11 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\FATFS\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>fatfs_sd_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\drivers\fatfs_sd_sdio.c</FilePath>
             </File>
             <File>
               <FileName>ccsbcs.c</FileName>
@@ -903,11 +908,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>fatfs_sd_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\FATFS\drivers\fatfs_sd_sdio.c</FilePath>
             </File>
             <File>
               <FileName>cc936.c</FileName>

@@ -79,12 +79,6 @@ static TaskHandle_t GUI_Task_Handle = NULL;
  */
 KEY Key1,Key2;
 
-FATFS   fs;								/* FatFs文件系统对象 */
-FIL     file;							/* file objects */
-UINT    bw;            		/* File R/W count */
-FRESULT result; 
-FILINFO fno;
-DIR dir;
 
 /*
 *************************************************************************

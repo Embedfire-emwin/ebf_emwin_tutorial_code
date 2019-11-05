@@ -24,120 +24,59 @@
   #define NULL        0
 #endif
 
-/**
- * struct i2c_msg - an I2C transaction segment beginning with START
- * @addr: Slave address, either seven or ten bits.  When this is a ten
- *	bit address, I2C_M_TEN must be set in @flags and the adapter
- *	must support I2C_FUNC_10BIT_ADDR.
- * @flags: I2C_M_RD is handled by all adapters.  No other flags may be
- *	provided unless the adapter exported the relevant I2C_FUNC_*
- *	flags through i2c_check_functionality().
- * @len: Number of data bytes in @buf being read from or written to the
- *	I2C slave address.  For read transactions where I2C_M_RECV_LEN
- *	is set, the caller guarantees that this buffer can hold up to
- *	32 bytes in addition to the initial length byte sent by the
- *	slave (plus, if used, the SMBus PEC); and this value will be
- *	incremented by the number of block data bytes received.
- * @buf: The buffer into which data is read, or from which it's written.
- *
- * An i2c_msg is the low level representation of one segment of an I2C
- * transaction.  It is visible to drivers in the @i2c_transfer() procedure,
- * to userspace from i2c-dev, and to I2C adapter drivers through the
- * @i2c_adapter.@master_xfer() method.
- *
- * Except when I2C "protocol mangling" is used, all I2C adapters implement
- * the standard rules for I2C transactions.  Each transaction begins with a
- * START.  That is followed by the slave address, and a bit encoding read
- * versus write.  Then follow all the data bytes, possibly including a byte
- * with SMBus PEC.  The transfer terminates with a NAK, or when all those
- * bytes have been transferred and ACKed.  If this is the last message in a
- * group, it is followed by a STOP.  Otherwise it is followed by the next
- * @i2c_msg transaction segment, beginning with a (repeated) START.
- *
- * Alternatively, when the adapter supports I2C_FUNC_PROTOCOL_MANGLING then
- * passing certain @flags may have changed those standard protocol behaviors.
- * Those flags are only for use with broken/nonconforming slaves, and with
- * adapters which are known to support the specific mangling options they
- * need (one or more of IGNORE_NAK, NO_RD_ACK, NOSTART, and REV_DIR_ADDR).
- */
+
+/*flags的可取值，注释掉的在本工程没有用到*/
+//#define I2C_M_TEN		0x0010	/* 表示这是个10位地址 */
+//#define I2C_M_NOSTART		0x4000	/* if I2C_FUNC_PROTOCOL_MANGLING */
+//#define I2C_M_REV_DIR_ADDR	0x2000	/* if I2C_FUNC_PROTOCOL_MANGLING */
+//#define I2C_M_IGNORE_NAK	0x1000	/* if I2C_FUNC_PROTOCOL_MANGLING */
+//#define I2C_M_NO_RD_ACK		0x0800	/* if I2C_FUNC_PROTOCOL_MANGLING */
+//#define I2C_M_RECV_LEN		0x0400	/* length will be first received byte */
+
+/* 表示读数据 */ 
+#define I2C_M_RD		0x0001	
+ /*
+ * 存储I2C通讯的信息
+ * @addr：  从设备的I2C设备地址	
+ * @flags: 控制标志
+ * @len：  读写数据的长度
+ * @buf：  存储读写数据的指针
+ **/
 struct i2c_msg {
-	uint8_t addr;	/* slave address			*/
-	uint16_t flags;
-#define I2C_M_TEN		0x0010	/* this is a ten bit chip address */
-#define I2C_M_RD		0x0001	/* read data, from slave to master */
-#define I2C_M_NOSTART		0x4000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_REV_DIR_ADDR	0x2000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_IGNORE_NAK	0x1000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_NO_RD_ACK		0x0800	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_RECV_LEN		0x0400	/* length will be first received byte */
-	uint16_t len;		/* msg length				*/
-	uint8_t *buf;		/* pointer to msg data			*/
+	uint8_t addr;		/*从设备的I2C设备地址 */
+	uint16_t flags;	/*控制标志*/
+	uint16_t len;		/*读写数据的长度			*/
+	uint8_t *buf;		/*存储读写数据的指针	*/
 };
 
-//***************************PART1:ON/OFF define*******************************
+/** 
+  * @brief 触摸屏参数
+  */
+typedef struct
+{
+  /*根据触摸屏类型配置*/
+  uint16_t max_width;  //触点最大值,高
+  uint16_t max_height;  //触点最大值，宽
 
-#define GTP_DEBUG_ON                    0
-#define GTP_DEBUG_ARRAY_ON              0
-#define GTP_DEBUG_FUNC_ON               0
+  uint16_t config_reg_addr;  	//不同类型的触摸ic配置寄存器地址不同
 
-//*************************** PART2:TODO define **********************************
+}TOUCH_PARAM_TypeDef;
 
-#if 0
-// TODO: define your own default or for Sensor_ID == 0 config here. 
-// The predefined one is just a sample config, which is not suitable for your tp in most cases.
+typedef enum 
+{
+	GT9157=0,
+	GT911=1,
+  GT5688=2,
+	GT917S=3,
+}TOUCH_IC;
 
-//0x8100~0x8047  len = 185
-#define CTP_CFG_GROUP1 {\
-		0x00,0x20,0x03,0xe0,0x01,0x05,0x0c,0x00,0x01,0x08,\
-		0x28,0x05,0x50,0x32,0x03,0x05,0x00,0x00,0x00,0x00,\
-		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x8b,0x2b,0x0d,\
-		0x19,0x16,0x12,0x0c,0x00,0x00,0x00,0xb9,0x04,0x2d,\
-		0x00,0x00,0x00,0x00,0x00,0x03,0x64,0x32,0x00,0x00,\
-		0x00,0x0f,0xa1,0x94,0xc5,0x02,0x07,0x00,0x00,0x04,\
-		0x93,0x13,0x00,0x5e,0x1f,0x00,0x3d,0x32,0x00,0x2a,\
-		0x51,0x00,0x20,0x82,0x00,0x20,0x00,0x00,0x00,0x00,\
-		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-		0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-		0x00,0x00,0x02,0x04,0x06,0x08,0x0a,0x0c,0x0e,0x10,\
-		0x12,0x14,0x16,0x18,0x1a,0xff,0x1f,0xff,0xff,0xff,\
-		0xff,0xff,0xff,0xff,0xff,0x00,0xff,0xff,0xff,0x0f,\
-		0xff,0xff,0x00,0x02,0x04,0x06,0x08,0x0a,0x0c,0x0f,\
-		0x10,0x12,0x13,0x16,0x18,0x1c,0x1d,0x1e,0x1f,0x20,\
-		0x21,0x22,0x24,0x26,0xff,0xff,0xff,0xff,0x00,0x00,\
-		0x00,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,\
-		0xff,0xff,0xff,0xff,0x01,\
-	}
-
-#else
-  
-#define CTP_CFG_GROUP1 {\
-0x00,0x20,0x03,0xE0,0x01,0x05,0x3C,0x00,0x01,0x08,\
-0x28,0x0C,0x50,0x32,0x03,0x05,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x17,0x19,0x1E,0x14,0x8B,0x2B,0x0D,\
-0x33,0x35,0x0C,0x08,0x00,0x00,0x00,0x9A,0x03,0x11,\
-0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x32,0x00,0x00,\
-0x00,0x20,0x58,0x94,0xC5,0x02,0x00,0x00,0x00,0x04,\
-0xB0,0x23,0x00,0x93,0x2B,0x00,0x7B,0x35,0x00,0x69,\
-0x41,0x00,0x5B,0x4F,0x00,0x5B,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x02,0x04,0x06,0x08,0x0A,0x0C,0x0E,0x10,\
-0x12,0x14,0x16,0x18,0x1A,0xFF,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,\
-0x00,0x00,0x00,0x02,0x04,0x06,0x08,0x0A,0x0C,0x0F,\
-0x10,0x12,0x13,0x16,0x18,0x1C,0x1D,0x1E,0x1F,0x20,\
-0x21,0x22,0x24,0x26,0xFF,0xFF,0xFF,0xFF,0x00,0x00,\
-0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,\
-0xFF,0xFF,0xFF,0xFF,0x48,0x01\
-}
-
-#endif
+extern TOUCH_IC touchIC;
+extern const TOUCH_PARAM_TypeDef touch_param[];
 
 // STEP_3(optional): Specify your special config info if needed
-#define GTP_MAX_HEIGHT                  480
-#define GTP_MAX_WIDTH                   800
+#define GTP_MAX_HEIGHT   touch_param[touchIC].max_height
+#define GTP_MAX_WIDTH    touch_param[touchIC].max_width
+
 #define GTP_INT_TRIGGER                 0
 #define GTP_MAX_TOUCH                   1
 
@@ -209,18 +148,22 @@ struct i2c_msg {
 #define CFG_GROUP_LEN(p_cfg_grp)        (sizeof(p_cfg_grp) / sizeof(p_cfg_grp[0]))
 	
 
+#define GTP_DEBUG_ON         	1
+#define GTP_DEBUG_ARRAY_ON    0
+#define GTP_DEBUG_FUNC_ON   	0
 // Log define
-#define GTP_INFO(fmt,arg...)            printf("<<-GTP-INFO->> "fmt"\n",##arg)
-#define GTP_ERROR(fmt,arg...)           printf("<<-GTP-ERROR->> "fmt"\n",##arg)
-#define GTP_DEBUG(fmt,arg...)           do{\
-                                           if(GTP_DEBUG_ON)\
-                                           printf("<<-GTP-DEBUG->> [%d]"fmt"\n",__LINE__, ##arg);\
-                                          }while(0)
-#define GTP_DEBUG_ARRAY(array, num)     do{\
-                                           int32_t i;\
-                                           uint8_t* a = array;\
-                                           if(GTP_DEBUG_ARRAY_ON)\
-                                           {\
+#define GTP_INFO(fmt,arg...)           printf("<<-GTP-INFO->> "fmt"\n",##arg)
+#define GTP_ERROR(fmt,arg...)          printf("<<-GTP-ERROR->> "fmt"\n",##arg)
+#define GTP_DEBUG(fmt,arg...)          do{\
+                                         if(GTP_DEBUG_ON)\
+                                         printf("<<-GTP-DEBUG->> [%d]"fmt"\n",__LINE__, ##arg);\
+																					}while(0)
+
+#define GTP_DEBUG_ARRAY(array, num)    do{\
+                                         int32_t i;\
+                                         uint8_t* a = array;\
+                                         if(GTP_DEBUG_ARRAY_ON)\
+                                         {\
                                             printf("<<-GTP-DEBUG-ARRAY->>\n");\
                                             for (i = 0; i < (num); i++)\
                                             {\
@@ -231,17 +174,22 @@ struct i2c_msg {
                                                 }\
                                             }\
                                             printf("\n");\
-                                           }\
-                                        }while(0)
-#define GTP_DEBUG_FUNC()                do{\
-                                           if(GTP_DEBUG_FUNC_ON)\
-                                           printf("<<-GTP-FUNC->> Func:%s@Line:%d\n",__func__,__LINE__);\
-                                        }while(0)
-#define GTP_SWAP(x, y)                  do{\
-                                           typeof(x) z = x;\
-                                           x = y;\
-                                           y = z;\
-                                        }while (0)
+                                        }\
+                                       }while(0)
+
+#define GTP_DEBUG_FUNC()               do{\
+                                         if(GTP_DEBUG_FUNC_ON)\
+                                         printf("<<-GTP-FUNC->> Func:%s@Line:%d\n",__func__,__LINE__);\
+                                       }while(0)
+
+																			 
+																			 
+#define GTP_SWAP(x, y)                 do{\
+                                         typeof(x) z = x;\
+                                         x = y;\
+                                         y = z;\
+                                       }while (0)
+
 
 //*****************************End of Part III********************************
 int8_t GTP_Reset_Guitar(void);

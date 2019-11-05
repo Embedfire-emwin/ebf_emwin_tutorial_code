@@ -293,12 +293,12 @@ void SystemClock_Config(void)
 		while(1) { ; }
 	}
 
-	/* 激活 OverDrive 模式以达到216M频率  */  
-	ret = HAL_PWREx_EnableOverDrive();
-	if(ret != HAL_OK)
-	{
-		while(1) { ; }
-	}
+//	/* 激活 OverDrive 模式以达到216M频率  */  
+//	ret = HAL_PWREx_EnableOverDrive();
+//	if(ret != HAL_OK)
+//	{
+//		while(1) { ; }
+//	}
 
 	/* 选择PLLCLK作为SYSCLK，并配置 HCLK, PCLK1 and PCLK2 的时钟分频因子 
 	 * SYSCLK = PLLCLK     = 216M

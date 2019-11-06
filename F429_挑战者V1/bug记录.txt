@@ -4,6 +4,7 @@
 
 
 /***********29.TTF字体**************/
-修改启动文件之前，读取字体文件的时候卡死在GUIFont_create.c的91行
 
 修改启动文件之后，读取字体文件的时候卡死在GUIFont_create.c的76行
+
+卡在函数SD_Error SD_WaitReadOperation(void)   

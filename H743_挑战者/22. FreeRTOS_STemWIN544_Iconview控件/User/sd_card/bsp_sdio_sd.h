@@ -18,7 +18,7 @@ static void SD_EraseTest(void);
 static HAL_StatusTypeDef Wait_SDCARD_Ready(void);
 static HAL_StatusTypeDef Buffercmp(uint8_t* pBuffer1, uint8_t* pBuffer2, uint32_t BufferLength);
 
-
+void SD_Init(void);
 void SD_Test(void);
 void SD_SingleBlockTest(void);
 void SD_MultiBlockTest(void);

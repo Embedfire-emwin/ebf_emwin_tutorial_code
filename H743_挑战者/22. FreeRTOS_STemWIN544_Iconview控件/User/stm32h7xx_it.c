@@ -36,6 +36,7 @@
 #include "stm32h7xx_it.h"
 #include "./touch/bsp_i2c_touch.h"
 #include "./led/bsp_led.h"
+#include "./sd_card/bsp_sdio_sd.h"
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -47,6 +48,7 @@
 /* External variables --------------------------------------------------------*/
 extern LTDC_HandleTypeDef  Ltdc_Handler;
 extern DMA2D_HandleTypeDef Dma2d_Handler;
+extern SD_HandleTypeDef uSdHandle;
 
 /******************************************************************************/
 /*            Cortex Processor Interruption and Exception Handlers         */ 
@@ -215,6 +217,9 @@ void LTDC_IRQHandler(void)
 //  /* 退出临界段 */
 //	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 //}
-
+void SDMMC1_IRQHandler(void)
+{
+  HAL_SD_IRQHandler(&uSdHandle);
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

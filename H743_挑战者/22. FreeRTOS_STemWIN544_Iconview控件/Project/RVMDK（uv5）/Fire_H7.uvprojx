@@ -853,11 +853,6 @@
               <FilePath>..\..\User\mpu\bsp_mpu.c</FilePath>
             </File>
             <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_sdio_sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>

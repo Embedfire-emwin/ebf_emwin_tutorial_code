@@ -411,7 +411,7 @@ BaseType_t xPortStartScheduler( void )
 	*( portFPCCR ) |= portASPEN_AND_LSPEN_BITS;
 
 	/* Start the first task. */
-	prvStartFirstTask();
+	prvStartFirstTask();/******/
 
 	/* Should not get here! */
 	return 0;

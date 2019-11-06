@@ -250,7 +250,7 @@ static void BSP_Init(void)
 	/* LCD初始化 */
 	LCD_Init();
   /* 挂载文件系统，挂载时会对SD卡初始化 */
-	delay(0xffff);	
+	delay(0xfffff);	
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)
 	{

@@ -6,7 +6,7 @@
   * @date    13-November-2013
   * @brief   This file provides a set of functions needed to manage the SDIO SD 
   *          Card memory mounted on STM324x9I-EVAL evaluation board. 
-  *          SDIO-SD卡驱动， 含文件系统接口
+  *          
   *            
   *  @verbatim
   *
@@ -241,7 +241,7 @@
 /** 
   * @brief  SDIO Data Transfer Frequency (25MHz max) 
   */
-#define SDIO_TRANSFER_CLK_DIV            ((uint8_t)0x0) 
+#define SDIO_TRANSFER_CLK_DIV            ((uint8_t)0x01) 
 
 #define SD_SDIO_DMA                      DMA2
 #define SD_SDIO_DMA_CLK                  RCC_AHB1Periph_DMA2
@@ -3137,7 +3137,7 @@ DSTATUS TM_FATFS_SD_SDIO_disk_initialize(void)
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
 	// Configure the NVIC Preemption Priority Bits 
-	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_1);
+	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_4);
 	NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -3318,8 +3318,6 @@ void SD_SDIO_DMA_IRQHANDLER(void)
   /* Process DMA2 Stream3 or DMA2 Stream6 Interrupt Sources */
   SD_ProcessDMAIRQ();
 }
-
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

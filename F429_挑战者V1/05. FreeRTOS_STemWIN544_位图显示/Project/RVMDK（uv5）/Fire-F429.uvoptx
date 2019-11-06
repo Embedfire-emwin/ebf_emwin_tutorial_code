@@ -140,7 +140,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>CMSIS_AGDI</Key>
-          <Name>-X"Any" -UAny -O206 -S9 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F429IGTx$CMSIS\Flash\STM32F4xx_1024.FLM)</Name>
+          <Name>-X"Fire CMSIS-DAP" -UHS-00006917 -O206 -S9 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024.FLM -FS08000000 -FL0100000 -FP0($$Device:STM32F429IGTx$CMSIS\Flash\STM32F4xx_1024.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -152,66 +152,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>414</LineNumber>
+          <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134321654</Address>
+          <Address>134279494</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\05. FreeRTOS_STemWIN544_浣嶅浘鏄剧ず\Project\FreeRTOS\port\RVDS\ARM_CM4F\port.c</Filename>
+          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\29. FreeRTOS_STemWIN544_TTF瀛椾綋鏄剧ず\Project\STemWin_Task\GUIFont_Create.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../FreeRTOS/port/RVDS/ARM_CM4F/port.c\414</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>1909</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134321054</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\05. FreeRTOS_STemWIN544_浣嶅浘鏄剧ず\Project\FreeRTOS\src\tasks.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../FreeRTOS/src/tasks.c\1909</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>250</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134287334</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\05. FreeRTOS_STemWIN544_浣嶅浘鏄剧ず\Project\User\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../User/main.c\250</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>257</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134287364</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\05. FreeRTOS_STemWIN544_浣嶅浘鏄剧ず\Project\User\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../User/main.c\257</Expression>
+          <Expression>\\Fire_F429\../../STemWin_Task/GUIFont_Create.c\76</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -268,7 +220,7 @@
 
   <Group>
     <GroupName>STARTUP</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1036,7 +988,7 @@
 
   <Group>
     <GroupName>FreeRTOS/port</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1167,7 +1119,7 @@
   </Group>
 
   <Group>
-    <GroupName>FatFs</GroupName>
+    <GroupName>FatFS</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1215,8 +1167,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\FATFS\option\ccsbcs.c</PathWithFileName>
-      <FilenameWithoutPath>ccsbcs.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\FATFS\option\cc936.c</PathWithFileName>
+      <FilenameWithoutPath>cc936.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

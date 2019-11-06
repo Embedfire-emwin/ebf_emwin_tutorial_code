@@ -23,6 +23,7 @@
 #include "./touch/gt9xx.h"
 #include "./sdram/bsp_sdram.h"
 #include "./mpu/bsp_mpu.h" 
+#include "./sd_card/bsp_sdio_sd.h"
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -33,8 +34,8 @@
 #include "MainTask.h"
 /* FATFS */
 #include "ff.h"
-#include "diskio.h"
-#include "integer.h"
+#include "ff_gen_drv.h"
+#include "sd_diskio.h"
 
 /**************************** 任务句柄 ********************************/
 /* 
@@ -68,7 +69,14 @@ SemaphoreHandle_t ScreenShotSem_Handle = NULL;
 /*
  * 当我们在写应用程序的时候，可能需要用到一些全局变量。
  */
-extern FRESULT result; 
+ char SDPath[4]; /* SD逻辑驱动器路径 */
+FATFS   fs;								/* FatFs文件系统对象 */
+FIL     file;							/* file objects */
+UINT    bw;            		/* File R/W count */
+FRESULT result; 
+FILINFO fno;
+DIR dir;
+
 
 /*
 *************************************************************************
@@ -210,6 +218,7 @@ static void GUI_Task(void* parameter)
   * @param 无
   * @retval 无
   */
+extern Diskio_drvTypeDef  SD_Driver;
 static void BSP_Init(void)
 {
   SCB_EnableICache();
@@ -236,15 +245,23 @@ static void BSP_Init(void)
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */
 	UARTx_Config();		
+	BSP_SD_MspInit();
   /* 初始化触摸屏 */
   GTP_Init_Panel(); 
   /* 初始化SDRAM 用作LCD 显存*/
 	SDRAM_Init();
 	/* LCD 端口初始化 */ 
 	LCD_Init();
-
+	//链接驱动器，创建盘符
+  FATFS_LinkDriver(&SD_Driver, SDPath);
+	/* 挂载文件系统，挂载时会对SD卡初始化 */
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 }
-
 
 
 
@@ -328,4 +345,3 @@ static void SystemClock_Config(void)
   }
 }
 /****************************END OF FILE***************************/
-

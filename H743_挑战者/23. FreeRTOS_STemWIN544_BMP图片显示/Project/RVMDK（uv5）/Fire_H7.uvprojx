@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,OS_SUPPORT,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\FATFS;..\..\STemWIN_Task</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\STemWIN_Task;..\..\FATFS</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -853,11 +853,6 @@
               <FilePath>..\..\User\mpu\bsp_mpu.c</FilePath>
             </File>
             <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_sdio_sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>
@@ -951,11 +946,6 @@
               <FileName>MainTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STemWIN_Task\MainTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>ScreenShot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\ScreenShot.c</FilePath>
             </File>
           </Files>
         </Group>

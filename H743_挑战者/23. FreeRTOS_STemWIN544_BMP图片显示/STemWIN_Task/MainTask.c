@@ -26,6 +26,7 @@
 /* STemWINÍ·ÎÄ¼þ */
 #include "ScreenShot.h"
 #include "MainTask.h"
+
 #include "usart/bsp_usart.h"
 
 /*********************************************************************

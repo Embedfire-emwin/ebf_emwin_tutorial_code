@@ -15,8 +15,8 @@
  * 
  */
 
-#ifndef _GOODIX_GT9XX_H
-#define _GOODIX_GT9XX_H
+#ifndef _GOODIX_GTXX_H
+#define _GOODIX_GTXX_H
 
 #include "stm32f7xx.h"
 
@@ -49,6 +49,8 @@ struct i2c_msg {
 	uint8_t *buf;		/*存储读写数据的指针	*/
 };
 
+
+
 /** 
   * @brief 触摸屏参数
   */
@@ -62,6 +64,9 @@ typedef struct
 
 }TOUCH_PARAM_TypeDef;
 
+/** 
+  * @brief  触摸屏类型
+  */ 
 typedef enum 
 {
 	GT9157=0,
@@ -76,23 +81,22 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
 // STEP_3(optional): Specify your special config info if needed
 #define GTP_MAX_HEIGHT   touch_param[touchIC].max_height
 #define GTP_MAX_WIDTH    touch_param[touchIC].max_width
-
-#define GTP_INT_TRIGGER                 0
-#define GTP_MAX_TOUCH                   1
+#define GTP_INT_TRIGGER  0
+#define GTP_MAX_TOUCH         1
 
 
 //***************************PART3:OTHER define*********************************
-#define GTP_DRIVER_VERSION              "V2.2<2014/01/14>"
-#define GTP_I2C_NAME                    "Goodix-TS"
-#define GT91XX_CONFIG_PROC_FILE         "gt9xx_config"
-#define GTP_POLL_TIME                   10    
-#define GTP_ADDR_LENGTH                 2
-#define GTP_CONFIG_MIN_LENGTH           186
-#define GTP_CONFIG_MAX_LENGTH           240
-#define FAIL                            0
-#define SUCCESS                         1
-#define SWITCH_OFF                      0
-#define SWITCH_ON                       1
+#define GTP_DRIVER_VERSION          "V2.2<2014/01/14>"
+#define GTP_I2C_NAME                "Goodix-TS"
+#define GT91XX_CONFIG_PROC_FILE     "gt9xx_config"
+#define GTP_POLL_TIME         10    
+#define GTP_ADDR_LENGTH       2
+#define GTP_CONFIG_MIN_LENGTH 186
+#define GTP_CONFIG_MAX_LENGTH 256
+#define FAIL                  0
+#define SUCCESS               1
+#define SWITCH_OFF            0
+#define SWITCH_ON             1
 
 //******************** For GT9XXF Start **********************//
 #define GTP_REG_BAK_REF                 0x99D0
@@ -101,21 +105,21 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
 #define GTP_REG_HAVE_KEY                0x804E
 #define GTP_REG_MATRIX_DRVNUM           0x8069     
 #define GTP_REG_MATRIX_SENNUM           0x806A
-#define GTP_REG_COMMAND				          0x8040
+#define GTP_REG_COMMAND				0x8040
 
-#define GTP_COMMAND_READSTATUS	        0
-#define GTP_COMMAND_DIFFERENCE	        1
-#define GTP_COMMAND_SOFTRESET		        2
-#define GTP_COMMAND_UPDATE	    		    3
-#define GTP_COMMAND_CALCULATE	          4
-#define GTP_COMMAND_TURNOFF	    	      5
-
-
+#define GTP_COMMAND_READSTATUS	    0
+#define GTP_COMMAND_DIFFERENCE	    1
+#define GTP_COMMAND_SOFTRESET		    2
+#define GTP_COMMAND_UPDATE	    		3
+#define GTP_COMMAND_CALCULATE	    4
+#define GTP_COMMAND_TURNOFF	    	5
 
 
-#define GTP_FL_FW_BURN                  0x00
-#define GTP_FL_ESD_RECOVERY             0x01
-#define GTP_FL_READ_REPAIR              0x02
+
+
+#define GTP_FL_FW_BURN              0x00
+#define GTP_FL_ESD_RECOVERY         0x01
+#define GTP_FL_READ_REPAIR          0x02
 
 #define GTP_BAK_REF_SEND                0
 #define GTP_BAK_REF_STORE               1
@@ -136,17 +140,20 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
 
 //******************** For GT9XXF End **********************//
 // Registers define
-#define GTP_READ_COOR_ADDR              0x814E
-#define GTP_REG_SLEEP                   0x8040
-#define GTP_REG_SENSOR_ID               0x814A
-#define GTP_REG_CONFIG_DATA             0x8047
-#define GTP_REG_VERSION                 0x8140
+#define GTP_READ_COOR_ADDR    0x814E
+#define GTP_REG_SLEEP         0x8040
+#define GTP_REG_SENSOR_ID     0x814A
+#define GTP_REG_CONFIG_DATA   touch_param[touchIC].config_reg_addr
+#define GTP_REG_VERSION       0x8140
 
-#define RESOLUTION_LOC                  3
-#define TRIGGER_LOC                     8
+#define RESOLUTION_LOC        3
+#define TRIGGER_LOC           8
+#define X2Y_LOC        				(1<<3)
 
-#define CFG_GROUP_LEN(p_cfg_grp)        (sizeof(p_cfg_grp) / sizeof(p_cfg_grp[0]))
+#define CFG_GROUP_LEN(p_cfg_grp)  (sizeof(p_cfg_grp) / sizeof(p_cfg_grp[0]))
 	
+
+//***************************PART1:ON/OFF define*******************************
 
 #define GTP_DEBUG_ON         	0
 #define GTP_DEBUG_ARRAY_ON    0
@@ -190,12 +197,15 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
                                          y = z;\
                                        }while (0)
 
-
 //*****************************End of Part III********************************
 int8_t GTP_Reset_Guitar(void);
 int32_t GTP_Read_Version(void);
+void GTP_IRQ_Disable(void);
+void GTP_IRQ_Enable(void);
 int32_t GTP_Init_Panel(void);
 int8_t GTP_Send_Command(uint8_t command);
+int	GTP_Execu( int *x,int *y);   
 
-void GT9xx_GetOnePiont(void);
+void GT9xx_GetOnePiont(void);																			 
+
 #endif /* _GOODIX_GT9XX_H_ */

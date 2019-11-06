@@ -15,8 +15,8 @@
  * 
  */
 
-#ifndef _GOODIX_GT9XX_H
-#define _GOODIX_GT9XX_H
+#ifndef _GOODIX_GTXX_H
+#define _GOODIX_GTXX_H
 
 #include "stm32f7xx.h"
 
@@ -49,6 +49,11 @@ struct i2c_msg {
 	uint8_t *buf;		/*存储读写数据的指针	*/
 };
 
+
+
+/** 
+  * @brief 触摸屏参数
+  */
 typedef struct
 {
   /*根据触摸屏类型配置*/
@@ -59,18 +64,25 @@ typedef struct
 
 }TOUCH_PARAM_TypeDef;
 
+/** 
+  * @brief  触摸屏类型
+  */ 
 typedef enum 
 {
 	GT9157=0,
 	GT911=1,
-	GT917S=2,
+  GT5688=2,
+	GT917S=3,
 }TOUCH_IC;
 
+extern TOUCH_IC touchIC;
+extern const TOUCH_PARAM_TypeDef touch_param[];
+
 // STEP_3(optional): Specify your special config info if needed
-#define GTP_MAX_HEIGHT   480
-#define GTP_MAX_WIDTH    800
+#define GTP_MAX_HEIGHT   touch_param[touchIC].max_height
+#define GTP_MAX_WIDTH    touch_param[touchIC].max_width
 #define GTP_INT_TRIGGER  0
-#define GTP_MAX_TOUCH         5
+#define GTP_MAX_TOUCH         1
 
 
 //***************************PART3:OTHER define*********************************
@@ -80,7 +92,7 @@ typedef enum
 #define GTP_POLL_TIME         10    
 #define GTP_ADDR_LENGTH       2
 #define GTP_CONFIG_MIN_LENGTH 186
-#define GTP_CONFIG_MAX_LENGTH 240
+#define GTP_CONFIG_MAX_LENGTH 256
 #define FAIL                  0
 #define SUCCESS               1
 #define SWITCH_OFF            0
@@ -136,6 +148,7 @@ typedef enum
 
 #define RESOLUTION_LOC        3
 #define TRIGGER_LOC           8
+#define X2Y_LOC        				(1<<3)
 
 #define CFG_GROUP_LEN(p_cfg_grp)  (sizeof(p_cfg_grp) / sizeof(p_cfg_grp[0]))
 	
@@ -191,5 +204,8 @@ void GTP_IRQ_Disable(void);
 void GTP_IRQ_Enable(void);
 int32_t GTP_Init_Panel(void);
 int8_t GTP_Send_Command(uint8_t command);
-void GT9xx_GetOnePiont(void);
+int	GTP_Execu( int *x,int *y);   
+
+void GT9xx_GetOnePiont(void);																			 
+
 #endif /* _GOODIX_GT9XX_H_ */

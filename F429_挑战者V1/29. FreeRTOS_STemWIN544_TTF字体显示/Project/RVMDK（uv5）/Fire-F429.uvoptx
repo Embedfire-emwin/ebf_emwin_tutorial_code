@@ -152,22 +152,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>71</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134316112</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\STemwin\tutorial_code_mcu\F429_鎸戞垬鑰匳1\29. FreeRTOS_STemWIN544_TTF瀛椾綋鏄剧ず\Project\STemWin_Task\MainTask.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Fire_F429\../../STemWin_Task/MainTask.c\71</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134279494</Address>

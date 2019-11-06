@@ -47,16 +47,21 @@ static void AP6181_PDN_INIT(void)
   GPIO_InitTypeDef GPIO_InitStructure;
 
   RCC_AHB1PeriphClockCmd ( RCC_AHB1Periph_GPIOG, ENABLE); 							   
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;	
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
   GPIO_Init(GPIOB, &GPIO_InitStructure);	
   
-  GPIO_ResetBits(GPIOB,GPIO_Pin_13);  //禁用WiFi模块
+  GPIO_ResetBits(GPIOG,GPIO_Pin_9);  //禁用WiFi模块
 }
 
+
+static void delay(__IO uint32_t nCount)	 //简单的延时函数
+{
+	for(; nCount != 0; nCount--);
+}
 /**
   * @brief FS_Init
   * @note 文件系统初始化
@@ -68,8 +73,8 @@ void FS_Init(void)
 	const TCHAR *ScreenShotPATH  = "0:/ScreenShot";
 	
 	/* 禁用WiFi模块 */
-//	AP6181_PDN_INIT();
-	
+	AP6181_PDN_INIT();
+	delay(0xfffff);
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)
@@ -103,29 +108,25 @@ void FS_Init(void)
   */
 void ScreenShot(void)
 {
-  char filename[35] = {0};
-
-  sprintf(filename, "0:/ScreenShot/ScreenShot_%03d.bmp", file_num);
-  result = f_open(&file, (const char*)filename, FA_WRITE | FA_CREATE_ALWAYS);
-  if(result == FR_OK)
-  {
-#if LCD_NUM_LAYERS == 2
-    GUI_SelectLayer(1);
-#endif 
-    printf("开始创建截屏文件\r\n");
-    
-    taskENTER_CRITICAL();
-    GUI_BMP_Serialize(_WriteByte2File, &file);
-    taskEXIT_CRITICAL();
-    result = f_close(&file);
-    
-    printf("截屏文件创建成功\r\n");
-    file_num++;
-  }
-  else
-  {
-    printf("截屏文件创建失败\r\n");
-  }
+	char filename[35] = {0};
+	
+	sprintf(filename, "0:/ScreenShot/ScreenShot_%03d.bmp", file_num);
+	result = f_open(&file, (const char*)filename, FA_WRITE | FA_CREATE_ALWAYS);
+	if(result == FR_OK)
+	{
+		printf("开始创建截屏文件\r\n");
+		
+		GUI_BMP_Serialize(_WriteByte2File, &file);
+	
+		result = f_close(&file);
+		
+		printf("截屏文件创建成功\r\n");
+		file_num++;
+	}
+	else
+	{
+		printf("截屏文件创建失败\r\n");
+	}
 }
 
 /**

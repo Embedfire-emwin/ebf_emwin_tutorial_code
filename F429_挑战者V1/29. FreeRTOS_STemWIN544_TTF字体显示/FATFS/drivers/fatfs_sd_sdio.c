@@ -492,7 +492,7 @@ void SD_LowLevel_DMA_RxConfig(uint32_t *BufferDST, uint32_t BufferSize)
 #define SD_SINGLE_BUS_SUPPORT           ((uint32_t)0x00010000)
 #define SD_CARD_LOCKED                  ((uint32_t)0x02000000)
 
-#define SD_DATATIMEOUT                  ((uint32_t)0xFFFFFFFF)
+#define SD_DATATIMEOUT                  ((uint32_t)0x0000FFFF)
 #define SD_0TO7BITS                     ((uint32_t)0x000000FF)
 #define SD_8TO15BITS                    ((uint32_t)0x0000FF00)
 #define SD_16TO23BITS                   ((uint32_t)0x00FF0000)
@@ -589,20 +589,6 @@ SD_Error SD_Init(void)
 {
   __IO SD_Error errorstatus = SD_OK;
 	
-	/**************≈‰÷√SDIO÷–∂œ DMA÷–∂œ**********************/
-	NVIC_InitTypeDef NVIC_InitStructure;
-	
-	// Configure the NVIC Preemption Priority Bits 
-//	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_4);
-	NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init (&NVIC_InitStructure);
-	NVIC_InitStructure.NVIC_IRQChannel = SD_SDIO_DMA_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_Init (&NVIC_InitStructure);
-	/**********************************************************/
 	
   /* SDIO Peripheral Low Level Init */
   SD_LowLevel_Init();
@@ -3151,7 +3137,7 @@ DSTATUS TM_FATFS_SD_SDIO_disk_initialize(void)
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
 	// Configure the NVIC Preemption Priority Bits 
-//	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_1);
+	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_1);
 	NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;

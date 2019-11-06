@@ -15,7 +15,7 @@
   ******************************************************************************
   */
   
-//#include "./flash/bsp_spi_flash.h"
+#include "./flash/bsp_spi_flash.h"
 #include "GUIFont_Create.h"
 #include "ff.h"
 /* FreeRTOSÍ·ÎÄ¼þ */

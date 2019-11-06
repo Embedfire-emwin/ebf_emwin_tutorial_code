@@ -82,13 +82,13 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
 #define GTP_MAX_HEIGHT   touch_param[touchIC].max_height
 #define GTP_MAX_WIDTH    touch_param[touchIC].max_width
 #define GTP_INT_TRIGGER  0
-#define GTP_MAX_TOUCH         5
+#define GTP_MAX_TOUCH         1
 
 
 //***************************PART3:OTHER define*********************************
 #define GTP_DRIVER_VERSION          "V2.2<2014/01/14>"
 #define GTP_I2C_NAME                "Goodix-TS"
-#define GT91XX_CONFIG_PROC_FILE     "g+t9xx_config"
+#define GT91XX_CONFIG_PROC_FILE     "gt9xx_config"
 #define GTP_POLL_TIME         10    
 #define GTP_ADDR_LENGTH       2
 #define GTP_CONFIG_MIN_LENGTH 186
@@ -197,12 +197,13 @@ extern const TOUCH_PARAM_TypeDef touch_param[];
                                          y = z;\
                                        }while (0)
 
-
 //*****************************End of Part III********************************
 int8_t GTP_Reset_Guitar(void);
 int32_t GTP_Read_Version(void);
+void GTP_IRQ_Disable(void);
+void GTP_IRQ_Enable(void);
 int32_t GTP_Init_Panel(void);
 int8_t GTP_Send_Command(uint8_t command);
+int	GTP_Execu( int *x,int *y);                                       
 
-void GT9xx_GetOnePiont(void);
 #endif /* _GOODIX_GT9XX_H_ */

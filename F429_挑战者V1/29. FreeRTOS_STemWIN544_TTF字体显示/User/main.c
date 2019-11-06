@@ -79,12 +79,6 @@ static TaskHandle_t GUI_Task_Handle = NULL;
  */
 KEY Key1,Key2;
 
-FATFS   fs;								/* FatFs文件系统对象 */
-FIL     file;							/* file objects */
-UINT    bw;            		/* File R/W count */
-FRESULT result; 
-FILINFO fno;
-DIR dir;
 
 /*
 *************************************************************************
@@ -267,7 +261,7 @@ static void Touch_Task(void* parameter)
 {
 	while(1)
 	{
-		GT9xx_GetOnePiont();
+		GTP_TouchProcess();
 		vTaskDelay(20);
 	}
 }
@@ -330,14 +324,8 @@ static void BSP_Init(void)
 	LCD_Init();
   /* 禁用WIFI模块 */
   BL8782_PDN_INIT();
-  /* 挂载文件系统，挂载时会对SD卡初始化 */
-	/*默认不使用SD卡，屏蔽SD卡挂载及初始化，否在在不插入SD卡是程序会卡死在while(1)循环*/
-//  result = f_mount(&fs,"0:",1);
-//	if(result != FR_OK)
-//	{
-//		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-//		while(1);
-//	}
+	
+	
 }
 
 /**

@@ -52,9 +52,9 @@ __initial_sp
 Heap_Size       EQU     0x00000400
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
-__heap_base     EQU     0xD0800000  ;设置堆空间起始地址(SDRAM)，位于8MB处，避开显存区
+__heap_base     EQU     0xD0400000  ;设置堆空间起始地址(SDRAM)，位于8MB处，避开显存区
 Heap_Mem        SPACE   Heap_Size
-__heap_limit    EQU     0xD0A00000  ;设置堆空间极限地址(SDRAM)，
+__heap_limit    EQU     0xD0600000  ;设置堆空间极限地址(SDRAM)，
                                     ;0xD0800000+0x00800000，分配2MB给TTF引擎
 
                 PRESERVE8
@@ -188,7 +188,7 @@ Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
         IMPORT  SystemInit
         IMPORT  __main
-			
+
         ;从外部文件引入声明
         IMPORT SDRAM_Init    
 

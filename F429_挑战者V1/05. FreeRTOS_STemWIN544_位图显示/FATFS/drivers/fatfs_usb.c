@@ -16,36 +16,31 @@
  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * |----------------------------------------------------------------------
  */
-#include "usb_conf.h"
-#include "usbh_usr.h"
-#include "fatfs_usb.h"
-#include "usbh_msc_core.h"
-#include "tm_stm32f4_usb_msc_host.h"
+#include "./drivers/fatfs_usb.h" 
 
-static volatile DSTATUS USB_Stat = STA_NOINIT;	/* Disk status */
-extern TM_USB_MSCHOST_Result_t 	TM_USB_MSCHOST_INT_Result;
+#if	FATFS_USE_USB
 
-extern USB_OTG_CORE_HANDLE   USB_OTG_Core;
-extern USBH_HOST             USB_Host;
+#include "./Bsp/usb/usbh_bsp.h"			/* µ×²ãÇý¶¯ */
+
+#define SECTOR_SIZE		512
 
 /*-----------------------------------------------------------------------*/
 /* Initialize USB                                                        */
 /*-----------------------------------------------------------------------*/
 DSTATUS TM_FATFS_USB_disk_initialize(void) {
-	if (HCD_IsDeviceConnected(&USB_OTG_Core) && TM_USB_MSCHOST_INT_Result == TM_USB_MSCHOST_Result_Connected) {
-		USB_Stat &= ~STA_NOINIT;
-	} else {
-		USB_Stat |= STA_NOINIT;
+	DSTATUS stat = STA_NOINIT;
+	if(HCD_IsDeviceConnected(&USB_OTG_Core))
+	{
+		stat &= ~STA_NOINIT;
 	}
-
-	return USB_Stat;
+	return stat;
 }
 
 /*-----------------------------------------------------------------------*/
 /* Get Disk Status                                                       */
 /*-----------------------------------------------------------------------*/
 DSTATUS TM_FATFS_USB_disk_status(void) {
-	return USB_Stat;
+	return 0;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -57,31 +52,38 @@ DRESULT TM_FATFS_USB_disk_read (
 	UINT count		/* Number of sectors to read (1..128) */
 )
 {
-	BYTE status = USBH_MSC_OK;
+	DRESULT res;
+	//res = USB_disk_read(buff, sector, count);
+	{
+		BYTE status = USBH_MSC_OK;
 
-	if (!count) {
-		return RES_PARERR;
-	}
-	if (USB_Stat & STA_NOINIT) {
-		return RES_NOTRDY;
-	}
+		//if (Stat & STA_NOINIT) 	return RES_NOTRDY;
 
-	if (HCD_IsDeviceConnected(&USB_OTG_Core) && TM_USB_MSCHOST_INT_Result == TM_USB_MSCHOST_Result_Connected) {
-		do
+		if (HCD_IsDeviceConnected(&USB_OTG_Core))
 		{
-			status = USBH_MSC_Read10(&USB_OTG_Core, buff, sector, 512 * count);
-			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+			do
+			{
+				status = USBH_MSC_Read10(&USB_OTG_Core, buff,sector,512 * count);
+				USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);
 
-			if (!HCD_IsDeviceConnected(&USB_OTG_Core)) { 
-				return RES_ERROR;
+				if (!HCD_IsDeviceConnected(&USB_OTG_Core))
+				{
+					break;
+				}
 			}
-		} while (status == USBH_MSC_BUSY);
-	}
+			while (status == USBH_MSC_BUSY );
+		}
 
-	if (status == USBH_MSC_OK) {
-		return RES_OK;
+		if (status == USBH_MSC_OK)
+		{
+			res = RES_OK;
+		}
+		else
+		{
+			res = RES_ERROR;
+		}
 	}
-	return RES_ERROR;
+	return res;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -94,33 +96,39 @@ DRESULT TM_FATFS_USB_disk_write (
 	UINT count			/* Number of sectors to write (1..128) */
 )
 {
-	BYTE status = USBH_MSC_OK;
-	if (!count) {
-		return RES_PARERR;
-	}
-	if (USB_Stat & STA_NOINIT) {
-		return RES_NOTRDY;
-	}
-	if (TM_USB_MSCHOST_INT_Result == TM_USB_MSCHOST_Result_WriteProtected) {
-		return RES_WRPRT;
-	}
-
-	if (HCD_IsDeviceConnected(&USB_OTG_Core) && TM_USB_MSCHOST_INT_Result == TM_USB_MSCHOST_Result_Connected) {
-		do
+	DRESULT res;
+	//res = USB_disk_write(buff, sector, count);
+	{
+		BYTE status = USBH_MSC_OK;
+		//if (drv || !count) return RES_PARERR;
+		//if (Stat & STA_NOINIT) return RES_NOTRDY;
+		//if (Stat & STA_PROTECT) return RES_WRPRT;
+		if (HCD_IsDeviceConnected(&USB_OTG_Core))
 		{
-			status = USBH_MSC_Write10(&USB_OTG_Core, (BYTE*)buff, sector, 512 * count);
-			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+			do
+			{
+				status = USBH_MSC_Write10(&USB_OTG_Core,(BYTE*)buff,sector, 512 * count);
+				USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
 
-			if (!HCD_IsDeviceConnected(&USB_OTG_Core)) {
-				return RES_ERROR;
+				if(!HCD_IsDeviceConnected(&USB_OTG_Core))
+				{
+					break;
+				}
 			}
-		} while (status == USBH_MSC_BUSY);
-	}
+			while(status == USBH_MSC_BUSY );
 
-	if (status == USBH_MSC_OK) {
-		return RES_OK;
+		}
+
+		if (status == USBH_MSC_OK)
+		{
+			res = RES_OK;
+		}
+		else
+		{
+			res = RES_ERROR;
+		}
 	}
-	return RES_ERROR;
+	return res;
 }
 #endif
 
@@ -135,36 +143,41 @@ DRESULT TM_FATFS_USB_disk_ioctl (
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res = RES_OK;
-
-	if (USB_Stat & STA_NOINIT) {
-		return RES_NOTRDY;
-	}
-
-	switch (cmd) {
+	DRESULT res;
+	//if (drv) return RES_PARERR;
+	res = RES_ERROR;
+	//if (Stat & STA_NOINIT) return RES_NOTRDY;
+	switch (cmd)
+	{
 		case CTRL_SYNC :		/* Make sure that no pending write process */
 			res = RES_OK;
 			break;
-
 		case GET_SECTOR_COUNT :	/* Get number of sectors on the disk (DWORD) */
 			*(DWORD*)buff = (DWORD) USBH_MSC_Param.MSCapacity;
 			res = RES_OK;
 			break;
-
 		case GET_SECTOR_SIZE :	/* Get R/W sector size (WORD) */
 			*(WORD*)buff = 512;
 			res = RES_OK;
 			break;
-
-		case GET_BLOCK_SIZE :	/* Get erase block size in unit of sector (DWORD) */
+		case GET_BLOCK_SIZE :	/* Get erase block size in unit of sector (DWORD) */\
 			*(DWORD*)buff = 512;
+			res = RES_OK;
 			break;
-
 		default:
 			res = RES_PARERR;
+			break;
 	}
-
 	return res;
 }
 #endif
 
+#else   // FATFS_USE_USB
+
+DSTATUS TM_FATFS_USB_disk_initialize(void){return RES_ERROR;}
+DSTATUS TM_FATFS_USB_disk_status(void){return RES_ERROR;}
+DRESULT TM_FATFS_USB_disk_read(BYTE* buff, DWORD sector, UINT count){return RES_ERROR;}
+DRESULT TM_FATFS_USB_disk_write(const BYTE* buff, DWORD sector, UINT count){return RES_ERROR;}
+DRESULT TM_FATFS_USB_disk_ioctl(BYTE cmd, void* buff){return RES_ERROR;}
+
+#endif  // FATFS_USE_USB

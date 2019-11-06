@@ -723,11 +723,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\TouchPad\bsp_touchpad.c</FilePath>
             </File>
-            <File>
-              <FileName>bsp_spi_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\flash\bsp_spi_flash.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -822,11 +817,6 @@
               <FileName>MainTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STemWin_Task\MainTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>ScreenShot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWin_Task\ScreenShot.c</FilePath>
             </File>
             <File>
               <FileName>text.c</FileName>

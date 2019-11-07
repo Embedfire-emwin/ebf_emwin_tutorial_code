@@ -375,7 +375,7 @@ void SDRAM_Init(void)
   hsdram1.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
   hsdram1.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;
   hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
-  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_1;
+  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_0;
   /* SdramTiming */
   SdramTiming.LoadToActiveDelay = 2;
   SdramTiming.ExitSelfRefreshDelay = 7;

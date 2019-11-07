@@ -6,7 +6,7 @@
   * @date    13-November-2013
   * @brief   This file provides a set of functions needed to manage the SDIO SD 
   *          Card memory mounted on STM324x9I-EVAL evaluation board. 
-  *          SDIO-SD卡驱动， 含文件系统接口
+  *          
   *            
   *  @verbatim
   *
@@ -3318,8 +3318,6 @@ void SD_SDIO_DMA_IRQHANDLER(void)
   /* Process DMA2 Stream3 or DMA2 Stream6 Interrupt Sources */
   SD_ProcessDMAIRQ();
 }
-
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

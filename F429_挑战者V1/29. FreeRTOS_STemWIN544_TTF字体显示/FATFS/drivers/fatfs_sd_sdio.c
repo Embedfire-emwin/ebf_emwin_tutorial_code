@@ -3138,7 +3138,6 @@ DSTATUS TM_FATFS_SD_SDIO_disk_initialize(void)
 	
 	// Configure the NVIC Preemption Priority Bits 
 	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_4);
-	NVIC_PriorityGroupConfig (NVIC_PriorityGroup_1);
 	NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;

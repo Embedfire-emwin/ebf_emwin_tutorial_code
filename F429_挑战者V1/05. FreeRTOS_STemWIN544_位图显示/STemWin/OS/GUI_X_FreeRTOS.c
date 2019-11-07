@@ -54,6 +54,7 @@ Purpose     : This file provides emWin Interface with FreeRTOS
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "event_groups.h"
 /*********************************************************************
 *
 * Global data

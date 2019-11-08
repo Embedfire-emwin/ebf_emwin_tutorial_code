@@ -1,0 +1,10 @@
+0:/srcdata/xinsongti18_4bpp.sif
+xinsongti18_4bpp.sif
+8389
+8192
+
+0:/srcdata/siyuanheiti36_2bpp.xbf
+siyuanheiti36_2bpp.xbf
+4890735
+16581
+

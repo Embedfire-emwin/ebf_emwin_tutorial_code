@@ -752,7 +752,7 @@ Output:
 	
 		
 	 /*使能中断，这样才能检测触摸数据*/
-		I2C_GTP_IRQEnable();
+//		I2C_GTP_IRQEnable();
 	
     GTP_Get_Info();
 		
@@ -870,16 +870,16 @@ void GTP_TouchProcess(void)
 
 }
 
-//触摸中断服务函数
-void GTP_IRQHandler(void)
-{
-	if(EXTI_GetITStatus(GTP_INT_EXTI_LINE) != RESET) //确保是否产生了EXTI Line中断
-	{
-		//也可以改成定时调用
-		GTP_TouchProcess();    
-		EXTI_ClearITPendingBit(GTP_INT_EXTI_LINE);     //清除中断标志位
-	}  
-}
+////触摸中断服务函数
+//void GTP_IRQHandler(void)
+//{
+//	if(EXTI_GetITStatus(GTP_INT_EXTI_LINE) != RESET) //确保是否产生了EXTI Line中断
+//	{
+//		//也可以改成定时调用
+//		GTP_TouchProcess();    
+//		EXTI_ClearITPendingBit(GTP_INT_EXTI_LINE);     //清除中断标志位
+//	}  
+//}
 
 //MODULE_DESCRIPTION("GTP Series Driver");
 //MODULE_LICENSE("GPL");

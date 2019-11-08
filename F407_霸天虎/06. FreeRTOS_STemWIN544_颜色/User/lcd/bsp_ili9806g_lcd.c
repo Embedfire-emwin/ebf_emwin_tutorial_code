@@ -665,7 +665,7 @@ void ILI9806G_Init ( void )
 	ILI9806G_GramScan(LCD_SCAN_MODE);
     
 	ILI9806G_Clear(0,0,LCD_X_LENGTH,LCD_Y_LENGTH);	/* 清屏，显示全黑 */
-	ILI9806G_BackLed_Control ( ENABLE );      //点亮LCD背光灯
+	ILI9806G_BackLed_Control ( DISABLE );//关LCD背光灯
 }
 
 /**

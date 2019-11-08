@@ -30,11 +30,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 
-extern void TimingDelay_Decrement(void);
-extern void GTP_TouchProcess(void);
+#include "FreeRTOS.h"					//FreeRTOS使用		  
+#include "task.h" 
 
-//GUI使用的计时
-extern __IO int32_t OS_TimeMS;
+
 /** @addtogroup STM32F429I_DISCOVERY_Examples
   * @{
   */
@@ -119,31 +118,24 @@ void UsageFault_Handler(void)
 void DebugMon_Handler(void)
 {}
 
-/**
-  * @brief  This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
-void SVC_Handler(void)
-{}
-
-/**
-  * @brief  This function handles PendSV_Handler exception.
-  * @param  None
-  * @retval None
-  */
-void PendSV_Handler(void)
-{}
 
 /**
   * @brief  This function handles SysTick Handler.
   * @param  None
   * @retval None
   */
+extern void xPortSysTickHandler(void);
+//systick中断服务函数
 void SysTick_Handler(void)
-{
-	TimingDelay_Decrement();
-	OS_TimeMS ++;
+{	
+    #if (INCLUDE_xTaskGetSchedulerState  == 1 )
+      if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+      {
+    #endif  /* INCLUDE_xTaskGetSchedulerState */  
+        xPortSysTickHandler();
+    #if (INCLUDE_xTaskGetSchedulerState  == 1 )
+      }
+    #endif  /* INCLUDE_xTaskGetSchedulerState */
 }
 
 /******************************************************************************/

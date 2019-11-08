@@ -16,7 +16,9 @@
   */
 #include "./TouchPad/bsp_touchpad.h"
 #include "./usart/bsp_debug_usart.h"
-#include "./systick/bsp_SysTick.h"
+/* FreeRTOS头文件 */
+#include "FreeRTOS.h"
+#include "task.h"
 
 //定时器最大计数值
 #define TPAD_ARR_MAX_VAL 	0XFFFF	
@@ -99,7 +101,7 @@ static void TPAD_Reset(void)
 	//输出低电平,放电
  	GPIO_ResetBits ( TPAD_TIM_CH_PORT, TPAD_TIM_CH_PIN );						 
   //保持一小段时间低电平，保证放电完全
-	Delay_ms(5);
+	vTaskDelay(5);
 	
 	//清除中断标志
 	TIM_ClearITPendingBit(TPAD_TIMx, TPAD_TIM_IT_CCx|TIM_IT_Update); 
@@ -173,7 +175,7 @@ uint8_t TPAD_Init(void)
 	for(i=0;i<10;i++)//连续读取10次
 	{				 
 		buf[i]=TPAD_Get_Val();
-		Delay_ms(10);	    
+		vTaskDelay(10);	    
 	}				    
 	for(i=0;i<9;i++)//排序
 	{

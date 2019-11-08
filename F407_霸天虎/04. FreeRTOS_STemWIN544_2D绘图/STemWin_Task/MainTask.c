@@ -228,21 +228,31 @@ static void Alpha_Blending(void)
 {
   /* 显示字符 */
 	GUI_SetColor(GUI_BLACK);
-//	GUI_SetTextMode(GUI_TM_TRANS);
-//	GUI_SetFont(GUI_FONT_32B_ASCII);
-//	GUI_DispStringHCenterAt("Alpha blending", 223, 203);
+	GUI_SetTextMode(GUI_TM_TRANS);
+	GUI_SetFont(GUI_FONT_24B_ASCII);
+	GUI_DispStringHCenterAt("Alpha blending", 110, 700);
+	GUI_DispStringHCenterAt("Not use blending",350, 700);
 
   /* 开启自动Alpha混合 */
   GUI_EnableAlpha(1);
 	/* 将Alpha数值添加到颜色中并显示 */
-	GUI_SetColor((0xC0uL << 24) | 0xEE0000);
+	GUI_SetColor(GUI_MAKE_COLOR(0xC0uL << 24) | 0xFF0000);
 	GUI_FillRect(20, 20, 235, 235);
-	GUI_SetColor((0x80uL << 24) | 0x00EE00);
-	GUI_FillRect(120, 120, 335, 335);
-	GUI_SetColor((0x40uL << 24) | 0x0000EE);
-	GUI_FillRect(230, 230, 445, 445);
+	GUI_SetColor(GUI_MAKE_COLOR(0x80uL << 24) | 0x00FF00);
+	GUI_FillRect(20, 245, 235, 465);
+	GUI_SetColor(GUI_MAKE_COLOR(0x40uL << 24) | 0x0000FF);
+	GUI_FillRect(20, 475, 235, 695);
   /* 关闭自动Alpha混合 */
   GUI_EnableAlpha(0);
+	/* 不使用Alpha混合显示 */
+	GUI_SetColor(GUI_MAKE_COLOR(0xC0uL << 24) | 0xFF0000);
+	GUI_FillRect(250, 20, 465, 235);
+	GUI_SetColor(GUI_MAKE_COLOR(0x80uL << 24) | 0x00FF00);
+	GUI_FillRect(250, 245, 465, 465);
+	GUI_SetColor(GUI_MAKE_COLOR(0x40uL << 24) | 0x0000FF);
+	GUI_FillRect(250, 475, 465, 695);
+	
+	
 }
 
 /**

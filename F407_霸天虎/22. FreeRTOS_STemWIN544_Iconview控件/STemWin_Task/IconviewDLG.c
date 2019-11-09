@@ -85,8 +85,8 @@ static BITMAP_ITEM _abitmapItem[] = {
 	{&bmsetting,          "Setting"},
 };
 
-static WM_HMEM hMem;
-static GUI_MEMDEV_Handle hBMP;
+//static WM_HMEM hMem;
+static GUI_MEMDEV_Handle hJPEG ;
 /*********************************************************************
 *
 *       Static code
@@ -99,8 +99,11 @@ static GUI_MEMDEV_Handle hBMP;
   * @param sFilename：需要加载的图片名
   * @retval 无
   */
-static GUI_HMEM LoadBMP_UsingMEMDEV(const char *sFilename)
+static WM_HMEM LoadJPEG_UsingMEMDEV(const char *sFilename)
 {
+	WM_HMEM hMem;
+	GUI_JPEG_INFO Jpeginfo;
+	
 	/* 进入临界段 */
 	taskENTER_CRITICAL();
 	/* 打开图片 */
@@ -126,20 +129,24 @@ static GUI_HMEM LoadBMP_UsingMEMDEV(const char *sFilename)
 	f_close(&file);
 	/* 退出临界段 */
 	taskEXIT_CRITICAL();
+	
+	GUI_JPEG_GetInfo(_acbuffer, file.fsize, &Jpeginfo);
+	
 	/* 创建内存设备 */
-	hBMP = GUI_MEMDEV_Create(0, 0,                        /* 起始坐标 */
-													 GUI_BMP_GetXSize(_acbuffer), /* x方向尺寸 */
-													 GUI_BMP_GetYSize(_acbuffer));/* y方向尺寸 */
+	hJPEG = GUI_MEMDEV_CreateEx(0, 0,                /* 起始坐标 */
+														 Jpeginfo.XSize,      /* x方向尺寸 */
+														 Jpeginfo.YSize,      /* y方向尺寸 */
+														 GUI_MEMDEV_HASTRANS);/* 带透明度的内存设备 */
 	/* 选择内存设备 */
-	GUI_MEMDEV_Select(hBMP);
-	/* 绘制BMP到内存设备中 */
-	GUI_BMP_Draw(_acbuffer, 0, 0);
-	/* 切换内存设备到LCD */
+	GUI_MEMDEV_Select(hJPEG);
+	/* 绘制JPEG到内存设备中 */
+	GUI_JPEG_Draw(_acbuffer, file.fsize, 0, 0);
+	/* 选择内存设备，0表示选中LCD */
 	GUI_MEMDEV_Select(0);
 	/* 释放内存 */
 	GUI_ALLOC_Free(hMem);
 	
-	return hBMP;
+	return hJPEG;
 }
 
 /**
@@ -178,7 +185,7 @@ static void FUN_ICON0Clicked(void)
   /* 创建框架窗口 */
 	hWin = FRAMEWIN_CreateEx(100,        /* 相对于父窗口坐标的最左像素 */
                          20,           /* 相对于父窗口坐标的最上像素 */
-                         600,          /* 水平尺寸 */
+                         300,          /* 水平尺寸 */
                          400,          /* 垂直尺寸 */
                          WM_HBKWIN,    /* 父窗口句柄 */
                          WM_CF_SHOW,   /* 窗口创建标志 */
@@ -214,7 +221,7 @@ static void _cbBkWindow(WM_MESSAGE *pMsg)
 	{
 		case WM_PAINT:
 			/* 将背景图片从内存设备写入LCD */
-			GUI_MEMDEV_WriteOpaqueAt(hBMP, 0, 0);
+			GUI_MEMDEV_WriteOpaqueAt(hJPEG , 0, 0);
 		  break;
 		case WM_NOTIFY_PARENT:
 			id = WM_GetId(pMsg->hWinSrc);
@@ -264,7 +271,7 @@ void MainTask(void)
 	WM_HWIN  hWin;
 
 	/* 加载BMP图片数据到内存设备 */
-	LoadBMP_UsingMEMDEV("0:/image/wallpaper.bmp");
+	LoadJPEG_UsingMEMDEV("0:/image/wallpaper.jpg");
 
 	/* 在指定位置创建ICONVIEW控件 */
 	hWin = ICONVIEW_CreateEx(30,                     /* 相对于父窗口坐标的最左像素 */

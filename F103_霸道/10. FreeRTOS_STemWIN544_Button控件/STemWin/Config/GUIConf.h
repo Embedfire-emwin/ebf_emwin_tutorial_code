@@ -97,7 +97,7 @@ Purpose     : Display controller initialization
 ///*********************************************************************
 //*
 //*       ARGB support
-//*/
-//#define GUI_USE_ARGB              (1)
+//*
+#define GUI_USE_ARGB              (1)
 
 #endif  /* Avoid multiple inclusion */

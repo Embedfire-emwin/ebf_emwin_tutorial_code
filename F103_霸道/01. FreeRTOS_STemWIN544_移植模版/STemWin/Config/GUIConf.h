@@ -94,10 +94,10 @@ Purpose     : Display controller initialization
 */
 #define USE_EXTMEMHEAP            (1)
 
-///*********************************************************************
-//*
-//*       ARGB support
-//*/
-//#define GUI_USE_ARGB              (1)
+/*********************************************************************
+*
+*       ARGB support
+*/
+#define GUI_USE_ARGB              (1)
 
 #endif  /* Avoid multiple inclusion */

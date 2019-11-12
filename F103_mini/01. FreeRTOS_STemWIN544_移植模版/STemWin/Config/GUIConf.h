@@ -88,10 +88,10 @@ Purpose     : Display controller initialization
 #define GUI_SUPPORT_MEMDEV            (1)    /* Memory device package available */
 #define GUI_SUPPORT_DEVICES           (1)    /* Enable use of device pointers */
 
-///*********************************************************************
-//*
-//*       ARGB support
-//*/
-//#define GUI_USE_ARGB              (1)
+/*********************************************************************
+*
+*       ARGB support
+*/
+#define GUI_USE_ARGB              (1)
 
 #endif  /* Avoid multiple inclusion */

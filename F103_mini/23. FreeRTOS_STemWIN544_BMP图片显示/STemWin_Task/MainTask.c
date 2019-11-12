@@ -256,8 +256,8 @@ void MainTask(void)
 				t0 = GUI_GetTime();
 				/* 直接从外部存储器绘制BMP图片 */
 				ShowBMPEx("0:/image/ngc7635.bmp",
-                  (LCD_GetXSize()-238)/2,
-                  (LCD_GetYSize()-320)/2);
+                  0,
+                  0);
 				t1 = GUI_GetTime();
         GUI_DispStringAt("GUI_BMP_DrawEx()", 0, 0);
         printf("\r\n直接从外部存储器绘制BMP：%dms\r\n",t1 - t0);

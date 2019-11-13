@@ -58,8 +58,8 @@ Purpose     : Display controller initialization
 // Define the available number of bytes available for the GUI
 //
 #if USE_EXTMEMHEAP
-  #define GUI_NUMBYTES   (1024 * 1024 * 20)    // x Byte
-  #define GUI_EXTBUFADD  (0xD4000000-GUI_NUMBYTES)//64MB SDRAM的其中20MB作为STemWIN动态内存
+  #define GUI_NUMBYTES   (1024 * 1024 * 8)    // x Byte
+  #define GUI_EXTBUFADD  (0xD2000000-GUI_NUMBYTES)//32MB SDRAM的其中8MB作为STemWIN动态内存
 #else
   #define GUI_NUMBYTES  (1024 * 110)    // x KByte
 #endif

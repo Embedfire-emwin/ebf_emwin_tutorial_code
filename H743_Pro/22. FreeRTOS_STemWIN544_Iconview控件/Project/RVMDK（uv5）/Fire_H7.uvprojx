@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,OS_SUPPORT,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\STemWIN_Task;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\STemWIN_Task;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\FATFS</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -852,6 +852,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -938,14 +943,44 @@
           <GroupName>STemWin/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>icon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\MainTask.c</FilePath>
+              <FilePath>..\..\STemWIN_Task\icon.c</FilePath>
             </File>
             <File>
-              <FileName>speedtest.c</FileName>
+              <FileName>IconviewDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\speedtest.c</FilePath>
+              <FilePath>..\..\STemWIN_Task\IconviewDLG.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FatFs</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff_gen_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\ff_gen_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>cc936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\option\cc936.c</FilePath>
+            </File>
+            <File>
+              <FileName>fatfs_sd_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\drivers\fatfs_sd_sdio.c</FilePath>
             </File>
           </Files>
         </Group>

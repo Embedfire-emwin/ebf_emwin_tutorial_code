@@ -32,7 +32,11 @@
 /* STemWIN头文件 */
 #include "GUI.h"
 #include "DIALOG.h"
-
+#include "IconviewDLG.h"
+/* FATFS */
+#include "ff.h"
+#include "ff_gen_drv.h"
+#include "sd_diskio.h"
 /**************************** 任务句柄 ********************************/
 /* 
  * 任务句柄是一个指针，用于指向一个任务，当任务创建好之后，它就具有了一个任务句柄
@@ -65,7 +69,13 @@ SemaphoreHandle_t ScreenShotSem_Handle = NULL;
 /*
  * 当我们在写应用程序的时候，可能需要用到一些全局变量。
  */
-
+ char SDPath[4]; /* SD逻辑驱动器路径 */
+FATFS   fs;								/* FatFs文件系统对象 */
+FIL     file;							/* file objects */
+UINT    bw;            		/* File R/W count */
+FRESULT result; 
+FILINFO fno;
+DIR dir;
 
 /*
 *************************************************************************
@@ -140,7 +150,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 4,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -162,9 +172,10 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(1000);
+		vTaskDelay(100);
+		
 	}
 }
 
@@ -216,8 +227,9 @@ static void BSP_Init(void)
   SCB_EnableDCache();
   Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
   Board_MPU_Config(1, MPU_Normal_WT, 0x24000000, MPU_REGION_SIZE_512KB);
-  /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
-  Board_MPU_Config(2, MPU_Normal_WT, 0xD0000000, MPU_REGION_SIZE_32MB);
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
+  /*emwin动态内存配置为WT，在使用Alpha混合和内存设备时需要手动清空D-Cache，但RGB565下清空操作无效*/
+  Board_MPU_Config(3,MPU_Normal_WT,0xD1800000,MPU_REGION_SIZE_8MB);
   
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
@@ -243,7 +255,15 @@ static void BSP_Init(void)
 	SDRAM_Init();
 	/* LCD 端口初始化 */ 
 	LCD_Init();
- 
+ 	//链接驱动器，创建盘符
+  FATFS_LinkDriver(&SD_Driver, SDPath);
+	/* 挂载文件系统，挂载时会对SD卡初始化 */
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 }
 
 /**

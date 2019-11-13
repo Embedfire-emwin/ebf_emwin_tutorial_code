@@ -227,7 +227,7 @@ static void BSP_Init(void)
   SCB_EnableDCache();
   Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
   Board_MPU_Config(1, MPU_Normal_WT, 0x24000000, MPU_REGION_SIZE_512KB);
-  Board_MPU_Config(2, MPU_Normal_WT, 0xD0000000, MPU_REGION_SIZE_32MB);
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   /*emwin动态内存配置为WT，在使用Alpha混合和内存设备时需要手动清空D-Cache，但RGB565下清空操作无效*/
   Board_MPU_Config(3,MPU_Normal_WT,0xD1800000,MPU_REGION_SIZE_8MB);
   

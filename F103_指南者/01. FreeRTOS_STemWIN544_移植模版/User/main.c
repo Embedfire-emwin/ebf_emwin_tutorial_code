@@ -38,7 +38,7 @@
 /* STemWINÍ·ÎÄ¼þ */
 #include "GUI.h"
 #include "DIALOG.h"
-#include "MainTask.h"
+
 /* FATFS */
 #include "ff.h"
 #include "diskio.h"

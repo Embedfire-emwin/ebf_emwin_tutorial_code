@@ -172,9 +172,9 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(100);
+		vTaskDelay(1000);
 		
 	}
 }
@@ -315,7 +315,7 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
  
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;

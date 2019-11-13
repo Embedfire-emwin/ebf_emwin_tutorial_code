@@ -119,7 +119,7 @@ void                     ILI9341_DispString_EN      			( uint16_t usX, uint16_t 
 void 											ILI9341_DispString_EN_YDir 		(   uint16_t usX,uint16_t usY ,  char * pStr );
 
 void 											LCD_SetFont											(sFONT *fonts);
-sFONT 										*LCD_GetFont											(void);
+//sFONT 										*LCD_GetFont											(void);
 void 											LCD_ClearLine										(uint16_t Line);
 void 											LCD_SetBackColor								(uint16_t Color);
 void 											LCD_SetTextColor								(uint16_t Color)	;

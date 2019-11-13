@@ -58,8 +58,8 @@ uint8_t *SIFbuffer16;
 #elif (SIF_FONT_SOURCE == USE_SDCARD_FONT)
 
 	static const char FONT_STORAGE_ROOT_DIR[]  =   "0:";
-	static const char FONT_XINSONGTI_16_ADDR[] = 	 "0:/Font/新宋体16_4bpp.sif";
-//	static const char FONT_SIYUANHEITI_20_ADDR[] = 	 "0:/Font/思源黑体20_4bpp.sif";
+	static const char FONT_XINSONGTI_16_ADDR[] = 	 "0:/Font/16_4bpp.sif";
+	static const char FONT_SIYUANHEITI_20_ADDR[] = 	 "0:/Font/20_4bpp.sif";
 
 #endif
 
@@ -185,17 +185,17 @@ void Create_SIF_Font(void)
 {
 	/* 获取字体数据 */
 	SIFbuffer16 = FONT_SIF_GetData(FONT_XINSONGTI_16_ADDR);
-//	SIFbuffer20 = FONT_SIF_GetData(FONT_SIYUANHEITI_20_ADDR);
+	SIFbuffer20 = FONT_SIF_GetData(FONT_SIYUANHEITI_20_ADDR);
 	
 	/* 新宋体18 */
 	GUI_SIF_CreateFont(SIFbuffer16,               /* 已加载到内存中的字体数据 */
 	                   &FONT_XINSONGTI_16_4BPP,   /* GUI_FONT 字体结构体指针 */
 										 GUI_SIF_TYPE_PROP_AA4_EXT);/* 字体类型 */
-//	/* 思源黑体36 */
-//	GUI_SIF_CreateFont(SIFbuffer20,               /* 已加载到内存中的字体数据 */
-//	                   &FONT_SIYUANHEITI_20_4BPP, /* GUI_FONT 字体结构体指针 */
-//										 GUI_SIF_TYPE_PROP_AA4_EXT);/* 字体类型 */
-//
+	/* 思源黑体36 */
+	GUI_SIF_CreateFont(SIFbuffer20,               /* 已加载到内存中的字体数据 */
+	                   &FONT_SIYUANHEITI_20_4BPP, /* GUI_FONT 字体结构体指针 */
+										 GUI_SIF_TYPE_PROP_AA4_EXT);/* 字体类型 */
+
 }
 
 /*********************************************END OF FILE**********************/

@@ -57,9 +57,9 @@ extern const char MULTIEDIT_text[];
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
+  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 240, 300, 0, 0x0, 0 },
 	{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 0, 0, 230, 55, 0, 0x64, 0 },
-//  { TEXT_CreateIndirect, "Text", ID_TEXT_1, 0, 50, 230, 108, 0, 0x64, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_1, 0, 50, 230, 108, 0, 0x64, 0 },
   { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 5, 120, 220, 110, 0, 0x0, 0 },
 //  { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 5, 240, 100, 25, 0, 0x0, 0 },
 //  { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 125, 240, 100, 25, 0, 0x0, 0 },
@@ -90,7 +90,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 			hItem = pMsg->hWin;
 			FRAMEWIN_SetTitleHeight(hItem, 32);
 			FRAMEWIN_SetText(hItem, Framewin_text);
-			FRAMEWIN_SetFont(hItem, &FONT_SIYUANHEITI_20_4BPP);
+			FRAMEWIN_SetFont(hItem, &FONT_XINSONGTI_16_4BPP);
 			/* 初始化TEXT0 */
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
 			TEXT_SetText(hItem, text);
@@ -105,7 +105,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 			MULTIEDIT_SetBufferSize(hItem, 200);
 			MULTIEDIT_SetWrapWord(hItem);
 			MULTIEDIT_SetText(hItem, MULTIEDIT_text);
-			MULTIEDIT_SetFont(hItem, &FONT_SIYUANHEITI_20_4BPP);
+			MULTIEDIT_SetFont(hItem, &FONT_XINSONGTI_16_4BPP);
 			MULTIEDIT_SetTextColor(hItem, MULTIEDIT_CI_READONLY, GUI_GREEN);
 			MULTIEDIT_SetBkColor(hItem, MULTIEDIT_CI_READONLY, GUI_BLACK);
 			MULTIEDIT_ShowCursor(hItem, 0);

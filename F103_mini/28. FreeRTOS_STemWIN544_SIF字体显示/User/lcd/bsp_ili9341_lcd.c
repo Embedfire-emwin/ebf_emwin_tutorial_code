@@ -29,7 +29,7 @@ uint16_t LCD_Y_LENGTH = ILI9341_MORE_PIXEL;
 uint8_t LCD_SCAN_MODE = 6;
 
 
-static sFONT *LCD_Currentfonts = &Font8x16;  //英文字体
+//static sFONT *LCD_Currentfonts = &Font8x16;  //英文字体
 static uint16_t CurrentTextColor   = BLACK;//前景色
 static uint16_t CurrentBackColor   = WHITE;//背景色
 
@@ -57,7 +57,7 @@ static void ILI9341_Delay ( __IO uint32_t nCount )
   * @param  usCmd :要写入的命令（表寄存器地址）
   * @retval 无
   */	
-__inline void ILI9341_Write_Cmd ( uint16_t usCmd )
+void ILI9341_Write_Cmd ( uint16_t usCmd )
 {
 	ILI9341_CS_CLR;//开始片选      
 	ILI9341_DC_CLR;//写命令
@@ -74,7 +74,7 @@ __inline void ILI9341_Write_Cmd ( uint16_t usCmd )
   * @param  usData :要写入的数据
   * @retval 无
   */	
-__inline void ILI9341_Write_Data ( uint16_t usData )
+void ILI9341_Write_Data ( uint16_t usData )
 {
 	ILI9341_CS_CLR;//开始片选      
 	ILI9341_DC_SET;//写数据
@@ -92,7 +92,7 @@ __inline void ILI9341_Write_Data ( uint16_t usData )
   * @param  无
   * @retval 读取到的数据
   */	
-__inline uint16_t ILI9341_Read_Data ( void )
+uint16_t ILI9341_Read_Data ( void )
 {
 	uint16_t data;
  	ILI9341_DATA_PORT->CRL=0X88888888; //上拉输入
@@ -811,41 +811,41 @@ void ILI9341_DrawCircle ( uint16_t usX_Center, uint16_t usY_Center, uint16_t usR
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispChar_EN ( uint16_t usX, uint16_t usY, const char cChar )
-{
-	uint8_t  byteCount, bitCount,fontLength;	
-	uint16_t ucRelativePositon;
-	uint8_t *Pfont;
-	
-	//对ascii码表偏移（字模表不包含ASCII表的前32个非图形符号）
-	ucRelativePositon = cChar - ' ';
-	
-	//每个字模的字节数
-	fontLength = (LCD_Currentfonts->Width*LCD_Currentfonts->Height)/8;
-		
-	//字模首地址
-	/*ascii码表偏移值乘以每个字模的字节数，求出字模的偏移位置*/
-	Pfont = (uint8_t *)&LCD_Currentfonts->table[ucRelativePositon * fontLength];
-	
-	//设置显示窗口
-	ILI9341_OpenWindow ( usX, usY, LCD_Currentfonts->Width, LCD_Currentfonts->Height);
-	
-	ILI9341_Write_Cmd ( CMD_SetPixel );			
+//void ILI9341_DispChar_EN ( uint16_t usX, uint16_t usY, const char cChar )
+//{
+//	uint8_t  byteCount, bitCount,fontLength;	
+//	uint16_t ucRelativePositon;
+//	uint8_t *Pfont;
+//	
+//	//对ascii码表偏移（字模表不包含ASCII表的前32个非图形符号）
+//	ucRelativePositon = cChar - ' ';
+//	
+//	//每个字模的字节数
+//	fontLength = (LCD_Currentfonts->Width*LCD_Currentfonts->Height)/8;
+//		
+//	//字模首地址
+//	/*ascii码表偏移值乘以每个字模的字节数，求出字模的偏移位置*/
+//	Pfont = (uint8_t *)&LCD_Currentfonts->table[ucRelativePositon * fontLength];
+//	
+//	//设置显示窗口
+//	ILI9341_OpenWindow ( usX, usY, LCD_Currentfonts->Width, LCD_Currentfonts->Height);
+//	
+//	ILI9341_Write_Cmd ( CMD_SetPixel );			
 
-	//按字节读取字模数据
-	//由于前面直接设置了显示窗口，显示数据会自动换行
-	for ( byteCount = 0; byteCount < fontLength; byteCount++ )
-	{
-			//一位一位处理要显示的颜色
-			for ( bitCount = 0; bitCount < 8; bitCount++ )
-			{
-					if ( Pfont[byteCount] & (0x80>>bitCount) )
-						ILI9341_Write_Data ( CurrentTextColor );			
-					else
-						ILI9341_Write_Data ( CurrentBackColor );
-			}	
-	}	
-}
+//	//按字节读取字模数据
+//	//由于前面直接设置了显示窗口，显示数据会自动换行
+//	for ( byteCount = 0; byteCount < fontLength; byteCount++ )
+//	{
+//			//一位一位处理要显示的颜色
+//			for ( bitCount = 0; bitCount < 8; bitCount++ )
+//			{
+//					if ( Pfont[byteCount] & (0x80>>bitCount) )
+//						ILI9341_Write_Data ( CurrentTextColor );			
+//					else
+//						ILI9341_Write_Data ( CurrentBackColor );
+//			}	
+//	}	
+//}
 
 
 /**
@@ -858,33 +858,33 @@ void ILI9341_DispChar_EN ( uint16_t usX, uint16_t usY, const char cChar )
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispStringLine_EN (  uint16_t line,  char * pStr )
-{
-	uint16_t usX = 0;
-	
-	while ( * pStr != '\0' )
-	{
-		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) > LCD_X_LENGTH )
-		{
-			usX = ILI9341_DispWindow_X_Star;
-			line += LCD_Currentfonts->Height;
-		}
-		
-		if ( ( line - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) > LCD_Y_LENGTH )
-		{
-			usX = ILI9341_DispWindow_X_Star;
-			line = ILI9341_DispWindow_Y_Star;
-		}
-		
-		ILI9341_DispChar_EN ( usX, line, * pStr);
-		
-		pStr ++;
-		
-		usX += LCD_Currentfonts->Width;
-		
-	}
-	
-}
+//void ILI9341_DispStringLine_EN (  uint16_t line,  char * pStr )
+//{
+//	uint16_t usX = 0;
+//	
+//	while ( * pStr != '\0' )
+//	{
+//		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) > LCD_X_LENGTH )
+//		{
+//			usX = ILI9341_DispWindow_X_Star;
+//			line += LCD_Currentfonts->Height;
+//		}
+//		
+//		if ( ( line - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) > LCD_Y_LENGTH )
+//		{
+//			usX = ILI9341_DispWindow_X_Star;
+//			line = ILI9341_DispWindow_Y_Star;
+//		}
+//		
+//		ILI9341_DispChar_EN ( usX, line, * pStr);
+//		
+//		pStr ++;
+//		
+//		usX += LCD_Currentfonts->Width;
+//		
+//	}
+//	
+//}
 
 
 /**
@@ -895,64 +895,64 @@ void ILI9341_DispStringLine_EN (  uint16_t line,  char * pStr )
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispString_EN ( 	uint16_t usX ,uint16_t usY,  char * pStr )
-{
-	while ( * pStr != '\0' )
-	{
-		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) > LCD_X_LENGTH )
-		{
-			usX = ILI9341_DispWindow_X_Star;
-			usY += LCD_Currentfonts->Height;
-		}
-		
-		if ( ( usY - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) > LCD_Y_LENGTH )
-		{
-			usX = ILI9341_DispWindow_X_Star;
-			usY = ILI9341_DispWindow_Y_Star;
-		}
-		
-		ILI9341_DispChar_EN ( usX, usY, * pStr);
-		
-		pStr ++;
-		
-		usX += LCD_Currentfonts->Width;
-		
-	}
-	
-}
+//void ILI9341_DispString_EN ( 	uint16_t usX ,uint16_t usY,  char * pStr )
+//{
+//	while ( * pStr != '\0' )
+//	{
+//		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) > LCD_X_LENGTH )
+//		{
+//			usX = ILI9341_DispWindow_X_Star;
+//			usY += LCD_Currentfonts->Height;
+//		}
+//		
+//		if ( ( usY - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) > LCD_Y_LENGTH )
+//		{
+//			usX = ILI9341_DispWindow_X_Star;
+//			usY = ILI9341_DispWindow_Y_Star;
+//		}
+//		
+//		ILI9341_DispChar_EN ( usX, usY, * pStr);
+//		
+//		pStr ++;
+//		
+//		usX += LCD_Currentfonts->Width;
+//		
+//	}
+//	
+//}
 
 
-/**
- * @brief  在 ILI9341 显示器上显示英文字符串(沿Y轴方向)
- * @param  usX ：在特定扫描方向下字符的起始X坐标
- * @param  usY ：在特定扫描方向下字符的起始Y坐标
- * @param  pStr ：要显示的英文字符串的首地址
- * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
- * @retval 无
- */
-void ILI9341_DispString_EN_YDir (	 uint16_t usX,uint16_t usY ,  char * pStr )
-{	
-	while ( * pStr != '\0' )
-	{
-		if ( ( usY - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) >LCD_Y_LENGTH  )
-		{
-			usY = ILI9341_DispWindow_Y_Star;
-			usX += LCD_Currentfonts->Width;
-		}
-		
-		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) >  LCD_X_LENGTH)
-		{
-			usX = ILI9341_DispWindow_X_Star;
-			usY = ILI9341_DispWindow_Y_Star;
-		}
-		
-		ILI9341_DispChar_EN ( usX, usY, * pStr);
-		
-		pStr ++;
-		
-		usY += LCD_Currentfonts->Height;		
-	}	
-}
+///**
+// * @brief  在 ILI9341 显示器上显示英文字符串(沿Y轴方向)
+// * @param  usX ：在特定扫描方向下字符的起始X坐标
+// * @param  usY ：在特定扫描方向下字符的起始Y坐标
+// * @param  pStr ：要显示的英文字符串的首地址
+// * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
+// * @retval 无
+// */
+//void ILI9341_DispString_EN_YDir (	 uint16_t usX,uint16_t usY ,  char * pStr )
+//{	
+//	while ( * pStr != '\0' )
+//	{
+//		if ( ( usY - ILI9341_DispWindow_Y_Star + LCD_Currentfonts->Height ) >LCD_Y_LENGTH  )
+//		{
+//			usY = ILI9341_DispWindow_Y_Star;
+//			usX += LCD_Currentfonts->Width;
+//		}
+//		
+//		if ( ( usX - ILI9341_DispWindow_X_Star + LCD_Currentfonts->Width ) >  LCD_X_LENGTH)
+//		{
+//			usX = ILI9341_DispWindow_X_Star;
+//			usY = ILI9341_DispWindow_Y_Star;
+//		}
+//		
+//		ILI9341_DispChar_EN ( usX, usY, * pStr);
+//		
+//		pStr ++;
+//		
+//		usY += LCD_Currentfonts->Height;		
+//	}	
+//}
 
 
 /**
@@ -964,20 +964,20 @@ void ILI9341_DispString_EN_YDir (	 uint16_t usX,uint16_t usY ,  char * pStr )
   * 	@arg：Font8x16;
   * @retval None
   */
-void LCD_SetFont(sFONT *fonts)
-{
-  LCD_Currentfonts = fonts;
-}
+//void LCD_SetFont(sFONT *fonts)
+//{
+//  LCD_Currentfonts = fonts;
+//}
 
 /**
   * @brief  获取当前字体类型
   * @param  None.
   * @retval 返回当前字体类型
   */
-sFONT *LCD_GetFont(void)
-{
-  return LCD_Currentfonts;
-}
+//sFONT *LCD_GetFont(void)
+//{
+//  return LCD_Currentfonts;
+//}
 
 
 /**
@@ -1031,11 +1031,11 @@ void LCD_SetBackColor(uint16_t Color)
   *   宏LINE(x)会根据当前选择的字体来计算Y坐标值，并删除当前字体高度的第x行。
   * @retval None
   */
-void LCD_ClearLine(uint16_t Line)
-{
-  ILI9341_Clear(0,Line,LCD_X_LENGTH,((sFONT *)LCD_GetFont())->Height);	/* 清屏，显示全黑 */
+//void LCD_ClearLine(uint16_t Line)
+//{
+//  ILI9341_Clear(0,Line,LCD_X_LENGTH,((sFONT *)LCD_GetFont())->Height);	/* 清屏，显示全黑 */
 
-}
+//}
 /*********************end of file*************************/
 
 

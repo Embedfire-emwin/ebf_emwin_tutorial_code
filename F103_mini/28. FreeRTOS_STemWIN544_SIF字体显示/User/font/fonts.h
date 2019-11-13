@@ -5,8 +5,8 @@
 #include "./font/fonts.h"
 
 
-#define LINE(x) ((x) * (((sFONT *)LCD_GetFont())->Height))
-#define LINEY(x) ((x) * (((sFONT *)LCD_GetFont())->Width))
+//#define LINE(x) ((x) * (((sFONT *)LCD_GetFont())->Height))
+//#define LINEY(x) ((x) * (((sFONT *)LCD_GetFont())->Width))
 
 /** @defgroup FONTS_Exported_Types
   * @{
@@ -21,7 +21,7 @@ typedef struct _tFont
 
 extern sFONT Font24x32;
 extern sFONT Font16x24;
-extern sFONT Font8x16;
+//extern sFONT Font8x16;
 
 //要支持中文需要实现本函数，可参考“液晶显示中英文（字库在外部FLASH）”例程
 #define      GetGBKCode( ucBuffer, usChar ) 

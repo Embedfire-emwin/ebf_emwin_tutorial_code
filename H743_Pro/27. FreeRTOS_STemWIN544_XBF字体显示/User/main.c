@@ -105,7 +105,7 @@ int main(void)
 	
 	xReturn = xTaskCreate((TaskFunction_t)AppTaskCreate,/* 任务入口函数 */
 											 (const char*    )"AppTaskCreate",/* 任务名称 */
-											 (uint16_t       )512,					/* 任务栈大小 */
+											 (uint16_t       )1024,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
 											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
@@ -174,7 +174,7 @@ static void LED_Task(void* parameter)
 	{
     printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(100);
+		vTaskDelay(1000);
 		
 	}
 }
@@ -315,7 +315,7 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLQ = 2;
  
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;

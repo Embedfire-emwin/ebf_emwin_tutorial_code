@@ -241,8 +241,6 @@ static void BSP_Init(void)
   /* 初始化SDRAM 用作LCD 显存*/
 	SDRAM_Init();
   
-  SDRAM_Test();
-  
 	/* LCD 端口初始化 */ 
 	LCD_Init();
  

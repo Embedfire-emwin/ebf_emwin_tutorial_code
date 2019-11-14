@@ -35,7 +35,7 @@
 #include "./adc/bsp_adc.h"
 
 
-/** @addtogroup STM32F429I_DISCOVERY_Examples
+/** @addtogroup STM32F407I_DISCOVERY_Examples
   * @{
   */
 

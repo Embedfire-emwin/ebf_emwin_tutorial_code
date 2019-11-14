@@ -1,0 +1,6 @@
+--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ..\..\Libraries\CMSIS\Include -I ..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include -I ..\..\Libraries\STM32H7xx_HAL_Driver\Inc -I ..\..\User -I ..\..\FreeRTOS\include -I ..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1 -I ..\..\STemWIN\inc -I ..\..\STemWIN\Config -I ..\..\STemWIN_Task
+-I.\RTE\_Fire_H7_ExtFlash_Single
+-Id:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+-Id:\Keil_v5\ARM\CMSIS\Include
+-D__UVISION_VERSION="528" -DSTM32H750xx -DUSE_HAL_DRIVER -DSTM32H743xx -DAPPLICATION_ADDRESS="0x90000000" -DOS_SUPPORT -D__TARGET_FPU_VFP
+-o ..\..\output\extflash\main.o --depend ..\..\output\extflash\main.d "..\..\User\main.c"

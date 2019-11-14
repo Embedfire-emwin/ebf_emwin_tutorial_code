@@ -24,7 +24,7 @@
   #define NULL        0
 #endif
 
-
+#define UPDATE_CONFIG  0 // 1 ：更新配置    0 ：不更新配置
 /*flags的可取值，注释掉的在本工程没有用到*/
 //#define I2C_M_TEN		0x0010	/* 表示这是个10位地址 */
 //#define I2C_M_NOSTART		0x4000	/* if I2C_FUNC_PROTOCOL_MANGLING */
@@ -206,6 +206,4 @@ int32_t GTP_Init_Panel(void);
 int8_t GTP_Send_Command(uint8_t command);
 int	GTP_Execu( int *x,int *y);                                       
 
-																			 
- void GTP_TouchProcess(void);
 #endif /* _GOODIX_GT9XX_H_ */

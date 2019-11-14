@@ -708,7 +708,9 @@ Output:
 		
 		//获取触摸IC的型号
     GTP_Read_Version(); 
-
+		
+#if UPDATE_CONFIG
+		
 		config = (uint8_t *)malloc (GTP_CONFIG_MAX_LENGTH + GTP_ADDR_LENGTH);
 
 		config[0] = GTP_REG_CONFIG_DATA >> 8;
@@ -835,8 +837,9 @@ Output:
 	    		GTP_DEBUG("Config success ! i = %d ",i);
 	}
 #endif
-	
+		free(config);
 		
+#endif
 	 /* emXGUI示例中不使能中断 */
 		GTP_IRQ_Enable();
 	

@@ -44,6 +44,7 @@
 /* External variables --------------------------------------------------------*/
 extern LTDC_HandleTypeDef  Ltdc_Handler;
 extern DMA2D_HandleTypeDef Dma2d_Handler;
+extern ADC_HandleTypeDef ADC_Handle;
 /******************************************************************************/
 /*            Cortex Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -198,6 +199,24 @@ void LTDC_IRQHandler(void)
   HAL_LTDC_IRQHandler(&Ltdc_Handler);
 	/* 退出临界段 */
 	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+}
+
+extern __IO uint16_t ADC_ConvertedValue;
+/**
+  * @brief  ADC 转换完成中断服务程序
+  * @param  None
+  * @retval None
+  */
+void ADC3_IRQHandler(void)
+{
+	uint32_t ulReturn;
+  /* 进入临界段 */
+  ulReturn = taskENTER_CRITICAL_FROM_ISR();
+	
+  HAL_ADC_IRQHandler(&ADC_Handle);
+	  
+	/* 退出临界段 */
+  taskEXIT_CRITICAL_FROM_ISR( ulReturn );
 }
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -852,6 +852,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\adc\bsp_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -938,14 +943,9 @@
           <GroupName>STemWin/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>GraphDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\MainTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>speedtest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\speedtest.c</FilePath>
+              <FilePath>..\..\STemWIN_Task\GraphDLG.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1807,6 +1807,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\adc\bsp_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1893,14 +1898,9 @@
           <GroupName>STemWin/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>GraphDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\MainTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>speedtest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\speedtest.c</FilePath>
+              <FilePath>..\..\STemWIN_Task\GraphDLG.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2762,6 +2762,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\adc\bsp_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2848,14 +2853,9 @@
           <GroupName>STemWin/Task</GroupName>
           <Files>
             <File>
-              <FileName>MainTask.c</FileName>
+              <FileName>GraphDLG.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\MainTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>speedtest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\STemWIN_Task\speedtest.c</FilePath>
+              <FilePath>..\..\STemWIN_Task\GraphDLG.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -24,7 +24,7 @@
 #include "./touch/bsp_touch_gtxx.h"
 #include "./delay/core_delay.h" 
 #include "./mpu/bsp_mpu.h" 
-
+#include "./adc/bsp_adc.h"
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -95,7 +95,7 @@ int main(void)
 	
 	xReturn = xTaskCreate((TaskFunction_t)AppTaskCreate,/* 任务入口函数 */
 											 (const char*    )"AppTaskCreate",/* 任务名称 */
-											 (uint16_t       )1024,					/* 任务栈大小 */
+											 (uint16_t       )512,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
 											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
@@ -140,7 +140,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024 * 4,      /* 任务栈大小 */
+											 (uint16_t         )1024,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -162,9 +162,9 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(100);
+		vTaskDelay(1000);
 	}
 }
 
@@ -195,7 +195,8 @@ static void GUI_Task(void* parameter)
 	GUI_Init();
 	/* 开启三缓冲 */
 	WM_MULTIBUF_Enable(1);
-
+		/* 初始化ADC */
+	Rheostat_Init();
 	while(1)
 	{
     MainTask();
@@ -243,6 +244,7 @@ static void BSP_Init(void)
   
 	/* LCD 端口初始化 */ 
 	LCD_Init();
+
  
 }
 
@@ -295,7 +297,7 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
  
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;

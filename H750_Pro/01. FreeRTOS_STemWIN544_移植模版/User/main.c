@@ -95,7 +95,7 @@ int main(void)
 	
 	xReturn = xTaskCreate((TaskFunction_t)AppTaskCreate,/* 任务入口函数 */
 											 (const char*    )"AppTaskCreate",/* 任务名称 */
-											 (uint16_t       )512,					/* 任务栈大小 */
+											 (uint16_t       )1024,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
 											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
@@ -140,7 +140,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 4,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -162,9 +162,9 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(1000);
+		vTaskDelay(100);
 	}
 }
 

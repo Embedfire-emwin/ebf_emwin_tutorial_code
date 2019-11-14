@@ -172,9 +172,9 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(1000);
+		vTaskDelay(100);
 		
 	}
 }

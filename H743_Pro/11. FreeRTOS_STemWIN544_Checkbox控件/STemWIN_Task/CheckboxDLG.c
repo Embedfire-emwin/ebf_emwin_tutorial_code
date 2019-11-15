@@ -78,7 +78,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = pMsg->hWin;
     FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
     FRAMEWIN_SetTitleHeight(hItem, 32);
-    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H750");
+    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H743");
     /* ³õÊ¼»¯Checkbox0 */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
     CHECKBOX_SetText(hItem, "Checkbox0");

@@ -68,7 +68,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 		/* 初始化Framewin控件 */
 		hItem = pMsg->hWin;
 		FRAMEWIN_SetTitleHeight(hItem, 32);
-		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H750");
+		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H743");
 		FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
 		/* 初始化Radio控件0 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_RADIO_0);

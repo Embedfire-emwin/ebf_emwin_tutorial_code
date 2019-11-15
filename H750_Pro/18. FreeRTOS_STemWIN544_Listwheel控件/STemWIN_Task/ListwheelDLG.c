@@ -120,7 +120,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
       hItem = pMsg->hWin;
       FRAMEWIN_SetTitleHeight(hItem, 32);
       FRAMEWIN_SetFont(hItem, GUI_FONT_32_1);
-      FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H743");
+      FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H750");
     
       /* ≥ı ºªØLISTWHEEL */
       for(int i=0; i < 3; i++)

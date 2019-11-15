@@ -69,7 +69,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
 		TEXT_SetFont(hItem, GUI_FONT_COMIC24B_ASCII);
 		TEXT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-		TEXT_SetText(hItem, "STemWIN@EmbedFire STM32H743");
+		TEXT_SetText(hItem, "STemWIN@EmbedFire STM32H750");
 		/* ³õÊ¼»¯Text1 */
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
 		TEXT_SetFont(hItem, GUI_FONT_8X16X1X2);

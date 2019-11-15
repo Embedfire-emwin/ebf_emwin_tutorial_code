@@ -158,7 +158,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 	case WM_INIT_DIALOG:
 		/* 初始化Framewin控件 */
 		hItem = pMsg->hWin;
-		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H743");
+		FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H750");
 		FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
 		FRAMEWIN_SetTitleHeight(hItem, 32);
   	/* 初始化Button0 */

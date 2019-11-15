@@ -240,7 +240,6 @@ static void BSP_Init(void)
 	/* 配置串口1为：115200 8-N-1 */
 	DEBUG_USART_Config();		
 	printf("\r\n欢迎使用野火STM32F767开发板。\r\n");		 
-	printf("野火STM32F767 触摸画板测试例程\r\n");
   /* 初始化触摸屏 */
   GTP_Init_Panel(); 
   /* 初始化SDRAM 用作LCD 显存*/

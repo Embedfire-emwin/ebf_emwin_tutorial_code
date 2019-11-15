@@ -271,7 +271,7 @@ static void SDRAM_InitSequence(void)
   
 /* Step 7 --------------------------------------------------------------------*/
   /* …Ë÷√sdramºƒ¥Ê∆˜≈‰÷√ */
-  tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_8          |
+  tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1          |
                    SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |
                    SDRAM_MODEREG_CAS_LATENCY_3           |
                    SDRAM_MODEREG_OPERATING_MODE_STANDARD |
@@ -375,7 +375,7 @@ void SDRAM_Init(void)
   hsdram1.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
   hsdram1.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;
   hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
-  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_0;
+  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_1;
   /* SdramTiming */
   SdramTiming.LoadToActiveDelay = 2;
   SdramTiming.ExitSelfRefreshDelay = 7;

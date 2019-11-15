@@ -78,7 +78,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   case WM_INIT_DIALOG:
     /* Edit0³õÊ¼»¯ */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
-    EDIT_SetText(hItem, "STemWIN@EmbedFire STM32F429");
+    EDIT_SetText(hItem, "STemWIN@EmbedFire STM32F767");
     EDIT_SetFont(hItem, GUI_FONT_24_ASCII);
     EDIT_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
 	  EDIT_EnableBlink(hItem, 500, 1);

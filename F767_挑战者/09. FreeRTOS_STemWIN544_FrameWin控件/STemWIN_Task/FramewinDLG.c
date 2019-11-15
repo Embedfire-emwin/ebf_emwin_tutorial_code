@@ -55,7 +55,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
       hItem = pMsg->hWin;
       FRAMEWIN_SetTitleHeight(hItem, 32);
       FRAMEWIN_SetFont(hItem, GUI_FONT_32_1);
-      FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
+      FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F767");
       /* ³õÊ¼»¯Button0 */
       hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
       BUTTON_SetFont(hItem, GUI_FONT_24B_ASCII);

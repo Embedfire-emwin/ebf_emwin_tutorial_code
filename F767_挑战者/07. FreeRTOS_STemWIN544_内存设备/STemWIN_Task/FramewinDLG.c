@@ -87,7 +87,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     hItem = pMsg->hWin;
     FRAMEWIN_SetTitleHeight(hItem, 24);
-    FRAMEWIN_SetText(hItem, "EmbeddedFire STM32F429");
+    FRAMEWIN_SetText(hItem, "EmbeddedFire STM32F767");
     FRAMEWIN_SetFont(hItem, GUI_FONT_24_ASCII);
     //
     // Initialization of 'Checkbox'

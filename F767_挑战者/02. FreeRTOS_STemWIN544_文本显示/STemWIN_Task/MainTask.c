@@ -8,7 +8,7 @@
   *********************************************************************
   * @attention
   *
-  * 实验平台:野火  STM32 F429 开发板 
+  * 实验平台:野火  STM32 F767 开发板 
   * 论坛    :http://www.firebbs.cn
   * 淘宝    :https://fire-stm32.taobao.com
   *
@@ -48,7 +48,7 @@ void MainTask(void)
 	
 	/* 设置字体大小 */
 	GUI_SetFont(GUI_FONT_32_1);
-	GUI_DispStringAt("STemWIN@EmbedFire STM32F429", 10, 10);
+	GUI_DispStringAt("STemWIN@EmbedFire STM32F767", 10, 10);
 	
 	/* 画线 */
 	GUI_SetPenSize(10);

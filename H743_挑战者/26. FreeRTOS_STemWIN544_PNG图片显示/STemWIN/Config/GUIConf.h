@@ -100,6 +100,6 @@ Purpose     : Configures emWins abilities, fonts etc.
 */
 #define GUI_USE_ARGB                 (1)
 
-#define GUI_DEBUG_LEVEL           GUI_DEBUG_LEVEL_LOG_ALL
+//#define GUI_DEBUG_LEVEL           GUI_DEBUG_LEVEL_LOG_ALL
 
 #endif  /* Avoid multiple inclusion */

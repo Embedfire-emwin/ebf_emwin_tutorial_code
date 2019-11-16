@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2015  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2017  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.30 - Graphical user interface for embedded applications **
+** emWin V5.46 - Graphical user interface for embedded applications **
 emWin is protected by international copyright laws.   Knowledge of the
 source code may not be used to write a similar product.  This file may
 only  be used  in accordance  with  a license  and should  not be  re-
@@ -110,10 +110,10 @@ static void _png_cexcept_error(png_structp png_ptr, png_const_charp msg) {
 static void PNGAPI _png_read_data(png_structp png_ptr, png_bytep data, png_size_t length) {
   GUI_PNG_CONTEXT * pContext;
   pContext = (GUI_PNG_CONTEXT *)png_ptr->io_ptr;
-  if ((png_size_t)pContext->pfGetData(pContext->pParam, (const U8 **)&data, length, pContext->Off) != length) {
+  if ((png_size_t)pContext->pfGetData(pContext->pParam, (const U8 **)&data, (unsigned)length, pContext->Off) != length) {
     _png_cexcept_error(png_ptr, "Error reading data!");
   }
-  pContext->Off += length;
+  pContext->Off += (unsigned)length;
 }
 
 /*********************************************************************
@@ -129,8 +129,12 @@ static png_voidp _malloc_fn(png_structp png_ptr, png_size_t size) {
     GUI_HMEM hMem;
 
     GUI_USE_PARA(png_ptr);
-    hMem = GUI_ALLOC_AllocNoInit(size);
-    p = (void *)GUI_LOCK_H(hMem);
+    hMem = GUI_ALLOC_AllocNoInit((GUI_ALLOC_DATATYPE)size);
+    if (hMem) {
+      p = (void *)GUI_LOCK_H(hMem);
+    } else {
+      p = NULL;
+    }
     return p;
   #else
     GUI_USE_PARA(png_ptr);
@@ -318,8 +322,8 @@ static int _Draw(int x0, int y0, GUI_PNG_CONTEXT * pContext) {
   //
   // Row_bytes is the width x number of channels
   //
-  RowBytes = png_get_rowbytes(png_ptr, info_ptr);
-  Channels = png_get_channels(png_ptr, info_ptr);
+  RowBytes = (U32)png_get_rowbytes(png_ptr, info_ptr);
+  Channels = (U32)png_get_channels(png_ptr, info_ptr);
   //
   // Now we can allocate memory to store the image
   //

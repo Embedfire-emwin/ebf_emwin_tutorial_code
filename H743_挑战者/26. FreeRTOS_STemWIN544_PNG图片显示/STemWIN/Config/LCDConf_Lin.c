@@ -1289,10 +1289,10 @@ void LCD_X_Config(void)
   GUI_SetFuncMixColorsBulk(_LCD_MixColorsBulk);
   
   /* Set up custom function for drawing 16bpp memory devices */
-//  GUI_MEMDEV_SetDrawMemdev16bppFunc(_LCD_DrawMemdev16bpp);
+  GUI_MEMDEV_SetDrawMemdev16bppFunc(_LCD_DrawMemdev16bpp);
   
   /* Set up custom function for Alpha drawing operations */
-//  GUI_SetFuncDrawAlpha(_LCD_DrawMemdevAlpha, _LCD_DrawBitmapAlpha);
+  GUI_SetFuncDrawAlpha(_LCD_DrawMemdevAlpha, _LCD_DrawBitmapAlpha);
   
   GUI_DCACHE_SetClearCacheHook(_ClearCacheHook);
 }

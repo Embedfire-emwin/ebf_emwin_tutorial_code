@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    sd_diskio.c
+  * @file    sdram_diskio.c
   * @author  MCD Application Team
   * @version V1.3.0
   * @date    08-May-2015
-  * @brief   SD Disk I/O driver
+  * @brief   SDRAM Disk I/O driver
   ******************************************************************************
   * @attention
   *
@@ -28,7 +28,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "ff_gen_drv.h"
-//#include "sdio/bsp_sdio_sd.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Block Size in Bytes */
@@ -39,27 +39,26 @@
 static volatile DSTATUS Stat = STA_NOINIT;
 
 /* Private function prototypes -----------------------------------------------*/
-DSTATUS SD_initialize (BYTE);
-DSTATUS SD_status (BYTE);
-DRESULT SD_read (BYTE, BYTE*, DWORD, UINT);
+DSTATUS SDRAMDISK_initialize (BYTE);
+DSTATUS SDRAMDISK_status (BYTE);
+DRESULT SDRAMDISK_read (BYTE, BYTE*, DWORD, UINT);
 #if _USE_WRITE == 1
-  DRESULT SD_write (BYTE, const BYTE*, DWORD, UINT);
+  DRESULT SDRAMDISK_write (BYTE, const BYTE*, DWORD, UINT);
 #endif /* _USE_WRITE == 1 */
 #if _USE_IOCTL == 1
-  DRESULT SD_ioctl (BYTE, BYTE, void*);
-#endif  /* _USE_IOCTL == 1 */
+  DRESULT SDRAMDISK_ioctl (BYTE, BYTE, void*);
+#endif /* _USE_IOCTL == 1 */
   
-const Diskio_drvTypeDef  SD_Driver =
+const Diskio_drvTypeDef  SDRAMDISK_Driver =
 {
-  SD_initialize,
-  SD_status,
-  SD_read, 
-#if  _USE_WRITE == 1
-  SD_write,
-#endif /* _USE_WRITE == 1 */
-  
+  SDRAMDISK_initialize,
+  SDRAMDISK_status,
+  SDRAMDISK_read, 
+#if  _USE_WRITE
+  SDRAMDISK_write,
+#endif  /* _USE_WRITE == 1 */  
 #if  _USE_IOCTL == 1
-  SD_ioctl,
+  SDRAMDISK_ioctl,
 #endif /* _USE_IOCTL == 1 */
 };
 
@@ -67,19 +66,17 @@ const Diskio_drvTypeDef  SD_Driver =
 
 /**
   * @brief  Initializes a Drive
-  * @param  lun : not used 
+  * @param  lun : not used
   * @retval DSTATUS: Operation status
   */
-DSTATUS SD_initialize(BYTE lun)
+DSTATUS SDRAMDISK_initialize(BYTE lun)
 {
   Stat = STA_NOINIT;
   
-  /* Configure the uSD device */
-  if(BSP_SD_Init() == MSD_OK)
-  {
-    Stat &= ~STA_NOINIT;
-  }
-
+  /* Configure the SDRAM device */
+  BSP_SDRAM_Init();
+  
+  Stat &= ~STA_NOINIT;
   return Stat;
 }
 
@@ -88,15 +85,12 @@ DSTATUS SD_initialize(BYTE lun)
   * @param  lun : not used
   * @retval DSTATUS: Operation status
   */
-DSTATUS SD_status(BYTE lun)
+DSTATUS SDRAMDISK_status(BYTE lun)
 {
   Stat = STA_NOINIT;
-
-  if(BSP_SD_GetStatus() == MSD_OK)
-  {
-    Stat &= ~STA_NOINIT;
-  }
   
+  Stat &= ~STA_NOINIT;
+
   return Stat;
 }
 
@@ -108,37 +102,18 @@ DSTATUS SD_status(BYTE lun)
   * @param  count: Number of sectors to read (1..128)
   * @retval DRESULT: Operation result
   */
-DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
+DRESULT SDRAMDISK_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 {
-    DRESULT res = RES_OK;
+  uint32_t *pSrcBuffer = (uint32_t *)buff;
+  uint32_t BufferSize = (BLOCK_SIZE * count)/4; 
+  uint32_t *pSdramAddress = (uint32_t *) (SDRAM_DEVICE_ADDR + (sector * BLOCK_SIZE)); 
   
-    if ((DWORD)buff & 3) 
-    {
-        DWORD scratch[BLOCK_SIZE / 4];
-
-        while (count--) 
-        {
-            memcpy(scratch, buff, BLOCK_SIZE);
-            res = SD_read(lun,(void *)scratch, sector++, 1);
-            
-            if (res != RES_OK)
-            {
-               break;
-            }
-            buff += BLOCK_SIZE;
-        }
-
-        return(res);
-     }
-  if(BSP_SD_ReadBlocks((uint32_t*)buff, 
-                       (uint64_t) (sector * BLOCK_SIZE), 
-                       BLOCK_SIZE, 
-                       count) != MSD_OK)
+  for(; BufferSize != 0; BufferSize--)
   {
-    res = RES_ERROR;
-  }
+    *pSrcBuffer++ = *(__IO uint32_t *)pSdramAddress++;                
+  } 
   
-  return res;
+  return RES_OK;
 }
 
 /**
@@ -150,37 +125,19 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
   * @retval DRESULT: Operation result
   */
 #if _USE_WRITE == 1
-DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
-{
-    DRESULT res = RES_OK;
+DRESULT SDRAMDISK_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
+{ 
+  uint32_t *pDstBuffer = (uint32_t *)buff;
+  uint32_t BufferSize = (BLOCK_SIZE * count)/4 + count; 
+  uint32_t *pSramAddress = (uint32_t *) (SDRAM_DEVICE_ADDR + (sector * BLOCK_SIZE)); 
   
-    if ((DWORD)buff & 3) 
-    {
-        DWORD scratch[BLOCK_SIZE / 4];
-
-        while (count--) 
-        {
-            memcpy(scratch, buff, BLOCK_SIZE);
-            res = SD_write(lun,(void *)scratch, sector++, 1);
-            
-            if (res != RES_OK)
-            {
-               break;
-            }
-            buff += BLOCK_SIZE;
-        }
-
-        return(res);
-     }
-    if(BSP_SD_WriteBlocks((uint32_t*)buff, 
-                        (uint64_t)(sector * BLOCK_SIZE), 
-                        BLOCK_SIZE, count) != MSD_OK)
-    {
-        res = RES_ERROR;
-    }
+  for(; BufferSize != 0; BufferSize--)
+  {
+    *(__IO uint32_t *)pSramAddress++ = *pDstBuffer++;    
+  } 
   
-    return res;
-}   
+  return RES_OK;
+}
 #endif /* _USE_WRITE == 1 */
 
 /**
@@ -191,10 +148,9 @@ DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
   * @retval DRESULT: Operation result
   */
 #if _USE_IOCTL == 1
-DRESULT SD_ioctl(BYTE lun, BYTE cmd, void *buff)
+DRESULT SDRAMDISK_ioctl(BYTE lun, BYTE cmd, void *buff)
 {
   DRESULT res = RES_ERROR;
-  SD_CardInfo CardInfo;
   
   if (Stat & STA_NOINIT) return RES_NOTRDY;
   
@@ -207,8 +163,7 @@ DRESULT SD_ioctl(BYTE lun, BYTE cmd, void *buff)
   
   /* Get number of sectors on the disk (DWORD) */
   case GET_SECTOR_COUNT :
-    BSP_SD_GetCardInfo(&CardInfo);
-    *(DWORD*)buff = CardInfo.CardCapacity / BLOCK_SIZE;
+    *(DWORD*)buff = SDRAM_DEVICE_SIZE / BLOCK_SIZE;
     res = RES_OK;
     break;
   

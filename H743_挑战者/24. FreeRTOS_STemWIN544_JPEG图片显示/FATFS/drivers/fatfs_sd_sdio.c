@@ -8,18 +8,18 @@
   ******************************************************************************
   * @attention
   *
-  * 实验平台:秉火  STM32 H743 开发板  
+  * 实验平台:野火  STM32 H743 开发板  
   * 论坛    :http://www.firebbs.cn
-  * 淘宝    :http://firestm32.taobao.com
+  * 淘宝    :http://fire-stm32.taobao.com
   *
   ******************************************************************************
   */
-#include "./drivers/fatfs_sd_sdio.h"
+#include "fatfs_sd_sdio.h"
 #include <stdio.h>
 #include <string.h>
 #include "./sd_card/bsp_sdio_sd.h"
 #include "ff_gen_drv.h"
-#include "./led/bsp_led.h" 
+
 /* Disk status */
 static volatile DSTATUS Stat = STA_NOINIT;
 
@@ -67,13 +67,13 @@ DRESULT SD_read(BYTE lun,//物理扇区，多个设备时用到(0...)
 {
   DRESULT res = RES_ERROR;
   uint32_t timeout;
-  uint32_t alignedAddr;
+uint32_t alignedAddr;
 
   RX_Flag = 0;
   
   alignedAddr = (uint32_t)buff & ~0x1F;
   //更新相应的DCache
-  SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+  //SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
   if(HAL_SD_ReadBlocks_DMA(&uSdHandle, (uint8_t*)buff,
                            (uint32_t) (sector),
                            count) == HAL_OK)
@@ -98,15 +98,9 @@ DRESULT SD_read(BYTE lun,//物理扇区，多个设备时用到(0...)
         if (HAL_SD_GetCardState(&uSdHandle) == HAL_SD_CARD_TRANSFER)
         {
           res = RES_OK;
-
-          /*
-             the SCB_InvalidateDCache_by_Addr() requires a 32-Byte aligned address,
-             adjust the address and the D-Cache size to invalidate accordingly.
-           */
-          alignedAddr = (uint32_t)buff & ~0x1F;
+					alignedAddr = (uint32_t)buff & ~0x1F;
           //使相应的DCache无效
           SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
-
            break;
         }
       }
@@ -123,12 +117,14 @@ DRESULT SD_write(BYTE lun,//物理扇区，多个设备时用到(0...)
 {
     DRESULT res = RES_ERROR;
     uint32_t timeout;
-    uint32_t alignedAddr;
+  uint32_t alignedAddr;
   
     TX_Flag = 0;
     alignedAddr = (uint32_t)buff & ~0x1F;
     //更新相应的DCache
-    SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+ //   SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+    TX_Flag = 0;
+    //更新相应的DCache
     if(HAL_SD_WriteBlocks_DMA(&uSdHandle, (uint8_t*)buff,
                              (uint32_t) (sector),
                              count) == HAL_OK)
@@ -153,10 +149,9 @@ DRESULT SD_write(BYTE lun,//物理扇区，多个设备时用到(0...)
           if (HAL_SD_GetCardState(&uSdHandle) == HAL_SD_CARD_TRANSFER)
           {
             res = RES_OK;
-            //使相应的DCache无效
-            SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
-
-             break;
+						//使相应的DCache无效
+//            SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+            break;
           }
         }
       }
@@ -202,5 +197,5 @@ DRESULT SD_ioctl(BYTE lun,BYTE cmd, void *buff){
     }
     return RES_OK;
 }
-/*****************************END OF FILE****************************/
+
 

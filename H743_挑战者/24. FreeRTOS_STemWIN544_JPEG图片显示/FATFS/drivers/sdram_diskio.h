@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    sd_diskio.h 
+  * @file    sdram_diskio.h 
   * @author  MCD Application Team
   * @version V1.3.0
   * @date    08-May-2015
-  * @brief   Header for sd_diskio.c module
+  * @brief   Header for sdram_diskio.c module
   ******************************************************************************
   * @attention
   *
@@ -26,16 +26,16 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __SD_DISKIO_H
-#define __SD_DISKIO_H
-#include "ff_gen_drv.h"
+#ifndef __SDRAM_DISKIO_H
+#define __SDRAM_DISKIO_H
+
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-extern Diskio_drvTypeDef  SD_Driver;
+extern Diskio_drvTypeDef  SDRAMDISK_Driver;
 
-#endif /* __SD_DISKIO_H */
+#endif /* __SDRAM_DISKIO_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

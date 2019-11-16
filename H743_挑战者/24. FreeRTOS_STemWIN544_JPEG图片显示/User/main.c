@@ -104,7 +104,7 @@ int main(void)
 	
 	xReturn = xTaskCreate((TaskFunction_t)AppTaskCreate,/* 任务入口函数 */
 											 (const char*    )"AppTaskCreate",/* 任务名称 */
-											 (uint16_t       )512,					/* 任务栈大小 */
+											 (uint16_t       )1024,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
 											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
@@ -149,7 +149,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )2048,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 8,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -171,7 +171,7 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
 		vTaskDelay(1000);
 	}
@@ -210,6 +210,10 @@ static void GUI_Task(void* parameter)
     MainTask();
 	}
 }
+static void Delay(__IO uint32_t nCount)	 //简单的延时函数
+{
+	for(; nCount != 0; nCount--);
+}
 
 /**
   * @brief 板级外设初始化
@@ -224,8 +228,9 @@ static void BSP_Init(void)
   SCB_EnableDCache();
   Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
   Board_MPU_Config(1, MPU_Normal_WT, 0x24000000, MPU_REGION_SIZE_512KB);
-  Board_MPU_Config(2, MPU_Normal_WT, 0xD0000000, MPU_REGION_SIZE_32MB);
-  
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
+  /*emwin动态内存配置为WT，在使用Alpha混合和内存设备时需要手动清空D-Cache，但RGB565下清空操作无效*/
+  Board_MPU_Config(3,MPU_Normal_WT,0xD1800000,MPU_REGION_SIZE_8MB);
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
    */
@@ -254,6 +259,7 @@ static void BSP_Init(void)
 	//链接驱动器，创建盘符
   FATFS_LinkDriver(&SD_Driver, SDPath);
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
+	Delay(0xffffff);
   result = f_mount(&fs,"0:",1);
 	if(result != FR_OK)
 	{

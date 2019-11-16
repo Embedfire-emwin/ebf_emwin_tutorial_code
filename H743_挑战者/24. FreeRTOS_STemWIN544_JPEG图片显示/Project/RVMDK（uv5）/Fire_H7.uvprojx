@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,OS_SUPPORT,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\STemWIN_Task;..\..\FATFS</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS\Include;..\..\Libraries\CMSIS\Device\ST\STM32H7xx\Include;..\..\Libraries\STM32H7xx_HAL_Driver\Inc;..\..\User;..\..\FreeRTOS\include;..\..\FreeRTOS\port\RVDS\ARM_CM7\r0p1;..\..\STemWIN\Config;..\..\STemWIN\inc;..\..\STemWIN_Task;..\..\FATFS;..\..\FATFS\drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -918,14 +918,14 @@
               <FilePath>..\..\STemWIN\Config\GUIConf.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\STemWIN\Config\GUIConf.h</FilePath>
-            </File>
-            <File>
               <FileName>LCDConf_Lin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STemWIN\Config\LCDConf_Lin.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\STemWIN\Config\GUIConf.h</FilePath>
             </File>
             <File>
               <FileName>GUI_X_OS.c</FileName>
@@ -968,14 +968,14 @@
               <FilePath>..\..\FATFS\option\cc936.c</FilePath>
             </File>
             <File>
-              <FileName>fatfs_sd_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\FATFS\drivers\fatfs_sd_sdio.c</FilePath>
-            </File>
-            <File>
               <FileName>ff_gen_drv.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\FATFS\ff_gen_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>fatfs_sd_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\drivers\fatfs_sd_sdio.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -219,7 +219,13 @@ void LTDC_IRQHandler(void)
 //}
 void SDMMC1_IRQHandler(void)
 {
+  uint32_t ulReturn;
+	/* 进入临界段 */
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+	
   HAL_SD_IRQHandler(&uSdHandle);
+	/* 退出临界段 */
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

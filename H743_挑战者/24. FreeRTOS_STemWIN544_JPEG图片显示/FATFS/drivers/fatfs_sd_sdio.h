@@ -1,5 +1,5 @@
-#ifndef __STM32H743_FatFs_SD_H
-#define __STM32H743_FatFs_SD_H
+#ifndef __STM32F429_FatFs_SD_H
+#define __STM32F429_FatFs_SD_H
 
 #include "stm32h7xx.h"
 #include <stdio.h>
@@ -24,4 +24,4 @@ DRESULT SD_write(BYTE lun,//物理扇区，多个设备时用到(0...)
 DRESULT SD_ioctl(BYTE lun,BYTE cmd, void *buff);
 
 
-#endif /* __STM32H743_FatFs_SD_H */
+#endif /* __STM32F429_FatFs_SD_H */

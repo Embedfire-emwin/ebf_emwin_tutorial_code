@@ -12,7 +12,7 @@
 /*-----------------------------------------------------------------------------/
 / Additional user header to be used  
 /-----------------------------------------------------------------------------*/
-#include "stm32h7xx_hal.h"
+#include "stm32f7xx_hal.h"
 
 //#ifdef USE_STM32746G_DISCOVERY
 //  #include "bsp_sdio_sd.h"

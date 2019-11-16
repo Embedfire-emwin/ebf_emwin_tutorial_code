@@ -42,7 +42,7 @@
 #include "stm32f7xx.h"
 #include "stm32f7xx_it.h"
 #include "./touch/bsp_i2c_touch.h"
-#include "./sd_card/bsp_sdio_sd.h"
+#include "./sdmmc/bsp_sdmmc_sd.h"
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -54,7 +54,7 @@
 /* External variables --------------------------------------------------------*/
 extern LTDC_HandleTypeDef  Ltdc_Handler;
 extern DMA2D_HandleTypeDef Dma2d_Handler;
-extern SD_HandleTypeDef uSdHandle;
+
 /******************************************************************************/
 /*            Cortex Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -187,6 +187,7 @@ void SysTick_Handler(void)
       {
     #endif  /* INCLUDE_xTaskGetSchedulerState */  
         xPortSysTickHandler();
+				HAL_IncTick();
     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
       }
     #endif  /* INCLUDE_xTaskGetSchedulerState */
@@ -224,13 +225,34 @@ void LTDC_IRQHandler(void)
 //}
 void SDMMC1_IRQHandler(void)
 {
-  uint32_t ulReturn;
+//  uint32_t ulReturn;
 	/* 进入临界段 */
-	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+//	ulReturn = taskENTER_CRITICAL_FROM_ISR();
 	
-  HAL_SD_IRQHandler(&uSdHandle);
+  BSP_SD_IRQHandler();
 		/* 退出临界段 */
-	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+//	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
+
+
+void DMA2_Stream3_IRQHandler(void)
+{
+  BSP_SD_DMA_Rx_IRQHandler();
+}
+
+/**
+* @brief This function handles DMA2 stream6 global interrupt.
+*/
+void DMA2_Stream6_IRQHandler(void)
+{
+	BSP_SD_DMA_Tx_IRQHandler();
+}
+
+
+
+
+
+
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -28,7 +28,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "ff_gen_drv.h"
-//#include "sdio/bsp_sdio_sd.h"
+#include "./sdmmc/bsp_sdmmc_sd.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Block Size in Bytes */
@@ -130,7 +130,7 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 
         return(res);
      }
-  if(BSP_SD_ReadBlocks((uint32_t*)buff, 
+  if(BSP_SD_ReadBlocks_DMA((uint32_t*)buff, 
                        (uint64_t) (sector * BLOCK_SIZE), 
                        BLOCK_SIZE, 
                        count) != MSD_OK)
@@ -172,7 +172,7 @@ DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 
         return(res);
      }
-    if(BSP_SD_WriteBlocks((uint32_t*)buff, 
+    if(BSP_SD_WriteBlocks_DMA((uint32_t*)buff, 
                         (uint64_t)(sector * BLOCK_SIZE), 
                         BLOCK_SIZE, count) != MSD_OK)
     {

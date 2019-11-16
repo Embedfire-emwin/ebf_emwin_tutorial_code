@@ -4,9 +4,9 @@
 #include "stm32h7xx.h"
 #include <stdio.h>
 
-#include "diskio.h"
-#include "integer.h"
-#include "ff_gen_drv.h"
+#include "./diskio.h"
+#include "./integer.h"
+#include "./ff_gen_drv.h"
 
 DSTATUS SD_initialize(BYTE lu);
 DSTATUS SD_status(BYTE lu);

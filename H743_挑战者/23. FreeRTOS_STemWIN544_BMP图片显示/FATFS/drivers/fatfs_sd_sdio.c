@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "./sd_card/bsp_sdio_sd.h"
-#include "ff_gen_drv.h"
+#include "./ff_gen_drv.h"
 #include "./led/bsp_led.h" 
 /* Disk status */
 static volatile DSTATUS Stat = STA_NOINIT;
@@ -73,7 +73,7 @@ DRESULT SD_read(BYTE lun,//物理扇区，多个设备时用到(0...)
   
   alignedAddr = (uint32_t)buff & ~0x1F;
   //更新相应的DCache
-  SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+//  SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
   if(HAL_SD_ReadBlocks_DMA(&uSdHandle, (uint8_t*)buff,
                            (uint32_t) (sector),
                            count) == HAL_OK)
@@ -128,7 +128,7 @@ DRESULT SD_write(BYTE lun,//物理扇区，多个设备时用到(0...)
     TX_Flag = 0;
     alignedAddr = (uint32_t)buff & ~0x1F;
     //更新相应的DCache
-    SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+    //SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
     if(HAL_SD_WriteBlocks_DMA(&uSdHandle, (uint8_t*)buff,
                              (uint32_t) (sector),
                              count) == HAL_OK)
@@ -154,11 +154,12 @@ DRESULT SD_write(BYTE lun,//物理扇区，多个设备时用到(0...)
           {
             res = RES_OK;
             //使相应的DCache无效
-            SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
+            //SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCKSIZE + ((uint32_t)buff - alignedAddr));
 
              break;
           }
         }
+				
       }
     }
     return res;

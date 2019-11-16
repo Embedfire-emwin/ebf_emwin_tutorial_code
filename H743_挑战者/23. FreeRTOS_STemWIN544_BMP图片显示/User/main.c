@@ -172,7 +172,7 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-//    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+    printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
 		vTaskDelay(1000);
 	}
@@ -226,7 +226,8 @@ static void BSP_Init(void)
   Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
   Board_MPU_Config(1, MPU_Normal_WT, 0x24000000, MPU_REGION_SIZE_512KB);
   Board_MPU_Config(2, MPU_Normal_WT, 0xD0000000, MPU_REGION_SIZE_32MB);
-  
+  /*emwin动态内存配置为WT，在使用Alpha混合和内存设备时需要手动清空D-Cache，但RGB565下清空操作无效*/
+  Board_MPU_Config(3,MPU_Normal_WT,0xD1800000,MPU_REGION_SIZE_8MB);
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
    */
@@ -245,7 +246,7 @@ static void BSP_Init(void)
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */
 	UARTx_Config();		
-	BSP_SD_MspInit();
+
   /* 初始化触摸屏 */
   GTP_Init_Panel(); 
   /* 初始化SDRAM 用作LCD 显存*/

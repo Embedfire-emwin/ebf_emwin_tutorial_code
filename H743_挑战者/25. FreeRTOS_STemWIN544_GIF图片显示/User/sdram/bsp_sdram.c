@@ -230,7 +230,7 @@ static void SDRAM_InitSequence(void)
 
 	/* Step 5 ----------------------------------------------------------------*/
 	/* 设置sdram寄存器配置 */
-	tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_8  |
+	tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1  |
 				   SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |
 				   SDRAM_MODEREG_CAS_LATENCY_3           |
 				   SDRAM_MODEREG_OPERATING_MODE_STANDARD |
@@ -269,21 +269,21 @@ void SDRAM_Init(void)
   /* 配置FMC接口相关的 GPIO*/
   SDRAM_GPIO_Config();
 
-	/* 配置SDRAM时钟源*/
-  RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_FMC;
-  RCC_PeriphClkInit.PLL2.PLL2M = 5;
-  RCC_PeriphClkInit.PLL2.PLL2N = 144;
-  RCC_PeriphClkInit.PLL2.PLL2P = 2;
-  RCC_PeriphClkInit.PLL2.PLL2Q = 2;
-  RCC_PeriphClkInit.PLL2.PLL2R = 3;
-  RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
-  RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
-  RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
-  RCC_PeriphClkInit.FmcClockSelection = RCC_FMCCLKSOURCE_PLL2;
-  if (HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK)
-  {
-    while(1);
-  }
+//	/* 配置SDRAM时钟源*/
+//  RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_FMC;
+//  RCC_PeriphClkInit.PLL2.PLL2M = 5;
+//  RCC_PeriphClkInit.PLL2.PLL2N = 144;
+//  RCC_PeriphClkInit.PLL2.PLL2P = 2;
+//  RCC_PeriphClkInit.PLL2.PLL2Q = 2;
+//  RCC_PeriphClkInit.PLL2.PLL2R = 3;
+//  RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+//  RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+//  RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
+//  RCC_PeriphClkInit.FmcClockSelection = RCC_FMCCLKSOURCE_PLL2;
+//  if (HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK)
+//  {
+//    while(1);
+//  }
   /* 使能 FMC 时钟 */
   __FMC_CLK_ENABLE();
 
@@ -299,7 +299,7 @@ void SDRAM_Init(void)
   hsdram1.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE; // 禁止写保护
   hsdram1.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;             // SDRAM 时钟 120MHz
   hsdram1.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;                  // 使能突发传输模式
-  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_1;              // 读通道延时
+  hsdram1.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;              // 读通道延时
   /* SDRAM时序 */
   SdramTiming.LoadToActiveDelay = 2;       // 加载模式寄存器命令与行有效或刷新命令之间的延迟
   SdramTiming.ExitSelfRefreshDelay = 8;    // 退出自我刷新到行有效命令之间的延迟

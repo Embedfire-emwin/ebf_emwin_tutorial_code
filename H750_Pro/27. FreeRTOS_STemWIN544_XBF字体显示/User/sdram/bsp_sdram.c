@@ -287,7 +287,7 @@ static void SDRAM_InitSequence(void)
 
 	/* Step 5 ----------------------------------------------------------------*/
 	/* 设置sdram寄存器配置 */
-	tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_8  |
+	tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_1  |
 				   SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL   |
 				   SDRAM_MODEREG_CAS_LATENCY_3           |
 				   SDRAM_MODEREG_OPERATING_MODE_STANDARD |
@@ -326,21 +326,21 @@ void SDRAM_Init(void)
   /* 配置FMC接口相关的 GPIO*/
   SDRAM_GPIO_Config();
 
-	/* 配置SDRAM时钟源*/
-  RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_FMC;
-  RCC_PeriphClkInit.PLL2.PLL2M = 5;
-  RCC_PeriphClkInit.PLL2.PLL2N = 144;
-  RCC_PeriphClkInit.PLL2.PLL2P = 2;
-  RCC_PeriphClkInit.PLL2.PLL2Q = 2;
-  RCC_PeriphClkInit.PLL2.PLL2R = 3;
-  RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
-  RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
-  RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
-  RCC_PeriphClkInit.FmcClockSelection = RCC_FMCCLKSOURCE_PLL2;
-  if (HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK)
-  {
-    while(1);
-  }
+//	/* 配置SDRAM时钟源*/
+//  RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_FMC;
+//  RCC_PeriphClkInit.PLL2.PLL2M = 5;
+//  RCC_PeriphClkInit.PLL2.PLL2N = 144;
+//  RCC_PeriphClkInit.PLL2.PLL2P = 2;
+//  RCC_PeriphClkInit.PLL2.PLL2Q = 2;
+//  RCC_PeriphClkInit.PLL2.PLL2R = 3;
+//  RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+//  RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+//  RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
+//  RCC_PeriphClkInit.FmcClockSelection = RCC_FMCCLKSOURCE_PLL2;
+//  if (HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit) != HAL_OK)
+//  {
+//    while(1);
+//  }
   /* 使能 FMC 时钟 */
   __FMC_CLK_ENABLE();
 

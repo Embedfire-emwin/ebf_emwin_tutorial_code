@@ -74,7 +74,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = pMsg->hWin;
     FRAMEWIN_SetFont(hItem, GUI_FONT_32_ASCII);
     FRAMEWIN_SetTitleHeight(hItem, 32);
-    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32F429");
+    FRAMEWIN_SetText(hItem, "STemWIN@EmbedFire STM32H743");
     /* ³õÊ¼»¯DROPDOWN0 */
     hItem = WM_GetDialogItem(pMsg->hWin, ID_DROPDOWN_0);
     DROPDOWN_SetListHeight(hItem, 100);

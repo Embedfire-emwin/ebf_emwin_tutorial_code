@@ -23,7 +23,6 @@
 #include "main.h"
 #include "./delay/core_delay.h"   
 #include "./touch/gt9xx.h"
-#include "./mpu/bsp_mpu.h" 
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -88,7 +87,7 @@ static void GUI_Task(void* parameter);
 
 static void BSP_Init(void);
 extern void MainTask(void);
-
+static void WIFI_PDN_INIT(void);
 /**
   * @brief  主函数
   * @param  无
@@ -148,7 +147,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024 * 4,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 16,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -220,13 +219,13 @@ static void GUI_Task(void* parameter)
   */
 static void BSP_Init(void)
 {
-  SCB_EnableICache();
-  SCB_EnableDCache();
+//  SCB_EnableICache();
+//  SCB_EnableDCache();
 
-  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
-  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
+//  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
+//  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
   /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
-  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
+//  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
   
@@ -257,7 +256,9 @@ static void BSP_Init(void)
 	SDRAM_Init();
 	/* LCD 端口初始化 */ 
 	LCD_Init();
-		//链接驱动器，创建盘符
+	/* 禁用WIFI模块 */
+	WIFI_PDN_INIT();
+	//链接驱动器，创建盘符
   FATFS_LinkDriver(&SD_Driver, SDPath);
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
   result = f_mount(&fs,"0:",1);
@@ -266,6 +267,31 @@ static void BSP_Init(void)
 		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
 		while(1);
 	}
+}
+/**
+  * @brief  禁用WIFI模块
+  * @param  无
+  * @param  无
+  * @retval 无
+  */
+static void WIFI_PDN_INIT(void)
+{
+	/*定义一个GPIO_InitTypeDef类型的结构体*/
+	GPIO_InitTypeDef GPIO_InitStruct;
+	/*使能引脚时钟*/	
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	/*选择要控制的GPIO引脚*/															   
+	GPIO_InitStruct.Pin = GPIO_PIN_13;	
+	/*设置引脚的输出类型为推挽输出*/
+	GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;      
+	/*设置引脚为上拉模式*/
+	GPIO_InitStruct.Pull  = GPIO_PULLUP;
+	/*设置引脚速率为高速 */   
+	GPIO_InitStruct.Speed = GPIO_SPEED_FAST; 
+	/*调用库函数，使用上面配置的GPIO_InitStructure初始化GPIO*/
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);	
+	/*禁用WiFi模块*/
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,GPIO_PIN_RESET);  
 }
 
 /**

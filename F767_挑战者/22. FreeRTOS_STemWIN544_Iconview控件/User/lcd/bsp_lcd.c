@@ -244,7 +244,7 @@ void LCD_Init(void)
     HAL_LTDC_EnableDither(&Ltdc_Handler);
     
     /* Set LTDC Interrupt to the lowest priority */
-    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 0);  
+    HAL_NVIC_SetPriority(LTDC_IRQn, 2, 0);  
     /* Enable LTDC Interrupt */
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
 }

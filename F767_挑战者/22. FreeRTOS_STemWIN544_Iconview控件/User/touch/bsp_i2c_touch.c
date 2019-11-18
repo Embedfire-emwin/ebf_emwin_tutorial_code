@@ -53,7 +53,7 @@ void I2C_GTP_IRQEnable(void)
     /* 使用上面的结构体初始化按键 */
     HAL_GPIO_Init(GTP_INT_GPIO_PORT, &GPIO_InitStructure); 
     /* 配置中断优先级 */
-    HAL_NVIC_SetPriority(GTP_INT_EXTI_IRQ, 1, 0);
+    HAL_NVIC_SetPriority(GTP_INT_EXTI_IRQ, 2, 0);
     /* 使能中断 */
     HAL_NVIC_EnableIRQ(GTP_INT_EXTI_IRQ);
 
@@ -79,7 +79,7 @@ void I2C_GTP_IRQDisable(void)
     /* 使用上面的结构体初始化按键 */
     HAL_GPIO_Init(GTP_INT_GPIO_PORT, &GPIO_InitStructure); 
     /* 配置中断优先级 */
-    HAL_NVIC_SetPriority(GTP_INT_EXTI_IRQ, 1, 0);
+    HAL_NVIC_SetPriority(GTP_INT_EXTI_IRQ, 2, 0);
     /* 使能中断 */
     HAL_NVIC_DisableIRQ(GTP_INT_EXTI_IRQ);
 

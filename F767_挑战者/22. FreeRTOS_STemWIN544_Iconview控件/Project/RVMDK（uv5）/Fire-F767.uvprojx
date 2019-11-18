@@ -763,24 +763,19 @@
               <FilePath>..\..\User\touch\gt9xx.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_mpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\mpu\bsp_mpu.c</FilePath>
-            </File>
-            <File>
               <FileName>FreeRTOSConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>bsp_sdmmc_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\sdmmc\bsp_sdmmc_sd.c</FilePath>
-            </File>
-            <File>
               <FileName>core_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\delay\core_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -898,14 +893,14 @@
               <FilePath>..\..\FATFS\ff_gen_drv.c</FilePath>
             </File>
             <File>
-              <FileName>sd_diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\FATFS\sd_diskio.c</FilePath>
-            </File>
-            <File>
               <FileName>cc936.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\FATFS\option\cc936.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd_diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\FATFS\sd_diskio.c</FilePath>
             </File>
           </Files>
         </Group>

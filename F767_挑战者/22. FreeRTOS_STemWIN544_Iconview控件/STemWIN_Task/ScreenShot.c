@@ -8,7 +8,7 @@
   *********************************************************************
   * @attention
   *
-  * 实验平台:野火  STM32 H743 开发板 
+  * 实验平台:野火  STM32 F429 开发板 
   * 论坛    :http://www.firebbs.cn
   * 淘宝    :https://fire-stm32.taobao.com
   *
@@ -17,8 +17,8 @@
 /*******************************************************************************
  * 包含的头文件
  ******************************************************************************/
-#include "ScreenShot.h"
-#include "./usart/bsp_debug_usart.h"
+#include "./ScreenShot.h"
+#include "./usart/bsp_usart.h"
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"

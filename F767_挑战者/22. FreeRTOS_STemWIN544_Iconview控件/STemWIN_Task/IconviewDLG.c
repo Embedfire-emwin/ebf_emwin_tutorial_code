@@ -23,10 +23,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 /* STemWIN头文件 */
-#include "IconviewDLG.h"
-#include "ScreenShot.h"
+#include "./IconviewDLG.h"
+#include "./ScreenShot.h"
 
-#include "usart/bsp_debug_usart.h"
+#include "./usart/bsp_debug_usart.h"
 
 /*********************************************************************
 *
@@ -102,7 +102,7 @@ static GUI_MEMDEV_Handle hBMP;
 static GUI_HMEM LoadBMP_UsingMEMDEV(const char *sFilename)
 {
 	/* 进入临界段 */
-//	taskENTER_CRITICAL();
+	taskENTER_CRITICAL();
 	/* 打开图片 */
 	result = f_open(&file, sFilename, FA_OPEN_EXISTING | FA_READ);
 	if ((result != FR_OK))
@@ -125,11 +125,11 @@ static GUI_HMEM LoadBMP_UsingMEMDEV(const char *sFilename)
 	/* 读取完毕关闭文件 */
 	f_close(&file);
 	/* 退出临界段 */
-//	taskEXIT_CRITICAL();
+	taskEXIT_CRITICAL();
 	/* 创建内存设备 */
 	hBMP = GUI_MEMDEV_Create(0, 0,                        /* 起始坐标 */
-													 GUI_BMP_GetXSize(_acbuffer), /* x方向尺寸 */
-													 GUI_BMP_GetYSize(_acbuffer));/* y方向尺寸 */
+													 800, /* x方向尺寸 */
+													 480);/* y方向尺寸 */
 	/* 选择内存设备 */
 	GUI_MEMDEV_Select(hBMP);
 	/* 绘制BMP到内存设备中 */

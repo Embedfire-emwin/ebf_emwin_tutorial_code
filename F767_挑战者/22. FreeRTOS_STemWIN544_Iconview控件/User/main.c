@@ -23,6 +23,7 @@
 #include "main.h"
 #include "./delay/core_delay.h"   
 #include "./touch/gt9xx.h"
+#include "./mpu/bsp_mpu.h" 
 /* FreeRTOS头文件 */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -219,13 +220,13 @@ static void GUI_Task(void* parameter)
   */
 static void BSP_Init(void)
 {
-//  SCB_EnableICache();
-//  SCB_EnableDCache();
+  SCB_EnableICache();
+  SCB_EnableDCache();
 
-//  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
-//  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
+  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
+  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
   /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
-//  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
   

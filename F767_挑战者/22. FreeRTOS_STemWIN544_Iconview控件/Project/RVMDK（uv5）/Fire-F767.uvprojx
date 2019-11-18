@@ -777,6 +777,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_mpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\mpu\bsp_mpu.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

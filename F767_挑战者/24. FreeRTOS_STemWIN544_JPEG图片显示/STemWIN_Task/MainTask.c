@@ -276,7 +276,7 @@ void MainTask(void)
         printf("使用内存设备显示JPEG：%dms\r\n",t1 - t0);
         break;
       default:
-        i = 1;
+        i = 0;
         break;
     }
 		GUI_Delay(50);

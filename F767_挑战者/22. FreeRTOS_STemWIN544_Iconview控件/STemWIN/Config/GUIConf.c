@@ -64,6 +64,8 @@ Purpose     : Display controller initialization
   #define GUI_NUMBYTES  (1024 * 110)    // x KByte
 #endif
 
+#define GUI_BLOCKSIZE 0x80
+
 /*********************************************************************
 *
 *       Static data

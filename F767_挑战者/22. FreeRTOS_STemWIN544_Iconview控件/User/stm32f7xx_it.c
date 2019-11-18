@@ -187,7 +187,6 @@ void SysTick_Handler(void)
       {
     #endif  /* INCLUDE_xTaskGetSchedulerState */  
         xPortSysTickHandler();
-				HAL_IncTick();
     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
       }
     #endif  /* INCLUDE_xTaskGetSchedulerState */
@@ -206,9 +205,10 @@ void LTDC_IRQHandler(void)
   uint32_t ulReturn;
 	/* 进入临界段 */
 	ulReturn = taskENTER_CRITICAL_FROM_ISR();
-	/* 行中断处理 */
+  
   HAL_LTDC_IRQHandler(&Ltdc_Handler);
-	/* 退出临界段 */
+  
+  /* 退出临界段 */
 	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
 
@@ -225,19 +225,27 @@ void LTDC_IRQHandler(void)
 //}
 void SDMMC1_IRQHandler(void)
 {
-//  uint32_t ulReturn;
+  uint32_t ulReturn;
 	/* 进入临界段 */
-//	ulReturn = taskENTER_CRITICAL_FROM_ISR();
-	
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+  
   BSP_SD_IRQHandler();
-		/* 退出临界段 */
-//	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+  
+  /* 退出临界段 */
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
 
 
 void DMA2_Stream3_IRQHandler(void)
 {
+  uint32_t ulReturn;
+	/* 进入临界段 */
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+  
   BSP_SD_DMA_Rx_IRQHandler();
+	//  
+  /* 退出临界段 */
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
 
 /**
@@ -245,7 +253,14 @@ void DMA2_Stream3_IRQHandler(void)
 */
 void DMA2_Stream6_IRQHandler(void)
 {
+  uint32_t ulReturn;
+	/* 进入临界段 */
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+  
 	BSP_SD_DMA_Tx_IRQHandler();
+	//  
+  /* 退出临界段 */
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
 }
 
 

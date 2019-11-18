@@ -21,6 +21,7 @@
 #include "./lcd/bsp_lcd.h"
 #include <stdlib.h>
 #include "main.h"
+#include "./delay/core_delay.h"   
 #include "./touch/gt9xx.h"
 #include "./mpu/bsp_mpu.h" 
 /* FreeRTOS头文件 */
@@ -102,7 +103,7 @@ int main(void)
 	
 	xReturn = xTaskCreate((TaskFunction_t)AppTaskCreate,/* 任务入口函数 */
 											 (const char*    )"AppTaskCreate",/* 任务名称 */
-											 (uint16_t       )512,					/* 任务栈大小 */
+											 (uint16_t       )1024,					/* 任务栈大小 */
 											 (void*          )NULL,					/* 任务入口函数参数 */
 											 (UBaseType_t    )1,						/* 任务的优先级 */
 											 (TaskHandle_t   )&AppTaskCraete_Handle);/* 任务控制块指针 */
@@ -147,7 +148,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024 * 8,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 4,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -197,13 +198,6 @@ static void Touch_Task(void* parameter)
   */
 static void GUI_Task(void* parameter)
 {
-		/* 挂载文件系统，挂载时会对SD卡初始化 */
-  result = f_mount(&fs,"0:",1);
-	if(result != FR_OK)
-	{
-		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
-		while(1);
-	}
 	/* 初始化GUI */
 	GUI_Init();
 	/* 开启三缓冲 */
@@ -226,14 +220,14 @@ static void GUI_Task(void* parameter)
   */
 static void BSP_Init(void)
 {
-//  SCB_EnableICache();
-//  SCB_EnableDCache();
+  SCB_EnableICache();
+  SCB_EnableDCache();
 
-//  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
-//  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
-//  /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
-//  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
-//  
+  Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
+  Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
+  /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
+  
   HAL_Init();
   
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
@@ -250,6 +244,8 @@ static void BSP_Init(void)
   
 	/* 系统时钟初始化成216MHz */
 	SystemClock_Config();
+	/* 初始化SysTick */
+//  HAL_SYSTICK_Config( HAL_RCC_GetSysClockFreq() / configTICK_RATE_HZ );	
 	/* LED 端口初始化 */
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */
@@ -261,10 +257,15 @@ static void BSP_Init(void)
 	SDRAM_Init();
 	/* LCD 端口初始化 */ 
 	LCD_Init();
-	HAL_SYSTICK_Config( HAL_RCC_GetSysClockFreq() / configTICK_RATE_HZ );
-	//链接驱动器，创建盘符
+		//链接驱动器，创建盘符
   FATFS_LinkDriver(&SD_Driver, SDPath);
-
+	/* 挂载文件系统，挂载时会对SD卡初始化 */
+  result = f_mount(&fs,"0:",1);
+	if(result != FR_OK)
+	{
+		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
+		while(1);
+	}
 }
 
 /**

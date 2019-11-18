@@ -8,25 +8,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx.h"
 
-/** @addtogroup BSP
-  * @{
-  */ 
 
-/** @addtogroup STM32746G_DISCOVERY
-  * @{
-  */
-    
-/** @addtogroup STM32746G_DISCOVERY_SD
-  * @{
-  */    
+//等待时间
+#define SD_TIMEOUT             ((uint32_t)0x00100000U)
+//块的大小（以字节为单位）
+#define BLOCK_SIZE            512 
+//块的数目
+#define NUMBER_OF_BLOCKS      50
+//块的数据大小
+#define MULTI_BUFFER_SIZE    (BLOCK_SIZE * NUMBER_OF_BLOCKS)
 
-/** @defgroup STM32746G_DISCOVERY_SD_Exported_Types STM32746G_DISCOVERY_SD Exported Types
-  * @{
-  */
 
-/** 
-  * @brief SD Card information structure 
-  */
+
+
 #define SD_CardInfo HAL_SD_CardInfoTypedef
 /**
   * @}

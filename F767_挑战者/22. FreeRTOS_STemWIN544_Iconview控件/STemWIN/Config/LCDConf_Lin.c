@@ -104,7 +104,7 @@ Purpose     : Display controller configuration (single layer)
 //
 // Color mode layer 0
 //
-#define COLOR_MODE_0 _CM_RGB565
+#define COLOR_MODE_0 _CM_RGB888
 //
 // Layer size
 //

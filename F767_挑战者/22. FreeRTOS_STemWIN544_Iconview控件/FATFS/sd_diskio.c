@@ -111,6 +111,11 @@ DSTATUS SD_status(BYTE lun)
 DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_OK;
+	  uint32_t alignedAddr;
+	
+	alignedAddr = (uint32_t)buff & ~0x1F;
+  //更新相应的DCache
+  SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCK_SIZE + ((uint32_t)buff - alignedAddr));
   
     if ((DWORD)buff & 3) 
     {
@@ -123,7 +128,11 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
             
             if (res != RES_OK)
             {
-               break;
+               
+								alignedAddr = (uint32_t)buff & ~0x1F;
+								//使相应的DCache无效
+								SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCK_SIZE + ((uint32_t)buff - alignedAddr));
+							  break;
             }
             buff += BLOCK_SIZE;
         }
@@ -154,6 +163,13 @@ DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_OK;
   
+	uint32_t alignedAddr;
+  
+
+    alignedAddr = (uint32_t)buff & ~0x1F;
+    //更新相应的DCache
+    SCB_CleanDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCK_SIZE + ((uint32_t)buff - alignedAddr));
+	
     if ((DWORD)buff & 3) 
     {
         DWORD scratch[BLOCK_SIZE / 4];
@@ -165,6 +181,9 @@ DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
             
             if (res != RES_OK)
             {
+							
+							//使相应的DCache无效
+               SCB_InvalidateDCache_by_Addr((uint32_t*)alignedAddr, count*BLOCK_SIZE + ((uint32_t)buff - alignedAddr));
                break;
             }
             buff += BLOCK_SIZE;

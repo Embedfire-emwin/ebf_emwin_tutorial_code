@@ -89,6 +89,7 @@ static void GUI_Task(void* parameter);
 static void BSP_Init(void);
 extern void MainTask(void);
 static void WIFI_PDN_INIT(void);
+void Delay(__IO uint32_t nCount);	 //简单的延时函数
 /**
   * @brief  主函数
   * @param  无
@@ -213,6 +214,7 @@ static void GUI_Task(void* parameter)
 	}
 }
 
+
 /**
   * @brief 板级外设初始化
   * @note 所有板子上的初始化均可放在这个函数里面
@@ -230,6 +232,7 @@ static void BSP_Init(void)
   Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
+	HAL_InitTick(0);
   
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
@@ -245,8 +248,7 @@ static void BSP_Init(void)
   
 	/* 系统时钟初始化成216MHz */
 	SystemClock_Config();
-	/* 初始化SysTick */
-//  HAL_SYSTICK_Config( HAL_RCC_GetSysClockFreq() / configTICK_RATE_HZ );	
+
 	/* LED 端口初始化 */
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */
@@ -261,14 +263,17 @@ static void BSP_Init(void)
 	/* 禁用WIFI模块 */
 	WIFI_PDN_INIT();
 	//链接驱动器，创建盘符
-  FATFS_LinkDriver(&SD_Driver, SDPath);
+  FATFS_LinkDriver(&SD_Driver, SDPath);	 
 	/* 挂载文件系统，挂载时会对SD卡初始化 */
+
   result = f_mount(&fs,"0:",1);
+		printf("\r\nsd\r\n");		 
 	if(result != FR_OK)
 	{
 		printf("SD卡初始化失败，请确保SD卡已正确接入开发板，或换一张SD卡测试！\n");
 		while(1);
 	}
+	printf("\r\nsd ok。\r\n");		 
 }
 /**
   * @brief  禁用WIFI模块

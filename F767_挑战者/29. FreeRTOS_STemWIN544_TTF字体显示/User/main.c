@@ -230,7 +230,8 @@ static void BSP_Init(void)
   Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
-  
+	HAL_InitTick(0);
+	
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
    */

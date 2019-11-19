@@ -279,7 +279,7 @@ void MainTask(void)
         i = 0;
         break;
     }
-		GUI_Delay(50);
+		GUI_Delay(1000);
 		GUI_Clear();
 	}
 }

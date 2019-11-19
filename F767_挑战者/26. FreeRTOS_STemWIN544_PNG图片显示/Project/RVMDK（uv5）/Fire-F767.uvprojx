@@ -768,11 +768,6 @@
               <FilePath>..\..\User\FreeRTOSConfig.h</FilePath>
             </File>
             <File>
-              <FileName>core_delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\delay\core_delay.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_sdio_sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\sd_card\bsp_sdio_sd.c</FilePath>

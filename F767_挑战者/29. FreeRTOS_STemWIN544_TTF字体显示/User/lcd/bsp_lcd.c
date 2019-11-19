@@ -217,7 +217,7 @@ void LCD_Init(void)
     periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
     periph_clk_init_struct.PLLSAI.PLLSAIN = 144;
     periph_clk_init_struct.PLLSAI.PLLSAIR = 2;
-    periph_clk_init_struct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
+    periph_clk_init_struct.PLLSAIDivR = RCC_PLLSAIDIVR_8;
     HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
     
     /* 初始化LCD的像素宽度和高度 */
@@ -244,7 +244,7 @@ void LCD_Init(void)
     HAL_LTDC_EnableDither(&Ltdc_Handler);
     
     /* Set LTDC Interrupt to the lowest priority */
-    HAL_NVIC_SetPriority(LTDC_IRQn, 2, 0);  
+    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 0);  
     /* Enable LTDC Interrupt */
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
 }

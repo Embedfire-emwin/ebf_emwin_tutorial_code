@@ -148,7 +148,7 @@ static void AppTaskCreate(void)
   
   xReturn = xTaskCreate((TaskFunction_t)GUI_Task,/* 任务入口函数 */
 											 (const char*      )"GUI_Task",/* 任务名称 */
-											 (uint16_t         )1024 * 20,      /* 任务栈大小 */
+											 (uint16_t         )1024 * 32,      /* 任务栈大小 */
 											 (void*            )NULL,      /* 任务入口函数参数 */
 											 (UBaseType_t      )3,         /* 任务的优先级 */
 											 (TaskHandle_t     )&GUI_Task_Handle);/* 任务控制块指针 */
@@ -170,9 +170,9 @@ static void LED_Task(void* parameter)
 {
 	while(1)
 	{
-	 printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
+//	 printf("%d\r\n", (int)GUI_ALLOC_GetNumUsedBytes());
 		LED3_TOGGLE;
-		vTaskDelay(100);
+		vTaskDelay(1000);
 	}
 }
 
@@ -227,7 +227,7 @@ static void BSP_Init(void)
   Board_MPU_Config(0, MPU_Normal_WT, 0x20000000, MPU_REGION_SIZE_128KB);
   Board_MPU_Config(1, MPU_Normal_WT, 0x20020000, MPU_REGION_SIZE_512KB);
   /* 如果配置为WT，则在使用Alpha混合时需要手动清空D-Cache，但RGB565下清空操作无效 */
-  Board_MPU_Config(2, MPU_Normal_WT, 0xD0000000, MPU_REGION_SIZE_32MB);
+  Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
   
@@ -245,8 +245,6 @@ static void BSP_Init(void)
   
 	/* 系统时钟初始化成216MHz */
 	SystemClock_Config();
-	/* 初始化SysTick */
-//  HAL_SYSTICK_Config( HAL_RCC_GetSysClockFreq() / configTICK_RATE_HZ );	
 	/* LED 端口初始化 */
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */

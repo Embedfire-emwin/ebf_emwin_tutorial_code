@@ -229,7 +229,7 @@ static void BSP_Init(void)
   Board_MPU_Config(2, MPU_Normal_NonCache, 0xD0000000, MPU_REGION_SIZE_32MB);
   
   HAL_Init();
-  
+  HAL_InitTick(0);  
 	/* CRC和emWin没有关系，只是他们为了库的保护而做的
    * 这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。
    */
@@ -244,8 +244,6 @@ static void BSP_Init(void)
   
 	/* 系统时钟初始化成216MHz */
 	SystemClock_Config();
-	/* 初始化SysTick */
-//  HAL_SYSTICK_Config( HAL_RCC_GetSysClockFreq() / configTICK_RATE_HZ );	
 	/* LED 端口初始化 */
 	LED_GPIO_Config();
 	/* 配置串口1为：115200 8-N-1 */

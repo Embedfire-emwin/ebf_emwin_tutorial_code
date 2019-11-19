@@ -26,7 +26,6 @@
 /* STemWIN头文件 */
 #include "ScreenShot.h"
 #include "MainTask.h"
-
 #include "usart/bsp_debug_usart.h"
 
 /*********************************************************************
@@ -85,8 +84,10 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytesReq, U32 Off)
 	{NumBytesReq = sizeof(_acBuffer);}
   
 	/* 读取偏移量 */
-	if(Off == 1) FileAddress = 0;
-	else FileAddress = Off;
+	if(Off == 1)
+		FileAddress = 0;
+	else 
+		FileAddress = Off;
 	result = f_lseek(Picfile, FileAddress);
 	
 	/* 进入临界段 */
@@ -120,11 +121,12 @@ static void ShowBMPEx(const char *sFilename, int x0, int y0)
 	{
 		printf("文件打开失败！\r\n");
 	}
-  /* 退出临界段 */
-	taskEXIT_CRITICAL();
+
   
   /* 绘制图片 */
   GUI_BMP_DrawEx(_GetData, &file, x0, y0);
+	  /* 退出临界段 */
+	taskEXIT_CRITICAL();
 }
 
 /**

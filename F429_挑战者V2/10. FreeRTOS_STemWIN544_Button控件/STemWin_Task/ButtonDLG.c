@@ -152,7 +152,7 @@ static void _cbDialog(WM_MESSAGE* pMsg) {
 	WM_HWIN hItem;
 	int     NCode;
 	int     Id;
-	static  U8  button_3_flag = 0, button_4_flag = 0;
+	static  U8  button_3_flag = 0;
 
 	switch (pMsg->MsgId) {
 	case WM_INIT_DIALOG:

@@ -308,12 +308,58 @@ static void SDRAM_InitSequence(void)
   */
 void SDRAM_Init(void)
 {
+  //FMC_SDRAMInitTypeDef  FMC_SDRAMInitStructure;
+//  FMC_SDRAMTimingInitTypeDef  FMC_SDRAMTimingInitStructure; 
+  
   /* 配置FMC接口相关的 GPIO*/
   SDRAM_GPIO_Config();
   
   /* 使能 FMC 时钟 */
 	__HAL_RCC_FMC_CLK_ENABLE();
+//  RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FMC, ENABLE);
+ 
+//  /* 配置 FMC 相关参数 ---------------------------------------------------------*/
+//  /* SDCLK： 90 Mhz (HCLK/2 :180Mhz/2) */
+//  /* TMRD: 2 Clock cycles */
+//  FMC_SDRAMTimingInitStructure.FMC_LoadToActiveDelay    = 2;      
+//  /* TXSR: min=70ns (7x11.11ns) */
+//  FMC_SDRAMTimingInitStructure.FMC_ExitSelfRefreshDelay = 7;
+//  /* TRAS: min=42ns (4x11.11ns) max=120k (ns) */
+//  FMC_SDRAMTimingInitStructure.FMC_SelfRefreshTime      = 4;
+//  /* TRC:  min=70 (7x11.11ns) */        
+//  FMC_SDRAMTimingInitStructure.FMC_RowCycleDelay        = 7;         
+//  /* TWR:  min=1+ 7ns (1+1x11.11ns) */
+//  FMC_SDRAMTimingInitStructure.FMC_WriteRecoveryTime    = 2;      
+//  /* TRP:  20ns => 2x11.11ns */
+//  FMC_SDRAMTimingInitStructure.FMC_RPDelay              = 2;                
+//  /* TRCD: 20ns => 2x11.11ns */
+//  FMC_SDRAMTimingInitStructure.FMC_RCDDelay             = 2;
 
+///* FMC SDRAM 控制配置 */
+//  FMC_SDRAMInitStructure.FMC_Bank = FMC_BANK_SDRAM;
+//  /* 行地址线宽度: [7:0] */
+//  FMC_SDRAMInitStructure.FMC_ColumnBitsNumber = FMC_ColumnBits_Number_8b;
+//  /* 列地址线宽度: [11:0] */
+//  FMC_SDRAMInitStructure.FMC_RowBitsNumber = FMC_RowBits_Number_12b;
+//  /* 数据线宽度 */
+//  FMC_SDRAMInitStructure.FMC_SDMemoryDataWidth = SDRAM_MEMORY_WIDTH;
+//  /* SDRAM内部bank数量*/
+//  FMC_SDRAMInitStructure.FMC_InternalBankNumber = FMC_InternalBank_Number_4;
+//  /* CAS潜伏期 */
+//  FMC_SDRAMInitStructure.FMC_CASLatency = SDRAM_CAS_LATENCY; 
+//  /* 禁止写保护*/
+//  FMC_SDRAMInitStructure.FMC_WriteProtection = FMC_Write_Protection_Disable;
+//  /* SDCLK时钟分频因子，SDCLK = HCLK/SDCLOCK_PERIOD*/
+//  FMC_SDRAMInitStructure.FMC_SDClockPeriod = SDCLOCK_PERIOD; 
+//  /* 突发读模式设置*/  
+//  FMC_SDRAMInitStructure.FMC_ReadBurst = SDRAM_READBURST;
+//  /* 读延迟配置 */
+//  FMC_SDRAMInitStructure.FMC_ReadPipeDelay = FMC_ReadPipe_Delay_1;
+//  /* SDRAM时序参数 */
+//  FMC_SDRAMInitStructure.FMC_SDRAMTimingStruct = &FMC_SDRAMTimingInitStructure;
+//  
+//  /* FMC SDRAM bank initialization */
+//  FMC_SDRAMInit(&FMC_SDRAMInitStructure); 
   FMC_SDRAM_TimingTypeDef SdramTiming;
 
   /** Perform the SDRAM1 memory initialization sequence

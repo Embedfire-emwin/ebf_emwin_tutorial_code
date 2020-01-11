@@ -50,7 +50,7 @@
 **********************************************************************
 */
 int t0, t1;
-static char _acBuffer[1024 * 4];
+static char _acBuffer[1024 * 8];
 static char *_acbuffer = NULL;
 
 UINT    f_num;
@@ -244,8 +244,8 @@ void MainTask(void)
   
   /* 加载BMP图片数据到内存设备 */
   LoadBMP_UsingMEMDEV("0:/image/ngc7635.bmp",
-                      (LCD_GetXSize()-768)/2,
-                      (LCD_GetYSize()-432)/2);
+                      0,
+                      0);
   
 	while (1)
 	{
@@ -256,8 +256,8 @@ void MainTask(void)
 				t0 = GUI_GetTime();
 				/* 直接从外部存储器绘制BMP图片 */
 				ShowBMPEx("0:/image/ngc7635.bmp",
-                  (LCD_GetXSize()-768)/2,
-                  (LCD_GetYSize()-432)/2);
+                  0,
+                  0);
 				t1 = GUI_GetTime();
         GUI_DispStringAt("GUI_BMP_DrawEx()", 0, 0);
         printf("\r\n直接从外部存储器绘制BMP：%dms\r\n",t1 - t0);
@@ -266,8 +266,8 @@ void MainTask(void)
 				t0 = GUI_GetTime();
 				/* 加载BMP图片到内存中并绘制 */
 				ShowBMP("0:/image/ngc7635.bmp",
-                (LCD_GetXSize()-768)/2,
-                (LCD_GetYSize()-432)/2);
+                0,
+                0);
 				t1 = GUI_GetTime();
         GUI_DispStringAt("GUI_BMP_Draw()", 0, 0);
         printf("加载BMP到内存中并绘制：%dms\r\n",t1 - t0);
@@ -277,8 +277,8 @@ void MainTask(void)
         t0 = GUI_GetTime();
         /* 从内存设备写入LCD */
         GUI_MEMDEV_CopyToLCDAt(hBMP,
-                               (LCD_GetXSize()-768)/2,
-                               (LCD_GetYSize()-432)/2);
+                               0,
+                               0);
         t1 = GUI_GetTime();
         GUI_DispStringAt("USE MEMDEV", 0, 0);
         printf("使用内存设备显示BMP：%dms\r\n",t1 - t0);

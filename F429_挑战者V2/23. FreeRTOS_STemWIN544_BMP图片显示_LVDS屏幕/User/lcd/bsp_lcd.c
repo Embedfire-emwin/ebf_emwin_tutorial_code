@@ -240,7 +240,7 @@ void LCD_Init(void)
  //开启两层时：设置为24MHz时界面运行流畅，如果设置为36Mhz时界面程序闪烁情况
  //如果只使用单层，可以设置成较高频率
  //另外，时钟频率跟颜色模式有关系，使用ARGB8888模式时时钟减半
- RCC_PLLSAIConfig(100, 7, 1);
+ RCC_PLLSAIConfig(130, 7, 1);
  RCC_LTDCCLKDivConfig(RCC_PLLSAIDivR_Div2);//18MHz
  
  /* Enable PLLSAI Clock */

@@ -127,7 +127,7 @@ can be set here.
 //
 // Color mode layer 0
 //
-#define COLOR_MODE_0 _CM_RGB565
+#define COLOR_MODE_0 _CM_ARGB1555
 //
 // Layer size
 //
